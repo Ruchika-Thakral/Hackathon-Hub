@@ -1,18 +1,26 @@
-package com.example.capstone.DTO;
+package com.example.capstone.Entity;
 
-public class UserDTO {
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
+public class OtpEntity {
+@Id
 private String email;
 private String name;
 private String password;
-public UserDTO()
+private String otp;
+
+public OtpEntity()
 {
 	
 }
-public UserDTO(String email, String name, String password) {
+public OtpEntity(String email, String name, String password, String otp) {
 	super();
 	this.email = email;
 	this.name = name;
 	this.password = password;
+	this.otp = otp;
 }
 public String getEmail() {
 	return email;
@@ -32,4 +40,11 @@ public String getPassword() {
 public void setPassword(String password) {
 	this.password = password;
 }
+public String getOtp() {
+	return otp;
+}
+public void setOtp(String otp) {
+	this.otp = otp;
+}
+
 }

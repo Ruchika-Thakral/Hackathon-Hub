@@ -1,8 +1,8 @@
 package com.example.capstone.Entity;
 
-public enum UserType {
+public enum Role {
 panelist,
 judge,
-user,
-admin
+admin,
+participant
 }

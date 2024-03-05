@@ -1,32 +1,37 @@
 package com.example.capstone.Entity;
 
+
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.Email;
+
 
 @Entity
 public class User {
-
 @Id
-@Email
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Integer userId;
+private String name;
 private String email;
-private String userName;
 private String password;
 @Enumerated(EnumType.STRING)
-private UserType role;
-private String otp;
-private boolean emailVerfied;
-public User() {
-	super();
+private Role role;
+private boolean isAvailable;
+public Integer getUserId() {
+	return userId;
 }
-public User(@Email String email, String userName, String password, UserType role) {
-	super();
-	this.email = email;
-	this.userName = userName;
-	this.password = password;
-	this.role = role;
+public void setUserId(Integer userId) {
+	this.userId = userId;
+}
+public String getName() {
+	return name;
+}
+public void setName(String name) {
+	this.name =name ;
 }
 public String getEmail() {
 	return email;
@@ -34,36 +39,23 @@ public String getEmail() {
 public void setEmail(String email) {
 	this.email = email;
 }
-public String getUserName() {
-	return userName;
-}
-public void setUserName(String userName) {
-	this.userName = userName;
-}
 public String getPassword() {
 	return password;
 }
 public void setPassword(String password) {
 	this.password = password;
 }
-public UserType getRole() {
+public Role getRole() {
 	return role;
 }
-public void setRole(UserType role) {
+public void setRole(Role role) {
 	this.role = role;
 }
-public String getOtp() {
-	return otp;
+public boolean isAvailable() {
+	return isAvailable;
 }
-public void setOtp(String otp) {
-	this.otp = otp;
+public void setAvailable(boolean isAvailable) {
+	this.isAvailable = isAvailable;
 }
-public boolean isEmailVerfied() {
-	return emailVerfied;
-}
-public void setEmailVerfied(boolean emailVerfied) {
-	this.emailVerfied = emailVerfied;
-}
-
 
 }
