@@ -6,6 +6,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import com.example.capstone.Exceptions.FailedToSendEmailException;
+
 @Service
 public class MailService {
 @Autowired
@@ -13,7 +15,7 @@ private JavaMailSender javaMailSender;
 
 @Value("${spring.mail.username}")
 private String sender;
-public boolean sendEmail(String receiver,String body,String Subject)
+public boolean sendEmail(String receiver,String body,String Subject) throws FailedToSendEmailException
 {
 	try {
 	SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -26,7 +28,7 @@ public boolean sendEmail(String receiver,String body,String Subject)
 }
 catch (Exception e) {
 	e.printStackTrace();
-	return false;
+	throw new FailedToSendEmailException("Failed to Send Email, Retry");
 }
 }
 }
