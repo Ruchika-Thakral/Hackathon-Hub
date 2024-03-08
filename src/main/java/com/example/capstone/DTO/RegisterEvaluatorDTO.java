@@ -2,16 +2,17 @@ package com.example.capstone.DTO;
 
 import com.example.capstone.Entity.Role;
 
-public class AddEvaluatorDTO {
+public class RegisterEvaluatorDTO {
 private String email;
 private String name;
+private Role role;
 public String getName() {
 	return name;
 }
 public void setName(String name) {
 	this.name = name;
 }
-private Role role;
+
 public String getEmail() {
 	return email;
 }

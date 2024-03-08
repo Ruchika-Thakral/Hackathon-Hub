@@ -23,6 +23,34 @@ public class Hackathon {
 	private LocalDateTime implementationSubmissionDeadLine;
 	private LocalDateTime reviewStartTime;
 	private LocalDateTime reviewEndTime;
+	private String description;
+	private String prizes;
+	private String rules;
+	private String judging_criteria;
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getPrizes() {
+		return prizes;
+	}
+	public void setPrizes(String prizes) {
+		this.prizes = prizes;
+	}
+	public String getRules() {
+		return rules;
+	}
+	public void setRules(String rules) {
+		this.rules = rules;
+	}
+	public String getJudging_criteria() {
+		return judging_criteria;
+	}
+	public void setJudging_criteria(String judging_criteria) {
+		this.judging_criteria = judging_criteria;
+	}
 	private String firstTeamId;
 	private String secondTeamId;
 	private String thirdTeamId;
@@ -126,8 +154,8 @@ public class Hackathon {
 	public List<Team> getTeams() {
 		return teams;
 	}
-	public void setTeams(List<Team> teams) {
-		this.teams = teams;
+	public void setTeams(Team teams) {
+		this.teams.add(teams);
 	}
 	
 	

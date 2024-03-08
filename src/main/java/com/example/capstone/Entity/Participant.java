@@ -3,11 +3,13 @@ package com.example.capstone.Entity;
 
 
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Participant {
@@ -15,14 +17,13 @@ public class Participant {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer participantId;
 	private boolean isLeader;
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
     private Team team;
 	@ManyToOne
 	private User user;
 	public Integer getParticipantId() {
 		return participantId;
 	}
-
 	public void setParticipantId(Integer participantId) {
 		this.participantId = participantId;
 	}

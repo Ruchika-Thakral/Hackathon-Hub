@@ -2,12 +2,16 @@ package com.example.capstone.Entity;
 
 
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 
 @Entity
@@ -21,6 +25,15 @@ private String password;
 @Enumerated(EnumType.STRING)
 private Role role;
 private boolean isAvailable;
+
+@OneToMany(cascade = CascadeType.ALL)
+private List<Participant> participants;
+
+@OneToMany
+private List<Panelist> panelists;
+
+@OneToMany
+private List<Judge> judges;
 public Integer getUserId() {
 	return userId;
 }
@@ -56,6 +69,24 @@ public boolean isAvailable() {
 }
 public void setAvailable(boolean isAvailable) {
 	this.isAvailable = isAvailable;
+}
+public List<Participant> getParticipants() {
+	return participants;
+}
+public void setParticipants(Participant participant) {
+	participants.add(participant);
+}
+public List<Panelist> getPanelists() {
+	return panelists;
+}
+public void setPanelists(List<Panelist> panelists) {
+	this.panelists = panelists;
+}
+public List<Judge> getJudges() {
+	return judges;
+}
+public void setJudges(List<Judge> judges) {
+	this.judges = judges;
 }
 
 }

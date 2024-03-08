@@ -27,6 +27,27 @@ public class HackathonDTO {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime reviewEndTime;
 
+	// constructor
+
+	public HackathonDTO(Integer hackathonId, LocalDateTime ideaSubmissionDeadline,
+			LocalDateTime implementationSubmissionDeadLine, String name, LocalDateTime reviewEndTime,
+			LocalDateTime reviewStartTime, LocalDateTime shortListDeadLine, LocalDateTime startDate, String theme) {
+		this.hackathonId = hackathonId;
+		this.ideaSubmissionDeadline = ideaSubmissionDeadline;
+		this.implementationSubmissionDeadline = implementationSubmissionDeadLine;
+		this.name = name;
+		this.reviewEndTime = reviewEndTime;
+		this.reviewStartTime = reviewStartTime;
+		this.shortListDeadline = shortListDeadLine;
+		this.startDate = startDate;
+		this.theme = theme;
+	}
+
+//    private String firstTeamId;
+//    private String secondTeamId;
+//    private String thirdTeamId;
+//    private boolean completed;
+
 	public int getHackathonId() {
 		return hackathonId;
 	}
@@ -97,5 +118,6 @@ public class HackathonDTO {
 
 	public void setReviewEndTime(LocalDateTime reviewEndTime) {
 		this.reviewEndTime = reviewEndTime;
-	}	
+	}
+
 }

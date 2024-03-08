@@ -1,113 +1,161 @@
 package com.example.capstone.Entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 
 @Entity
 public class Team {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer teamId;
-	private String name;
-	private String ideaTitle;
-	private Status ideaBody;
-	private String ideaRepo;
-	private String ideaFiles;
-	private String ideaDomain;
-	private Float consolidatedRating;
-	private Status status;
-	@OneToMany
-	private List<Review> reviews;
-	@OneToMany
-	private List<Participant> participants;
-	@OneToOne
-	private Panelist panelist;
-	@ManyToOne
-	private Hackathon hackthon;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer teamId;
+    @Column(nullable = true) 
+    private String name;
+    @Column(nullable = true) 
+    private String ideaTitle;
+    @Column(nullable = true) 
+    private String ideaBody;
+    @Column(nullable = true) 
+    private String ideaRepo;
+    @Column(nullable = true) 
+    private String ideaFiles;
+    @Column(nullable = true) 
+    private String ideaDomain;
+    @Column(nullable = true) 
+    private Float consolidatedRating;
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @OneToMany
+    @Column(nullable = true)
+    private List<Review> reviews;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Participant> participants;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Panelist panelist;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Hackathon hackathon;
+  public Team()
+  {
+	  reviews=new ArrayList<>();
+	  participants=new ArrayList<>();
+	  
+	  }
 	public Integer getTeamId() {
 		return teamId;
 	}
+
 	public void setTeamId(Integer teamId) {
 		this.teamId = teamId;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getIdeaTitle() {
 		return ideaTitle;
 	}
+
 	public void setIdeaTitle(String ideaTitle) {
 		this.ideaTitle = ideaTitle;
 	}
-	public Status getIdeaBody() {
+
+	public String getIdeaBody() {
 		return ideaBody;
 	}
-	public void setIdeaBody(Status ideaBody) {
+
+	public void setIdeaBody(String ideaBody) {
 		this.ideaBody = ideaBody;
 	}
+
 	public String getIdeaRepo() {
 		return ideaRepo;
 	}
+
 	public void setIdeaRepo(String ideaRepo) {
 		this.ideaRepo = ideaRepo;
 	}
+
 	public String getIdeaFiles() {
 		return ideaFiles;
 	}
+
 	public void setIdeaFiles(String ideaFiles) {
 		this.ideaFiles = ideaFiles;
 	}
+
 	public String getIdeaDomain() {
 		return ideaDomain;
 	}
+
 	public void setIdeaDomain(String ideaDomain) {
 		this.ideaDomain = ideaDomain;
 	}
+
 	public Float getConsolidatedRating() {
 		return consolidatedRating;
 	}
+
 	public void setConsolidatedRating(Float consolidatedRating) {
 		this.consolidatedRating = consolidatedRating;
 	}
+
 	public Status getStatus() {
 		return status;
 	}
+
 	public void setStatus(Status status) {
 		this.status = status;
 	}
+
 	public List<Review> getReviews() {
 		return reviews;
 	}
+
 	public void setReviews(List<Review> reviews) {
 		this.reviews = reviews;
 	}
+
 	public List<Participant> getParticipants() {
 		return participants;
 	}
+
 	public void setParticipants(List<Participant> participants) {
 		this.participants = participants;
 	}
+
 	public Panelist getPanelist() {
 		return panelist;
 	}
+
 	public void setPanelist(Panelist panelist) {
 		this.panelist = panelist;
 	}
-	public Hackathon getHackthon() {
-		return hackthon;
+
+	public Hackathon getHackathon() {
+		return hackathon;
 	}
-	public void setHackthon(Hackathon hackthon) {
-		this.hackthon = hackthon;
+
+	public void setHackathon(Hackathon hackathon) {
+		this.hackathon = hackathon;
 	}
-	
+    
 }
