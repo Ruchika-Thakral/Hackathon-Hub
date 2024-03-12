@@ -10,25 +10,24 @@ import com.example.capstone.Exceptions.FailedToSendEmailException;
 
 @Service
 public class MailService {
-@Autowired
-private JavaMailSender javaMailSender;
+	@Autowired
+	private JavaMailSender javaMailSender;
 
-@Value("${spring.mail.username}")
-private String sender;
-public boolean sendEmail(String receiver,String body,String Subject) throws FailedToSendEmailException
-{
-	try {
-	SimpleMailMessage mailMessage = new SimpleMailMessage();
-	mailMessage.setFrom(sender);
-	mailMessage.setTo(receiver);
-	mailMessage.setText(body);
-	mailMessage.setSubject(Subject);
-	javaMailSender.send(mailMessage);
-	return true;
-}
-catch (Exception e) {
-	e.printStackTrace();
-	throw new FailedToSendEmailException("Failed to Send Email, Retry");
-}
-}
+	@Value("${spring.mail.username}")
+	private String sender;
+
+	public boolean sendEmail(String receiver, String body, String Subject) throws FailedToSendEmailException {
+		try {
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
+			mailMessage.setFrom(sender);
+			mailMessage.setTo(receiver);
+			mailMessage.setText(body);
+			mailMessage.setSubject(Subject);
+			javaMailSender.send(mailMessage);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FailedToSendEmailException("Failed to Send Email, Retry");
+		}
+	}
 }

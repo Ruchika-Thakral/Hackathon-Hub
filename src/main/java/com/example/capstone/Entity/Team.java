@@ -36,17 +36,17 @@ public class Team {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany
-    @Column(nullable = true)
+    @OneToMany(cascade = CascadeType.ALL)
+    @Column
     private List<Review> reviews;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Participant> participants;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Panelist panelist;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Hackathon hackathon;
   public Team()
   {
@@ -157,5 +157,5 @@ public class Team {
 	public void setHackathon(Hackathon hackathon) {
 		this.hackathon = hackathon;
 	}
-    
+
 }

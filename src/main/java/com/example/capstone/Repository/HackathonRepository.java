@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.example.capstone.DTO.HackathonDTO;
 import com.example.capstone.Entity.Hackathon;
 
-public interface HackathonRepository extends JpaRepository<Hackathon,Integer> {
+public interface HackathonRepository extends JpaRepository<Hackathon, Integer> {
 	@Query("SELECT new com.example.capstone.DTO.HackathonDTO(h.hackathonId, h.ideaSubmissionDeadline, h.implementationSubmissionDeadLine, h.name, h.reviewEndTime, h.reviewStartTime, h.shortListDeadLine, h.startDate, h.theme) FROM Hackathon h")
-    List<HackathonDTO> findHackathonsWithSelectedAttributes();
+	List<HackathonDTO> findHackathonsWithSelectedAttributes();
 }

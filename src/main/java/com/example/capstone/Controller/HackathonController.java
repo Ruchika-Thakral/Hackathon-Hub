@@ -17,7 +17,7 @@ public class HackathonController {
 	private HackathonService hackathonService;
 
 	@GetMapping
-		public List<HackathonDTO> getHackathons() {
+	public List<HackathonDTO> getHackathons() {
 		return hackathonService.getAllHackathons();
 	}
 }

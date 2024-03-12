@@ -8,12 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.capstone.DTO.RegisterEvaluatorDTO;
-import com.example.capstone.DTO.AddEvaluatorsDTO;
 import com.example.capstone.DTO.EvaluatorDTO;
 import com.example.capstone.DTO.GetEvaluatorsDTO;
-import com.example.capstone.DTO.GetUserDTO;
 import com.example.capstone.DTO.UserDTO;
 import com.example.capstone.DTO.UserDetailsDTO;
+import com.example.capstone.Entity.Participant;
 import com.example.capstone.Entity.Role;
 import com.example.capstone.Entity.User;
 import com.example.capstone.Exceptions.FailedToSendEmailException;
@@ -44,7 +43,19 @@ public class UserService {
 	public boolean generateOTP(UserDTO user) {
 		String otp = otpService.generateOTP();
 		String body = "Your OTP: " + otp;
-		String subject = "User verification code";
+		String subject = "Dear Candidate,\r\n"
+				+ "\r\n"
+				+ "Your One-Time Password (OTP) is: "+otp+" .\r\n"
+				+ "\r\n"
+				+ "If you did not request this OTP, please ignore this message.\r\n"
+				+ "\r\n"
+				+ "For security reasons, do not share this OTP with anyone.\r\n"
+				+ "\r\n"
+				+ "Thank you,\r\n"
+				+ "\r\n"
+				+"\n"+
+				"Regards,\n"
+				+ "Team HackerHub";
 		if (mailService.sendEmail(user.getEmail(), body, subject)) {
 			String otpHash = hashService.generateHash(otp);
 			String passwordHash = hashService.generateHash(user.getPassword());
@@ -101,10 +112,24 @@ public class UserService {
 			evaluator.setRole(addEvaluatorDTO.getRole());
 			String password = passwordGenerationService.generatePassword();
 			evaluator.setPassword(hashService.generateHash(password));
-			String subject = "Your credentials";
-			String body = "We are glade inform that you are added as " + addEvaluatorDTO.getRole() + " to Hacker Hub \n"
-					+ "Your credentials are:\n " + "email: " + addEvaluatorDTO.getEmail() + "\n password: " + password
-					+ "\n\n" + "regards\n team HackerHub";
+			String subject = "Welcome to – Your Account Details";
+			String body = "Dear Evaluator,\r\n"
+					+ "\r\n"
+					+ "We are delighted to welcome you to HackerHub as a "+addEvaluatorDTO.getRole()+". Your account has been successfully created, and you are now ready to access our platform.\r\n"
+					+ "\r\n"
+					+ "Below are your login credentials:\r\n"
+					+ "\r\n"
+					+ "Username: "+addEvaluatorDTO.getEmail()+"\r\n"
+					+ "\r\n"
+					+ "Password: "+password+"\r\n"
+					+ "\r\n"
+					+ "Please use the provided credentials to log in to your account."
+					+ "\r\n"
+					+ "We appreciate your participation and look forward to your valuable contributions to HackerHub.\r\n"
+					+ "\r\n"
+					+ "Best regards,\r\n"
+					+ "\r\n"
+					+ "Team HackerHub";
 			if (mailService.sendEmail(addEvaluatorDTO.getEmail(), body, subject)) {
 				userRepository.save(evaluator);
 			} else {
@@ -113,20 +138,20 @@ public class UserService {
 		}
 	}
 
-    public List<User> getUsersByIds(List<EvaluatorDTO> evaluators)
-    {
-    	List<User> users = new ArrayList<>();
+	public List<User> getUsersByIds(List<EvaluatorDTO> evaluators) {
+		List<User> users = new ArrayList<>();
 		for (EvaluatorDTO e : evaluators) {
-		Optional<User> user=userRepository.findById(e.getUserId());
-		users.add(check(user));
+			Optional<User> user = userRepository.findById(e.getUserId());
+			users.add(check(user));
 		}
 		return users;
-    }
+	}
+
 	public List<User> getUsers(List<String> evaluators) {
 		List<User> users = new ArrayList<>();
 		for (String e : evaluators) {
-		Optional<User> user=userRepository.findByEmail(e);
-		users.add(check(user));
+			Optional<User> user = userRepository.findByEmail(e);
+			users.add(check(user));
 		}
 		return users;
 	}
@@ -135,63 +160,63 @@ public class UserService {
 		userRepository.saveAll(users);
 	}
 
-	
-
 	public UserDetailsDTO returnUserDetails(int id) {
 		Tuple t = userRepository.findUserById(id);
-			UserDetailsDTO user = new UserDetailsDTO();
-			user.setUserId((int)t.get(0));
-			user.setName((String)t.get(1));
-			user.setEmail((String) t.get(2));
-			user.setRole((Role)t.get(3));
-			return user;			
+		UserDetailsDTO user = new UserDetailsDTO();
+		user.setUserId((int) t.get(0));
+		user.setName((String) t.get(1));
+		user.setEmail((String) t.get(2));
+		user.setRole((Role) t.get(3));
+		return user;
 	}
-	public User check(Optional<User> user)
-	{
-		if(user.isPresent())
-		{
-			if(!user.get().isAvailable())
-			{
-				throw new UserAlreadyExistsException(user.get().getName()+" User is already exists in another team");
-			}
-			else
-			{
+
+	public User check(Optional<User> user) {
+		if (user.isPresent()) {
+			if (!user.get().isAvailable()) {
+				throw new UserAlreadyExistsException(user.get().getName() + " User is already exists in another team");
+			} else {
 				return user.get();
 			}
-		}
-		else
-		{
+		} else {
 			throw new UserNotFoundException("User not found exception");
 		}
 	}
-	public User findUserByEmail(String email)
-	{
-		Optional<User> user=userRepository.findByEmail(email);
+
+	public User findUserByEmail(String email) {
+		Optional<User> user = userRepository.findByEmail(email);
 		return check(user);
-					
+
 	}
-	public User findUserById(int id)
-	{
-		Optional<User> user=userRepository.findById(id);
-		if(user.isPresent())
-		{
-			if(!user.get().isAvailable())
-			{
-				throw new UserAlreadyExistsException(user.get().getName()+" User is already exists in another team");
-			}
-			else
-			{
+
+	public User findUserById(int id) {
+		Optional<User> user = userRepository.findById(id);
+		if (user.isPresent()) {
+			if (!user.get().isAvailable()) {
+				throw new UserAlreadyExistsException(user.get().getName() + " User is already exists in another team");
+			} else {
 				return user.get();
 			}
-		}
-		else
-		{
+		} else {
 			throw new UserNotFoundException("User not found exception");
-		}	
+		}
 	}
-	
-	public List<GetEvaluatorsDTO> getAvailableEvaluators(List<Role> roles)
-	{
+
+	public User getUser(int userId) {
+		Optional<User> user = userRepository.findById(userId);
+		if (user.isEmpty()) {
+			throw new UserNotFoundException("User not found exception");
+		} else {
+			return user.get();
+		}
+
+	}
+
+	public List<GetEvaluatorsDTO> getAvailableEvaluators(List<Role> roles) {
 		return userRepository.findUsersByRolesAndIsAvailable(roles);
+	}
+
+	public void removeParticipant(User user, Participant participant) {
+		user.getParticipants().remove(participant);
+		userRepository.save(user);
 	}
 }

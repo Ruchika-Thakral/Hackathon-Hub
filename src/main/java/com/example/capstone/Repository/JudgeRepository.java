@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.example.capstone.Entity.Judge;
 
 @Repository
-public interface JudgeRepository extends JpaRepository<Judge,Integer> {
+public interface JudgeRepository extends JpaRepository<Judge, Integer> {
 
 }

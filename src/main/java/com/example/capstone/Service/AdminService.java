@@ -13,39 +13,38 @@ import com.example.capstone.DTO.CreateHackathonDTO;
 import com.example.capstone.DTO.GetEvaluatorsDTO;
 import com.example.capstone.DTO.HackathonDTO;
 
-
 @Service
 public class AdminService {
 
-@Autowired
-private HackathonService hackathonService;
+	@Autowired
+	private HackathonService hackathonService;
 
-@Autowired
-private UserService userService;
-public void createHackathon(CreateHackathonDTO createHackathonDTO)
-{
-	hackathonService.CreateHackathon(createHackathonDTO);
-}
+	@Autowired
+	private UserService userService;
 
-public void addEvaluator(RegisterEvaluatorDTO addEvaluatorDTO)
-{
-	 userService.addEvaluator(addEvaluatorDTO);
-}
+	public void createHackathon(CreateHackathonDTO createHackathonDTO) {
+		hackathonService.CreateHackathon(createHackathonDTO);
+	}
 
-public void assignEvaluators(AddEvaluatorsDTO addEvaluatorsDTO)
-{
-	hackathonService.addEvaluators(addEvaluatorsDTO);
-}
+	public void addEvaluator(RegisterEvaluatorDTO addEvaluatorDTO) {
+		userService.addEvaluator(addEvaluatorDTO);
+	}
 
-public List<HackathonDTO> getAllHackathons()
-{
-	return hackathonService.getAllHackathons();
-}
-public List<GetEvaluatorsDTO> getEvaluators() {
-    List<Role> roles = Arrays.asList(Role.judge, Role.panelist);
+	public void assignEvaluators(AddEvaluatorsDTO addEvaluatorsDTO) {
+		hackathonService.addEvaluators(addEvaluatorsDTO);
+	}
 
-    return userService.getAvailableEvaluators(roles);
-	
-}
+	public List<HackathonDTO> getAllHackathons() {
+		return hackathonService.getAllHackathons();
+	}
+
+	public List<GetEvaluatorsDTO> getEvaluators() {
+		List<Role> roles = Arrays.asList(Role.judge, Role.panelist);
+		return userService.getAvailableEvaluators(roles);
+	}
+	public void endHackathon(int hackathonId)
+	{
+		hackathonService.endHackathon(hackathonId);
+	}
 
 }

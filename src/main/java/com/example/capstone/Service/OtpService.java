@@ -14,40 +14,33 @@ import com.example.capstone.Repository.OtpRepository;
 
 @Service
 public class OtpService {
-@Autowired
-private OtpRepository otpRepository;
-public String generateOTP()
-{
-	int max=999999;
-	int min=100000;
-	Random random=new Random();
-	Integer otp=random.nextInt(max-min+1)+min;
-	return String.valueOf(otp);
-}
-public void saveOtp(String email,String name,String password,String otp)
-{
-	otpRepository.save(new OtpEntity(email,name,password,otp));
-}
+	@Autowired
+	private OtpRepository otpRepository;
 
+	public String generateOTP() {
+		int max = 999999;
+		int min = 100000;
+		Random random = new Random();
+		Integer otp = random.nextInt(max - min + 1) + min;
+		return String.valueOf(otp);
+	}
 
-public UserDTO verifyOtp(String email,String otp) throws InvalidOtpException,InvalidUserException
-{
-	Optional<OtpEntity> otpEntity=otpRepository.findById(email);
-	if(otpEntity.isPresent())
-	{
-		if(otpEntity.get().getOtp().equals(otp))
-		{
-		   otpRepository.deleteById(email);
-		   return new UserDTO(otpEntity.get().getEmail(),otpEntity.get().getName(),otpEntity.get().getPassword());
-		}
-		else
-		{
-			throw new InvalidOtpException("Otp is not valid");
+	public void saveOtp(String email, String name, String password, String otp) {
+		otpRepository.save(new OtpEntity(email, name, password, otp));
+	}
+
+	public UserDTO verifyOtp(String email, String otp) throws InvalidOtpException, InvalidUserException {
+		Optional<OtpEntity> otpEntity = otpRepository.findById(email);
+		if (otpEntity.isPresent()) {
+			if (otpEntity.get().getOtp().equals(otp)) {
+				otpRepository.deleteById(email);
+				return new UserDTO(otpEntity.get().getEmail(), otpEntity.get().getName(),
+						otpEntity.get().getPassword());
+			} else {
+				throw new InvalidOtpException("Otp is not valid");
+			}
+		} else {
+			throw new InvalidUserException("User is not valid");
 		}
 	}
-	else
-	{
-		throw new InvalidUserException("User is not valid");
-	}
-}
 }

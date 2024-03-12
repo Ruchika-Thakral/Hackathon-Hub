@@ -12,47 +12,47 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Panelist {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Integer panelistId;
-@ManyToOne(cascade = CascadeType.ALL)
-private Hackathon hackathon;
-@ManyToOne(cascade = CascadeType.ALL)
-private User user;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer panelistId;
+	@ManyToOne(cascade = CascadeType.ALL)
+	private Hackathon hackathon;
+	@ManyToOne(cascade = CascadeType.ALL)
+	private User user;
 
-@OneToMany(cascade = CascadeType.ALL)
-private List<Team> teams;
+	@OneToMany
+	private List<Team> teams;
 
-public Integer getPanelistId() {
-	return panelistId;
-}
+	public Integer getPanelistId() {
+		return panelistId;
+	}
 
-public void setPanelistId(Integer panelistId) {
-	this.panelistId = panelistId;
-}
+	public void setPanelistId(Integer panelistId) {
+		this.panelistId = panelistId;
+	}
 
-public Hackathon getHackathon() {
-	return hackathon;
-}
+	public Hackathon getHackathon() {
+		return hackathon;
+	}
 
-public void setHackathon(Hackathon hackathon) {
-	this.hackathon = hackathon;
-}
+	public void setHackathon(Hackathon hackathon) {
+		this.hackathon = hackathon;
+	}
 
-public User getUser() {
-	return user;
-}
+	public User getUser() {
+		return user;
+	}
 
-public void setUser(User user) {
-	this.user = user;
-}
+	public void setUser(User user) {
+		this.user = user;
+	}
 
-public List<Team> getTeam() {
-	return teams;
-}
+	public List<Team> getTeam() {
+		return teams;
+	}
 
-public void setTeam(Team team) {
-	teams.add(team);
-}
+	public void setTeam(Team team) {
+		teams.add(team);
+	}
 
 }
