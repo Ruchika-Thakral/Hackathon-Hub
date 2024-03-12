@@ -1,15 +1,14 @@
 // SignInDialog.jsx
-import React from 'react';
+import React from "react";
 import { Dialog, Card, CardHeader, Typography } from "@material-tailwind/react";
-import SignInForm from './Login';
+import SignInForm from "./Login";
 
-function SignInDialog({ showModal, toggleModal,toggleModals }) {
-    
+const SignInDialog = ({ showModal, toggleModal, toggleModals }) => {
     return (
         <Dialog open={showModal} handler={toggleModal} size={"xs"}>
             {/* <span className="close" onClick={toggleModal} style={{ cursor: 'pointer' }}>&times;</span> */}
-            
-            <div className='container '>
+
+            <div className="container ">
                 <Card className="mx-auto w-full max-w-[36rem] px-8">
                     <CardHeader
                         color="gray"
@@ -17,9 +16,14 @@ function SignInDialog({ showModal, toggleModal,toggleModals }) {
                         shadow={false}
                         className="w-72 m-2 grid place-items-center text-center mx-auto"
                     >
-                        <Typography variant="h5" color="white">Sign in to your account</Typography>
+                        <Typography variant="h5" color="white">
+                            Sign in to your account
+                        </Typography>
                     </CardHeader>
-                    <SignInForm toggleModal={toggleModal} toggleModals={toggleModals}/>
+                    <SignInForm
+                        toggleModal={toggleModal}
+                        toggleModals={toggleModals}
+                    />
                     <Typography
                         variant="small"
                         color="gray"
@@ -31,6 +35,6 @@ function SignInDialog({ showModal, toggleModal,toggleModals }) {
             </div>
         </Dialog>
     );
-}
+};
 
 export default SignInDialog;

@@ -1,24 +1,28 @@
 // SignUpDialog.jsx
-import React from 'react';
+import React from "react";
 import { Dialog, Card, CardHeader, Typography } from "@material-tailwind/react";
-import SignUpForm from './Singup';
+import SignUpForm from "./Singup";
 
 function SignUpDialog({ showModal, toggleModal }) {
     return (
         <Dialog open={showModal} handler={toggleModal} size={"xs"}>
             {/* <span className="close" onClick={toggleModal} style={{ cursor: 'pointer' }}>&times;</span> */}
-            <div className='container'>
-            <CardHeader
-                        color="gray"
-                        floated={false}
-                        shadow={false}
-                        className="w-72 grid place-items-center text-center mx-auto"
-                    >
-                        <Typography  variant="h5" color="white">Create an account</Typography>
-                    </CardHeader>
-                <Card className="mx-auto w-full max-w-[36rem]" style={{ maxHeight: '70vh', overflowY: 'auto'}}>
-                    
-                    <SignUpForm/>
+            <div className="container">
+                <CardHeader
+                    color="gray"
+                    floated={false}
+                    shadow={false}
+                    className="w-72 grid place-items-center text-center mx-auto"
+                >
+                    <Typography variant="h5" color="white">
+                        Create an account
+                    </Typography>
+                </CardHeader>
+                <Card
+                    className="mx-auto w-full max-w-[36rem]"
+                    style={{ maxHeight: "70vh", overflowY: "auto" }}
+                >
+                    <SignUpForm />
                     <Typography
                         variant="small"
                         color="gray"
