@@ -1,0 +1,18 @@
+
+.heading{
+    width:fit-content;
+}
+
+.login{
+   
+    position: relative;
+    left:90%;
+    bottom:45px;
+    
+}
+
+.profile{
+    position: relative;
+    left:90%;
+    bottom:45px;
+}
