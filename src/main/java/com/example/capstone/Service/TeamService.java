@@ -122,7 +122,7 @@ public class TeamService {
 		  teamRepository.delete(team);
 	  }
 	}
-   public void selectForTeamNextStep(int teamId)
+   public void selectTeamForNextStep(int teamId)
    {
 	   Team team=teamRepository.findById(teamId).get();
 	   if(team!=null)

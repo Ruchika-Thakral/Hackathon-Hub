@@ -20,7 +20,8 @@ import com.example.capstone.Repository.PanelistRepository;
 public class PanelistService {
 	@Autowired
 	private PanelistRepository panelistRepository;
-
+    @Autowired
+	private UserService userService;
 	public Panelist createPanelist(User user, Hackathon hackathon) {
 		Panelist panelist = new Panelist();
 		panelist.setHackathon(hackathon);
@@ -33,9 +34,18 @@ public class PanelistService {
 		panelistRepository.save(panelist);
 	}
 
-	public List<TeamDetailsToPanelistDTO> getTeamNamesByPanelistIdAndHackathonId(Integer panelistId,
-			Integer hackathonId) {
-		Panelist panelist = panelistRepository.findById(panelistId).orElse(null);
+	public List<TeamDetailsToPanelistDTO> getTeamNamesByPanelistIdAndHackathonId(Integer hackathonId,
+			Integer userId) {
+		User user=userService.findUserById(userId);
+		Panelist panelist=null;
+		for(Panelist p:user.getPanelists())
+		{
+			if(p.getHackathon().getHackathonId()==hackathonId)
+			{
+				panelist=p;
+				break;
+			}
+		}
 		LocalDateTime currentTime = LocalDateTime.now();
 		if (panelist == null) {
 			throw new UserNotFoundException("Panelist not found");

@@ -17,12 +17,11 @@ public class PanelistController {
 	@Autowired
 	private PanelistService panelistService;
 
-	@GetMapping("{hackathonId}/{panelistId}")
-	public ResponseEntity<?> getTeamNamesByPanelistAndHackathon(@PathVariable Integer panelistId,
-			@PathVariable Integer hackathonId) {
-		List<TeamDetailsToPanelistDTO> teamNames = panelistService.getTeamNamesByPanelistIdAndHackathonId(panelistId,
-				hackathonId);
-
+	@GetMapping("{hackathonId}/{userId}")
+	public ResponseEntity<?> getTeamNamesByPanelistAndHackathon(@PathVariable Integer hackathonId,
+			@PathVariable Integer userId) {
+		List<TeamDetailsToPanelistDTO> teamNames = panelistService.getTeamNamesByPanelistIdAndHackathonId(hackathonId,
+				userId);
 		if (teamNames != null && !teamNames.isEmpty()) {
 			return new ResponseEntity<>(teamNames, HttpStatus.OK);
 		} else {

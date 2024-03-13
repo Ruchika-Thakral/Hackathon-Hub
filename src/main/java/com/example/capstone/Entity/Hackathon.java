@@ -27,9 +27,9 @@ public class Hackathon {
 	private String prizes;
 	private String rules;
 	private String judging_criteria;
-	private int  firstTeamId;
-	private int  secondTeamId;
-	private int thirdTeamId;
+	private String firstTeamId;
+	private String secondTeamId;
+	private String thirdTeamId;
 	private boolean isCompleted;
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Judge> judges;
@@ -141,27 +141,27 @@ public class Hackathon {
 		this.reviewEndTime = reviewEndTime;
 	}
 
-	public int getFirstTeamId() {
+	public String getFirstTeamId() {
 		return firstTeamId;
 	}
 
-	public void setFirstTeamId(int firstTeamId) {
+	public void setFirstTeamId(String firstTeamId) {
 		this.firstTeamId = firstTeamId;
 	}
 
-	public int getSecondTeamId() {
+	public String getSecondTeamId() {
 		return secondTeamId;
 	}
 
-	public void setSecondTeamId(int secondTeamId) {
+	public void setSecondTeamId(String secondTeamId) {
 		this.secondTeamId = secondTeamId;
 	}
 
-	public int getThirdTeamId() {
+	public String getThirdTeamId() {
 		return thirdTeamId;
 	}
 
-	public void setThirdTeamId(int thirdTeamId) {
+	public void setThirdTeamId(String thirdTeamId) {
 		this.thirdTeamId = thirdTeamId;
 	}
 

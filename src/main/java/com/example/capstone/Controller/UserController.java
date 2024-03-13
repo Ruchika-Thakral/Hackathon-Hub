@@ -2,6 +2,7 @@ package com.example.capstone.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +14,6 @@ import com.example.capstone.DTO.EmailVerificationDTO;
 import com.example.capstone.DTO.UserDTO;
 import com.example.capstone.DTO.UserDetailsDTO;
 import com.example.capstone.DTO.UserLoginDTO;
-import com.example.capstone.Exceptions.Response;
 import com.example.capstone.Service.UserService;
 
 @RestController
@@ -24,24 +24,23 @@ public class UserController {
 	private UserService userService;
 
 	@PostMapping("register")
-	public Response generateOtp(@RequestBody UserDTO userDto) {
+	public ResponseEntity<String> generateOtp(@RequestBody UserDTO userDto) {
 		userService.generateOTP(userDto);
-		return new Response(HttpStatus.OK.value(), HttpStatus.OK, "OTP generated successfully");
+		return ResponseEntity.status(HttpStatus.OK).body("OTP generated successfully");
 	}
 
 	@PostMapping("verifyOtp")
-	public Response validateOtp(@RequestBody EmailVerificationDTO emailVerificationDto) {
+	public ResponseEntity<String> validateOtp(@RequestBody EmailVerificationDTO emailVerificationDto) {
 		userService.validateOTP(emailVerificationDto.getEmail(), emailVerificationDto.getOtp());
-		return new Response(HttpStatus.CREATED.value(), HttpStatus.CREATED, "User added successfully");
+		return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
 	}
 
 	@PostMapping("login")
-	public UserDetailsDTO verifyUser(@RequestBody UserLoginDTO userLoginDto) {
-		return userService.verifyUser(userLoginDto.getEmail(), userLoginDto.getPassword());
+	public ResponseEntity<UserDetailsDTO> verifyUser(@RequestBody UserLoginDTO userLoginDto) {
+		return ResponseEntity.status(HttpStatus.OK).body(userService.verifyUser(userLoginDto.getEmail(), userLoginDto.getPassword()));
 	}
-
 	@GetMapping("/{id}")
-	public UserDetailsDTO getUser(@PathVariable int id) {
-		return userService.returnUserDetails(id);
+	public ResponseEntity<UserDetailsDTO> getUser(@PathVariable int id) {
+		return ResponseEntity.status(HttpStatus.OK).body(userService.returnUserDetails(id));
 	}
 }

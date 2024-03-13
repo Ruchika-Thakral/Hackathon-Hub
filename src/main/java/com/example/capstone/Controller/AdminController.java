@@ -18,7 +18,6 @@ import com.example.capstone.DTO.AddEvaluatorsDTO;
 import com.example.capstone.DTO.CreateHackathonDTO;
 import com.example.capstone.DTO.GetEvaluatorsDTO;
 import com.example.capstone.DTO.HackathonDTO;
-import com.example.capstone.Exceptions.Response;
 import com.example.capstone.Service.AdminService;
 
 @RestController
@@ -29,36 +28,37 @@ public class AdminController {
 	private AdminService adminService;
 
 	@PostMapping("hackathon")
-	public Response createHackathon(@RequestBody CreateHackathonDTO createHackathonDTO) {
+	public ResponseEntity<String> createHackathon(@RequestBody CreateHackathonDTO createHackathonDTO) {
 		adminService.createHackathon(createHackathonDTO);
-		return new Response(HttpStatus.CREATED.value(), HttpStatus.CREATED, "Hackathon created successfully");
-	}
+		return ResponseEntity.status(HttpStatus.CREATED).body("Hackathon created successfully");
+		}
 
 	@PostMapping("Evaluator")
-	public Response addEvaluator(@RequestBody RegisterEvaluatorDTO addEvaluatorDTO) {
+	public ResponseEntity<String> addEvaluator(@RequestBody RegisterEvaluatorDTO addEvaluatorDTO) {
 		adminService.addEvaluator(addEvaluatorDTO);
-		return new Response(HttpStatus.CREATED.value(), HttpStatus.CREATED, "User added successfully");
+		return  ResponseEntity.status(HttpStatus.CREATED).body("Evaluator added successfully");
 	}
 
 	@PostMapping("assign")
-	public Response assignEvaluators(@RequestBody AddEvaluatorsDTO addEvaluatorsDTO) {
+	public ResponseEntity<String> assignEvaluators(@RequestBody AddEvaluatorsDTO addEvaluatorsDTO) {
 		adminService.assignEvaluators(addEvaluatorsDTO);
-		return new Response(HttpStatus.OK.value(), HttpStatus.OK, "assigned successfully");
+		return ResponseEntity.status(HttpStatus.OK).body("Evaluators assigned successfully");
 	}
 
 	@GetMapping("hackathon")
-	public List<HackathonDTO> getHackathons() {
-		return adminService.getAllHackathons();
+	public ResponseEntity<List<HackathonDTO>> getHackathons() {
+		return ResponseEntity.status(HttpStatus.OK).body(adminService.getAllHackathons());
 	}
 
 	@GetMapping("Evaluator")
 	public ResponseEntity<List<GetEvaluatorsDTO>> getEvaluators() {
-		return new ResponseEntity<>(adminService.getEvaluators(), HttpStatus.OK);
+		return ResponseEntity.status(HttpStatus.OK).body(adminService.getEvaluators());
 
 	}
 	@PutMapping("hackathon/end/{hackathonid}")
-	public void endHackathon(@PathVariable int hackathonid)
+	public ResponseEntity<?> endHackathon(@PathVariable int hackathonid)
 	{
 		adminService.endHackathon(hackathonid);
+		return ResponseEntity.status(HttpStatus.OK).body("Hackathon ended successfully");
 	}
 }
