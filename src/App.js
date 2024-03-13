@@ -7,6 +7,7 @@ import IdeaSubmission from './pages/IdeaSubmission';
 import Results from './pages/Results';
 import Judge from './components/Judge';
 import YourComponent from './components/PanelHackathonDropdown';
+import Trial from './components/Trial';
 export const CreateContext=React.createContext()
 const Provider=CreateContext.Provider
 function App() {
@@ -113,7 +114,7 @@ const arr = [
         <Route path='hackathons' element={<Hackathons/>}/>
         <Route path='ideasubmission' element={<IdeaSubmission/>}/>
         <Route path='results' element={<Results/>}/>
-       
+        <Route path='trial' element={<Trial />}/>
       </Routes>
       </BrowserRouter>
       {/* <Judge arr={arr}/> */}
