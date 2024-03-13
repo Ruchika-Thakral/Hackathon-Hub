@@ -97,7 +97,6 @@ public class TeamService {
 		  for(Participant participant:team.getParticipants())
 		  {
 			  User user=participant.getUser();
-			  user.getParticipants().remove(participant);
 			  user.setAvailable(true);
 			  String subject="Update on Your Submission";
 			  String body="Dear Team,\r\n"
@@ -115,11 +114,8 @@ public class TeamService {
 			  		+ "Team HackerHub";
 			  mailService.sendEmail(user.getEmail(),body, subject);
 		  }
-		  Hackathon hackathon=team.getHackathon();
-		  hackathon.getTeams().remove(team);
-		  Panelist panelist=team.getPanelist();
-		  panelist.getTeam().remove(team);
-		  teamRepository.delete(team);
+		  team.setStatus(Status.rejected);
+		  teamRepository.save(team);
 	  }
 	}
    public void selectTeamForNextStep(int teamId)

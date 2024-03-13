@@ -34,7 +34,7 @@ public class PanelistService {
 		panelistRepository.save(panelist);
 	}
 
-	public List<TeamDetailsToPanelistDTO> getTeamNamesByPanelistIdAndHackathonId(Integer hackathonId,
+	public List<TeamDetailsToPanelistDTO> getTeamDetailsByUserIdAndHackathonId(Integer hackathonId,
 			Integer userId) {
 		User user=userService.findUserById(userId);
 		Panelist panelist=null;

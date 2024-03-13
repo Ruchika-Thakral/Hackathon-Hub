@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: "1"
+      author: Sharath
+      changes:
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: email
+                  value: singamsettigokul@gmail.com
+              - column:
+                  name: password
+                  value: admin123
+              - column:
+                  name: role
+                  value: ADMIN
+              - column:
+                  name: is_available
+                  valueBoolean: False
+              - column:
+                  name: name
+                  value: Gokul
+      context: "deploy"

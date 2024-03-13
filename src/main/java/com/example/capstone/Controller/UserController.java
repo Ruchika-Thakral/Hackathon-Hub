@@ -28,13 +28,11 @@ public class UserController {
 		userService.generateOTP(userDto);
 		return ResponseEntity.status(HttpStatus.OK).body("OTP generated successfully");
 	}
-
 	@PostMapping("verifyOtp")
 	public ResponseEntity<String> validateOtp(@RequestBody EmailVerificationDTO emailVerificationDto) {
 		userService.validateOTP(emailVerificationDto.getEmail(), emailVerificationDto.getOtp());
 		return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
 	}
-
 	@PostMapping("login")
 	public ResponseEntity<UserDetailsDTO> verifyUser(@RequestBody UserLoginDTO userLoginDto) {
 		return ResponseEntity.status(HttpStatus.OK).body(userService.verifyUser(userLoginDto.getEmail(), userLoginDto.getPassword()));

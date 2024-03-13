@@ -42,8 +42,8 @@ public class UserService {
 
 	public boolean generateOTP(UserDTO user) {
 		String otp = otpService.generateOTP();
-		String body = "Your OTP: " + otp;
-		String subject = "Dear Candidate,\r\n"
+		String subject= "Otp verification";
+		String body = "Dear Candidate,\r\n"
 				+ "\r\n"
 				+ "Your One-Time Password (OTP) is: "+otp+" .\r\n"
 				+ "\r\n"

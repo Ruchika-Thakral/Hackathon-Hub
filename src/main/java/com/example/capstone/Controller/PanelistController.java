@@ -20,7 +20,7 @@ public class PanelistController {
 	@GetMapping("{hackathonId}/{userId}")
 	public ResponseEntity<?> getTeamNamesByPanelistAndHackathon(@PathVariable Integer hackathonId,
 			@PathVariable Integer userId) {
-		List<TeamDetailsToPanelistDTO> teamNames = panelistService.getTeamNamesByPanelistIdAndHackathonId(hackathonId,
+		List<TeamDetailsToPanelistDTO> teamNames = panelistService.getTeamDetailsByUserIdAndHackathonId(hackathonId,
 				userId);
 		if (teamNames != null && !teamNames.isEmpty()) {
 			return new ResponseEntity<>(teamNames, HttpStatus.OK);
