@@ -7,7 +7,7 @@ import CreateHackathon from './components/CreateHackathon';
 import AdminHackathons from './components/AdminHackathons';
 import ListHackathon from './components/ListHackathon';
 import ListEvaluator from './components/ListEvaluator';
-import AdminDashboard from './components/AdminDashboard';
+// import AdminDashboard from './components/AdminDashboard';
 import Results from './components/Results';
 
 const App = () => {
