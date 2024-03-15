@@ -36,14 +36,14 @@ const SignUpForm = () => {
                     placeholder="First Name"
                     required
                 />
-                <Input
+                {/* <Input
                     id="last-name"
                     name="last-name"
                     type="text"
                     label="Last Name"
                     placeholder="Last Name"
                     required
-                />
+                /> */}
                 <Input
                     id="email"
                     name="email"
