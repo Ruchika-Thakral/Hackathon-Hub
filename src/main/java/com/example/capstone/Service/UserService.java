@@ -41,6 +41,9 @@ public class UserService {
 	private PasswordGenerationService passwordGenerationService;
 
 	public boolean generateOTP(UserDTO user) {
+		Optional<User> user1=userRepository.findByEmail(user.getEmail());
+		if(user1.isEmpty())
+		{
 		String otp = otpService.generateOTP();
 		String subject= "Otp verification";
 		String body = "Dear Candidate,\r\n"
@@ -61,8 +64,14 @@ public class UserService {
 			String passwordHash = hashService.generateHash(user.getPassword());
 			otpService.saveOtp(user.getEmail(), user.getName(), passwordHash, otpHash);
 			return true;
-		} else {
+		}
+		else
+		{
 			return false;
+		}
+		}
+		else {
+			throw new  UserAlreadyExistsException("User already exists");
 		}
 	}
 

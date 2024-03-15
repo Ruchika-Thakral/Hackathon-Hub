@@ -42,8 +42,8 @@ public class AdminService {
 		List<Role> roles = Arrays.asList(Role.judge, Role.panelist);
 		return userService.getAvailableEvaluators(roles);
 	}
-	public void endHackathon(int hackathonId)
-	{
+
+	public void endHackathon(int hackathonId) {
 		hackathonService.endHackathon(hackathonId);
 	}
 

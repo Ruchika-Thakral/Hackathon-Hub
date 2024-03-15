@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.capstone.DTO.AddIdeaDTO;
+import com.example.capstone.DTO.IdeaDetailsRequestDTO;
 import com.example.capstone.DTO.TeamCreationDTO;
 import com.example.capstone.Service.TeamService;
 
@@ -41,11 +42,18 @@ public class TeamController {
 		teamService.deleteTeam(teamId);
 		return ResponseEntity.status(HttpStatus.OK).body("Team rejected successfully");
 	}
+
 	@PutMapping("selected/{teamId}")
-	public ResponseEntity<String> updateSelectedTeamStatus(@PathVariable int teamId)
-	{
+	public ResponseEntity<String> updateSelectedTeamStatus(@PathVariable int teamId) {
 		teamService.selectTeamForNextStep(teamId);
 		return ResponseEntity.status(HttpStatus.OK).body("Team selected successfully");
 
+	}
+
+	@PostMapping("ideaFiles/{hackathonId}/{userId}")
+	public ResponseEntity<String> updateIdeaDetails(@PathVariable Integer hackathonId, @PathVariable Integer userId,
+			@RequestBody IdeaDetailsRequestDTO requestBody) {
+		String message = teamService.FileSubmission(hackathonId, userId, requestBody);
+		return ResponseEntity.ok(message);
 	}
 }

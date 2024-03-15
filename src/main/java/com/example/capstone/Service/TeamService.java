@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.capstone.DTO.AddIdeaDTO;
+import com.example.capstone.DTO.IdeaDetailsRequestDTO;
 import com.example.capstone.DTO.TeamCreationDTO;
 import com.example.capstone.Entity.Hackathon;
 import com.example.capstone.Entity.Panelist;
@@ -31,8 +32,9 @@ public class TeamService {
 	private PanelistService panelistService;
 	@Autowired
 	private TeamRepository teamRepository;
-    @Autowired
-    private MailService mailService;
+	@Autowired
+	private MailService mailService;
+
 	@Transactional
 	public void CreateTeam(int hackathonid, int userid, TeamCreationDTO teamCreationDTO) {
 		Team team = new Team();
@@ -79,83 +81,92 @@ public class TeamService {
 						team.setIdeaDomain(teamUpdateDTO.getUpdatedIdeaDomain());
 						teamRepository.save(team);
 					}
-				}
-				else
-				{
+				} else {
 					throw new UnauthorizedException("Your not a leader to add Idea ");
 				}
 			}
 		}
 	}
-	
+
 	@Transactional
-	public void deleteTeam(int id)
-	{
-	  Team team=teamRepository.findById(id).get();
-	  if(team!=null)
-	  {
-		  for(Participant participant:team.getParticipants())
-		  {
-			  User user=participant.getUser();
-			  user.setAvailable(true);
-			  String subject="Update on Your Submission";
-			  String body="Dear Team,\r\n"
-			  		+ "\r\n"
-			  		+ "After careful consideration and review, we regret to inform you that your recent submission did not advance to the next phase.\r\n"
-			  		+ "\r\n"
-			  		+ "We appreciate the effort and creativity you put into your proposal. We encourage you to seek feedback and consider this experience as an opportunity\r\n"
-			  		+ "\r\n"
-			  		+ "for growth and improvement. Please do not be disheartened, as there will be more opportunities to showcase your innovative ideas in the future.\r\n"
-			  		+ "\r\n"
-			  		+ "Thank you for your contribution and continued dedication.\r\n"
-			  		+ "\r\n"
-			  		+ "Best regards,\r\n"
-			  		+ "\r\n"
-			  		+ "Team HackerHub";
-			  mailService.sendEmail(user.getEmail(),body, subject);
-		  }
-		  team.setStatus(Status.rejected);
-		  teamRepository.save(team);
-	  }
+	public void deleteTeam(int id) {
+		Team team = teamRepository.findById(id).get();
+		if (team != null) {
+			for (Participant participant : team.getParticipants()) {
+				User user = participant.getUser();
+				user.setAvailable(true);
+				String subject = "Update on Your Submission";
+				String body = "Dear Team,\r\n" + "\r\n"
+						+ "After careful consideration and review, we regret to inform you that your recent submission did not advance to the next phase.\r\n"
+						+ "\r\n"
+						+ "We appreciate the effort and creativity you put into your proposal. We encourage you to seek feedback and consider this experience as an opportunity\r\n"
+						+ "\r\n"
+						+ "for growth and improvement. Please do not be disheartened, as there will be more opportunities to showcase your innovative ideas in the future.\r\n"
+						+ "\r\n" + "Thank you for your contribution and continued dedication.\r\n" + "\r\n"
+						+ "Best regards,\r\n" + "\r\n" + "Team HackerHub";
+				mailService.sendEmail(user.getEmail(), body, subject);
+			}
+			team.setStatus(Status.rejected);
+			teamRepository.save(team);
+		}
 	}
-   public void selectTeamForNextStep(int teamId)
-   {
-	   Team team=teamRepository.findById(teamId).get();
-	   if(team!=null)
-	   {
-		   for(Participant participant:team.getParticipants())
-		   {
-			  String email=participant.getUser().getEmail();
-			  String subject="Congratulations! You've Advanced to the Next Step";
-			  String body="Dear Team,\r\n"
-			  		+ "\r\n"
-			  		+ "We’re thrilled to announce that you have been selected to move forward to the next step. Your dedication and hard work have truly set you apart.\r\n"
-			  		+ "\r\n"
-			  		+ "Details on the upcoming phase, including expectations and timelines, will be shared soon. In the meantime, please ensure you're prepared for an increased level of involvement.\r\n"
-			  		+ "\r\n"
-			  		+ "Should you have any questions or need further clarification, feel free to reach out.\r\n"
-			  		+ "\r\n"
-			  		+ "Congratulations once again on your achievement!\r\n"
-			  		+ "\r\n"
-			  		+ "Best regards,\r\n"
-			  		+ "\r\n"
-			  		+ "Team HackerHub";
-			  mailService.sendEmail(email, body, subject);
-		   }
-	   }
-	   else
-	   {
-		   throw new TeamNotFoundException("Team not found");
-	   }
-	   team.setStatus(Status.selected);
-	   teamRepository.save(team);
-   }
-   public Team getTeam(int id)
-   {
-	   return teamRepository.findById(id).get();
-   }
-   public void updateTeam(Team team)
-   {
+
+	public void selectTeamForNextStep(int teamId) {
+		Team team = teamRepository.findById(teamId).get();
+		if (team != null) {
+			for (Participant participant : team.getParticipants()) {
+				String email = participant.getUser().getEmail();
+				String subject = "Congratulations! You've Advanced to the Next Step";
+				String body = "Dear Team,\r\n" + "\r\n"
+						+ "We’re thrilled to announce that you have been selected to move forward to the next step. Your dedication and hard work have truly set you apart.\r\n"
+						+ "\r\n"
+						+ "Details on the upcoming phase, including expectations and timelines, will be shared soon. In the meantime, please ensure you're prepared for an increased level of involvement.\r\n"
+						+ "\r\n"
+						+ "Should you have any questions or need further clarification, feel free to reach out.\r\n"
+						+ "\r\n" + "Congratulations once again on your achievement!\r\n" + "\r\n" + "Best regards,\r\n"
+						+ "\r\n" + "Team HackerHub";
+				mailService.sendEmail(email, body, subject);
+			}
+		} else {
+			throw new TeamNotFoundException("Team not found");
+		}
+		team.setStatus(Status.selected);
 		teamRepository.save(team);
+	}
+
+	public Team getTeam(int id) {
+		return teamRepository.findById(id).get();
+	}
+
+	public void updateTeam(Team team) {
+		teamRepository.save(team);
+	}
+
+	public String FileSubmission(int hackathonId, int userId, IdeaDetailsRequestDTO requestBody) {
+		User user = userService.findUserById(userId);
+		List<Participant> participants = user.getParticipants();
+		for (Participant participant : participants) 
+		{
+			if (participant.isLeader() && participant.getTeam().getHackathon().getHackathonId().equals(hackathonId)) 
+			{
+				Team team = participant.getTeam();
+				if (team.getStatus().equals(Status.selected)) 
+				{
+					team.setIdeaRepo(requestBody.getIdeaRepo());
+					team.setIdeaFiles(requestBody.getIdeaFiles());
+					teamRepository.save(team);
+					return "Your idea files have been submitted.";
+				}
+				else
+				{
+					throw new UnauthorizedException("Your team is not selected, Better luck next time champ!");
+				}
+			} 
+			else 
+			{
+				throw new UnauthorizedException("Oops, You are not a leader!");
+			}
+		}
+		return "Idea files submitted successfully";
 	}
 }
