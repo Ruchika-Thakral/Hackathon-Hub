@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.capstone.DTO.PanelistHackathonDTO;
 import com.example.capstone.DTO.TeamDetailsToPanelistDTO;
 import com.example.capstone.Entity.Hackathon;
 import com.example.capstone.Entity.Panelist;
@@ -70,5 +71,10 @@ public class PanelistService {
 		} else {
 			throw new UnauthorizedException("Idea reviewing is not started");
 		}
+		
+	}
+	public PanelistHackathonDTO getPanelistHackathonDTO(int panelistId)
+	{
+		return panelistRepository.findAssignedHackathon(panelistId);
 	}
 }

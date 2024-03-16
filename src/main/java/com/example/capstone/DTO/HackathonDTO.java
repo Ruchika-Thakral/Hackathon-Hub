@@ -28,7 +28,10 @@ public class HackathonDTO {
 	private LocalDateTime reviewEndTime;
 
 	// constructor
-
+     public HackathonDTO()
+     {
+    	 
+     }
 	public HackathonDTO(Integer hackathonId, LocalDateTime ideaSubmissionDeadline,
 			LocalDateTime implementationSubmissionDeadLine, String name, LocalDateTime reviewEndTime,
 			LocalDateTime reviewStartTime, LocalDateTime shortListDeadLine, LocalDateTime startDate, String theme) {

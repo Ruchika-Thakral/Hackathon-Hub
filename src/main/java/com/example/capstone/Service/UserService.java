@@ -10,8 +10,15 @@ import org.springframework.stereotype.Service;
 import com.example.capstone.DTO.RegisterEvaluatorDTO;
 import com.example.capstone.DTO.EvaluatorDTO;
 import com.example.capstone.DTO.GetEvaluatorsDTO;
+import com.example.capstone.DTO.HackathonDTO;
+import com.example.capstone.DTO.JudgeUserDetailsDTO;
+import com.example.capstone.DTO.PanelistHackathonDTO;
+import com.example.capstone.DTO.PanelistUserDetails;
 import com.example.capstone.DTO.UserDTO;
 import com.example.capstone.DTO.UserDetailsDTO;
+import com.example.capstone.Entity.Hackathon;
+import com.example.capstone.Entity.Judge;
+import com.example.capstone.Entity.Panelist;
 import com.example.capstone.Entity.Participant;
 import com.example.capstone.Entity.Role;
 import com.example.capstone.Entity.User;
@@ -39,39 +46,30 @@ public class UserService {
 
 	@Autowired
 	private PasswordGenerationService passwordGenerationService;
+	@Autowired
+	private JudgeService judgeService;
+	@Autowired
+	private PanelistService panelistService;
 
 	public boolean generateOTP(UserDTO user) {
-		Optional<User> user1=userRepository.findByEmail(user.getEmail());
-		if(user1.isEmpty())
-		{
-		String otp = otpService.generateOTP();
-		String subject= "Otp verification";
-		String body = "Dear Candidate,\r\n"
-				+ "\r\n"
-				+ "Your One-Time Password (OTP) is: "+otp+" .\r\n"
-				+ "\r\n"
-				+ "If you did not request this OTP, please ignore this message.\r\n"
-				+ "\r\n"
-				+ "For security reasons, do not share this OTP with anyone.\r\n"
-				+ "\r\n"
-				+ "Thank you,\r\n"
-				+ "\r\n"
-				+"\n"+
-				"Regards,\n"
-				+ "Team HackerHub";
-		if (mailService.sendEmail(user.getEmail(), body, subject)) {
-			String otpHash = hashService.generateHash(otp);
-			String passwordHash = hashService.generateHash(user.getPassword());
-			otpService.saveOtp(user.getEmail(), user.getName(), passwordHash, otpHash);
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-		}
-		else {
-			throw new  UserAlreadyExistsException("User already exists");
+		Optional<User> user1 = userRepository.findByEmail(user.getEmail());
+		if (user1.isEmpty()) {
+			String otp = otpService.generateOTP();
+			String subject = "Otp verification";
+			String body = "Dear Candidate,\r\n" + "\r\n" + "Your One-Time Password (OTP) is: " + otp + " .\r\n" + "\r\n"
+					+ "If you did not request this OTP, please ignore this message.\r\n" + "\r\n"
+					+ "For security reasons, do not share this OTP with anyone.\r\n" + "\r\n" + "Thank you,\r\n"
+					+ "\r\n" + "\n" + "Regards,\n" + "Team HackerHub";
+			if (mailService.sendEmail(user.getEmail(), body, subject)) {
+				String otpHash = hashService.generateHash(otp);
+				String passwordHash = hashService.generateHash(user.getPassword());
+				otpService.saveOtp(user.getEmail(), user.getName(), passwordHash, otpHash);
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			throw new UserAlreadyExistsException("User already exists");
 		}
 	}
 
@@ -90,17 +88,40 @@ public class UserService {
 		}
 	}
 
-	public UserDetailsDTO verifyUser(String email, String password) {
+	public Object verifyUser(String email, String password) {
 		Optional<User> user = userRepository.findByEmail(email);
 		if (user.isPresent()) {
 			String hash = hashService.generateHash(password);
 			if (user.get().getPassword().equals(hash)) {
-				UserDetailsDTO userDetailsDTO = new UserDetailsDTO();
-				userDetailsDTO.setUserId(user.get().getUserId());
-				userDetailsDTO.setName(user.get().getName());
-				userDetailsDTO.setRole(user.get().getRole());
-				userDetailsDTO.setEmail(user.get().getEmail());
-				return userDetailsDTO;
+				if (user.get().getRole().equals(Role.participant) || user.get().getRole().equals(Role.admin)) {
+					UserDetailsDTO userDetailsDTO = new UserDetailsDTO();
+					userDetailsDTO.setUserId(user.get().getUserId());
+					userDetailsDTO.setName(user.get().getName());
+					userDetailsDTO.setRole(user.get().getRole());
+					userDetailsDTO.setEmail(user.get().getEmail());
+					return userDetailsDTO;
+				} else if (user.get().getRole().equals(Role.judge)) {
+					JudgeUserDetailsDTO judgeUserDetailsDTO = new JudgeUserDetailsDTO();
+					judgeUserDetailsDTO.setUserId(user.get().getUserId());
+					judgeUserDetailsDTO.setName(user.get().getName());
+					judgeUserDetailsDTO.setRole(user.get().getRole());
+					judgeUserDetailsDTO.setEmail(user.get().getEmail());
+					for (Judge judge : user.get().getJudges()) {
+						judgeUserDetailsDTO.getHackathons().add(judgeService.getJudgeHackathonDTO(judge.getJudgeId()));
+					}
+					return judgeUserDetailsDTO;
+				} else {
+					PanelistUserDetails panelistUserDetails = new PanelistUserDetails();
+					panelistUserDetails.setEmail(user.get().getEmail());
+					panelistUserDetails.setName(user.get().getName());
+					panelistUserDetails.setRole(user.get().getRole());
+					panelistUserDetails.setUserId(user.get().getUserId());
+					for (Panelist panelist : user.get().getPanelists()) {
+						PanelistHackathonDTO hackathon = panelistService.getPanelistHackathonDTO(panelist.getPanelistId());
+						panelistUserDetails.getPanelistHackathonDTO().add(hackathon);
+					}
+					return panelistUserDetails;
+				}
 			} else {
 				throw new InvalidUserException("Invalid email or password");
 			}
@@ -122,23 +143,14 @@ public class UserService {
 			String password = passwordGenerationService.generatePassword();
 			evaluator.setPassword(hashService.generateHash(password));
 			String subject = "Welcome to – Your Account Details";
-			String body = "Dear Evaluator,\r\n"
-					+ "\r\n"
-					+ "We are delighted to welcome you to HackerHub as a "+addEvaluatorDTO.getRole()+". Your account has been successfully created, and you are now ready to access our platform.\r\n"
-					+ "\r\n"
-					+ "Below are your login credentials:\r\n"
-					+ "\r\n"
-					+ "Username: "+addEvaluatorDTO.getEmail()+"\r\n"
-					+ "\r\n"
-					+ "Password: "+password+"\r\n"
-					+ "\r\n"
-					+ "Please use the provided credentials to log in to your account."
-					+ "\r\n"
+			String body = "Dear Evaluator,\r\n" + "\r\n" + "We are delighted to welcome you to HackerHub as a "
+					+ addEvaluatorDTO.getRole()
+					+ ". Your account has been successfully created, and you are now ready to access our platform.\r\n"
+					+ "\r\n" + "Below are your login credentials:\r\n" + "\r\n" + "Username: "
+					+ addEvaluatorDTO.getEmail() + "\r\n" + "\r\n" + "Password: " + password + "\r\n" + "\r\n"
+					+ "Please use the provided credentials to log in to your account." + "\r\n"
 					+ "We appreciate your participation and look forward to your valuable contributions to HackerHub.\r\n"
-					+ "\r\n"
-					+ "Best regards,\r\n"
-					+ "\r\n"
-					+ "Team HackerHub";
+					+ "\r\n" + "Best regards,\r\n" + "\r\n" + "Team HackerHub";
 			if (mailService.sendEmail(addEvaluatorDTO.getEmail(), body, subject)) {
 				userRepository.save(evaluator);
 			} else {

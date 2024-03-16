@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.capstone.DTO.JudgeHackathonDTO;
 import com.example.capstone.DTO.ReviewDTO;
 import com.example.capstone.DTO.TeamDetailsToJudgeDTO;
 import com.example.capstone.Entity.Hackathon;
@@ -30,7 +31,10 @@ public class JudgeService {
 	public void addReview(int teamId, ReviewDTO reviewDTO) {
 		reviewService.addReview(teamId, reviewDTO);
 	}
-	
+	public JudgeHackathonDTO getJudgeHackathonDTO(int judgeId)
+	{
+		return judgeRepository.findAssignedHackathon(judgeId);
+	}
 	public List<TeamDetailsToJudgeDTO> getSelectedTeamsDetails(int hackathonId) {
 		return judgeRepository.findSelectedTeamsDetailsByHackathonId(hackathonId);
 	}
