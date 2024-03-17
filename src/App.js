@@ -2,9 +2,9 @@
 import React from 'react'
 import EvaluatorRegistration from './components/EvaluatorRegistration';
 import EvaluatorAssign from './components/EvaluatorAssign';
-import AdminEvaluators from './components/AdminEvaluators';
+import AdminEvaluators from './pages/AdminEvaluators';
 import CreateHackathon from './components/CreateHackathon';
-import AdminHackathons from './components/AdminHackathons';
+import AdminHackathons from './pages/AdminHackathons';
 import ListHackathon from './components/ListHackathon';
 import ListEvaluator from './components/ListEvaluator';
 // import AdminDashboard from './components/AdminDashboard';
@@ -14,10 +14,11 @@ import { BrowserRouter,Routes,Route } from 'react-router-dom';
 import { useState} from 'react';
 import Hackathons from './pages/Hackathons';
 import IdeaSubmission from './pages/IdeaSubmission';
-import Results from './pages/Results';
+// import Results from './pages/Results';
 import Judge from './components/Judge';
 import YourComponent from './components/PanelHackathonDropdown';
 import Trial from './components/Trial';
+import BaseLayout from './components/BaseLayout';
 export const CreateContext=React.createContext()
 const Provider=CreateContext.Provider
 function App() {
@@ -122,9 +123,11 @@ const arr = [
         <Route path="/" element={<Home/>}/>
         
         <Route path='hackathons' element={<Hackathons/>}/>
+        <Route path='admin/hackathons' element={<AdminHackathons/>}/>
+        <Route path='admin/evaluators' element={<AdminEvaluators/>}/>
         <Route path='ideasubmission' element={<IdeaSubmission/>}/>
         <Route path='results' element={<Results/>}/>
-        <Route path='trial' element={<Trial />}/>
+        <Route path='trial' element={<BaseLayout />}/>
       </Routes>
       </BrowserRouter>
       {/* <Judge arr={arr}/> */}

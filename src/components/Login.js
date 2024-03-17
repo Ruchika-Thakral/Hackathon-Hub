@@ -13,12 +13,13 @@ const SignInForm = ({ toggleModal, toggleModals }) => {
     };
     return (
         <form
-            className="account-form  w-96 mx-auto border border-black rounded-xl mt-2 p-2"
-            onSubmit={(evt) => evt.preventDefault()}
+            className="account-form w-full mx-auto rounded-xl mt-2 p-2"
+
+            onSubmit={(e) => e.preventDefault()}
         >
             <div
                 className={
-                    "account-form-fields sign-in flex flex-col gap-y-4 sign-up w-72 mx-auto"
+                    "account-form-fields sign-in flex flex-col gap-y-4 sign-up w-full mx-auto"
                 }
             >
                 <Input
@@ -40,23 +41,24 @@ const SignInForm = ({ toggleModal, toggleModals }) => {
             </div>
             <br />
             <div
-                style={{
-                    alignItems: "center",
-                    display: "flex",
-                    flexDirection: "column",
-                }}
+                className="flex flex-col align-middle"
+                // style={{
+                //     alignItems: "center",
+                //     display: "flex",
+                //     flexDirection: "column",
+                // }}
             >
                 <Button
-                    className="btn-submit-form"
+                    className="btn-submit-form cursor-pointer"
                     type="submit"
-                    style={{ cursor: "pointer" }}
+                    // style={{ cursor: "pointer" }}
                 >
                     Sign in
                 </Button>
                 <Button
                     onClick={handleGoogleSignIn}
-                    className="btn-google-sign-in"
-                    style={{ cursor: "pointer", marginTop: "10px" }}
+                    className="btn-google-sign-in mt-2 cursor-pointer"
+                    // style={{ cursor: "pointer", marginTop: "10px" }}
                 >
                     Sign in with Google
                 </Button>
