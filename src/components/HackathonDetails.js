@@ -1,17 +1,23 @@
-import React from "react";
-import { Button, Typography } from "@material-tailwind/react";
+import React, { useEffect } from "react";
+import { Button,Typography} from "@material-tailwind/react";
 import { useContext } from "react";
 import { CreateContext } from "../App";
 import TeamRegistration from "./TeamRegistration";
 import { useState } from "react";
-
 const HackathonDetails = () => {
-    const { details } = useContext(CreateContext);
+    const { details} = useContext(CreateContext);
     const [open, setOpen] = useState(false);
+    const [loading,setLoading]=useState(true)
+    useEffect(()=>{
+        if(details){
+            setLoading(false)
+        }
+    },[details])
     return (
-        <div className="mx-2 w-2/3">
+        <>
+        {!loading && <div className="mx-2 w-2/3">
             <Typography className="w-fit mx-auto" variant="h2" color="black">
-                {details.name}
+            {details.name}
             </Typography>
             <div className="w-full border border-black mt-1 rounded-2xl p-2">
                 <Typography variant="h4" color="black">
@@ -55,6 +61,9 @@ const HackathonDetails = () => {
             </div>
             <TeamRegistration open={open} setOpen={setOpen} />
         </div>
+       }
+        
+        </>
     );
 };
 

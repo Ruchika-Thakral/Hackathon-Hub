@@ -6,6 +6,8 @@ import {
     Button,
     Input,
 } from "@material-tailwind/react";
+import { useDispatch } from "react-redux";
+import { logout } from "../features/user/userSlice";
 
 
 const DrawerDefault = ({ opens, onClose, user }) => {
@@ -23,6 +25,11 @@ const DrawerDefault = ({ opens, onClose, user }) => {
     // const handleSelectChange = (e) => {
     //   setSelectedHackathon(e.taget.value);
     // };
+    const dispatch=useDispatch()
+    const logoutHandler=()=>{
+        dispatch(logout())
+        onClose()
+    }
     return (
         <Drawer
             placement="right"
@@ -85,6 +92,7 @@ const DrawerDefault = ({ opens, onClose, user }) => {
                         </Typography>
                         {/* <Typography variant="body1">{user.email}</Typography> */}
                     </div>
+                    <Button onClick={logoutHandler}>Log Out</Button>
                     <div className="mt-6">
                         <Button size="sm" onClick={handleEdit}>
                             Edit

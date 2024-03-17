@@ -37,7 +37,7 @@ const SignUpForm = ({onSuccess}) => {
             
         }     // otp is successfullyverified`
     },[status,setEmailVerification,onSuccess,dispatch,loginDetails])
-    const handleEmailVerification = async() => {
+    const handleEmailVerification = () => {
        dispatch(userRegistration(formData))
         // Perform email verification logic here, e.g., send OTP to the provided email
         // After verification, set isEmailVerified to true
