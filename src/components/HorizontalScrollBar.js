@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import styles from "./HorizontalScrollBar.module.css";
 import { useContext } from "react";
 import { CreateContext } from "../App";
-
+import { useDispatch} from "react-redux";
+import { fetchHackathons } from "../features/hackathon/hackathonSlice";
+import { useSelector } from "react-redux";
 const HorizontalScrollBar = () => {
-    const { arr, setDetails } = useContext(CreateContext);
+    const { arr,setDetails } = useContext(CreateContext);
+
     const clickHandler = (item) => {
         setDetails(item);
     };
@@ -18,7 +21,7 @@ const HorizontalScrollBar = () => {
             {arr.map((item) => (
                 <Link
                     to="hackathons"
-                    key={item.id}
+                    key={item.hackathonId}
                     onClick={() => clickHandler(item)}
                 >
                     <div className="shrink-0 w-96  h-48 border border-black rounded-3xl">
@@ -30,11 +33,9 @@ const HorizontalScrollBar = () => {
                             {item.name}
                         </Typography>
                         <Typography variant="h6" color="black">
-                            Start Date:{item.start}
+                            Start Date:{item.startDate}
                         </Typography>
-                        <Typography variant="h6" color="black">
-                            End Date:{item.end}
-                        </Typography>
+    
                     </div>
                 </Link>
             ))}

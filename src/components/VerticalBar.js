@@ -3,11 +3,11 @@ import { Typography } from "@material-tailwind/react";
 import { useContext } from "react";
 import { CreateContext } from "../App";
 import styles from "./VerticalBar.module.css";
-
 const VerticalBar = () => {
-    const { arr, setDetails } = useContext(CreateContext);
+    const {arr,setDetails}=useContext(CreateContext)
+        // dispatch(fetchHackathons())
     const clickHandler = (item) => {
-        setDetails(item);
+        setDetails(item)
     };
     return (
         <div
@@ -16,7 +16,7 @@ const VerticalBar = () => {
         >
             {arr.map((item) => (
                 <div
-                    key={item.id}
+                    key={item.hackathonId}
                     className="w-96 h-48 mb-5 ml-3 border border-black rounded-3xl"
                     onClick={() => clickHandler(item)}
                 >
@@ -28,14 +28,12 @@ const VerticalBar = () => {
                         {item.name}
                     </Typography>
                     <Typography className="" variant="h6" color="black">
-                        Start Date:{item.start}
-                    </Typography>
-                    <Typography className="" variant="h6" color="black">
-                        End Date:{item.end}
+                        Start Date:{item.startDate}
                     </Typography>
                 </div>
             ))}
         </div>
+        
     );
 };
 
