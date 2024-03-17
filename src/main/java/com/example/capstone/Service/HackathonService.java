@@ -53,11 +53,7 @@ public class HackathonService {
 		hackathon.setReviewEndTime(createHackathonDTO.getReviewEndTime());
 		hackathonRepository.save(hackathon);
 	}
-
-//Retrieve all hackathons from the database
-
-	// Helper method to convert a Hackathon entity to a HackathonDTO
-
+	
 	public List<HackathonDTO> getAllHackathons() {
 		List<HackathonDTO> hackathonDTOs = hackathonRepository.findHackathonsWithSelectedAttributes();
 		return hackathonDTOs;
@@ -109,6 +105,7 @@ public class HackathonService {
 							+ "\r\n"
 							+ "Team HackerHub";
 					user.setAvailable(false);
+					user.setAssignedHackathon(hackathon.get().getHackathonId());
 					users.add(i, user);
 					reciever = user.getEmail();
 					if (user.getRole().equals(Role.panelist)) {
@@ -178,10 +175,12 @@ public class HackathonService {
 	    for(Judge judge:hackathon.get().getJudges())
 	    {
 	    	judge.getUser().setAvailable(true);
+	    	judge.getUser().setAssignedHackathon(null);
 	    }
 	    for(Panelist panelist:hackathon.get().getPanelists())
 	    {
 	    	panelist.getUser().setAvailable(true);
+	    	panelist.getUser().setAssignedHackathon(null);
 	    }
 	    Collections.sort(scores,(s1,s2)->s1.getSecond().compareTo(s2.getSecond()));
 	    hackathon.get().setFirstTeamId(scores.size()>=1?String.valueOf(scores.get(0).getFirst()):null);

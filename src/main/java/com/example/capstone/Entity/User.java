@@ -22,7 +22,7 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	private boolean isAvailable;
-
+    private Integer assignedHackathon;
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Participant> participants;
 
@@ -31,7 +31,7 @@ public class User {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Judge> judges;
-
+  
 	public Integer getUserId() {
 		return userId;
 	}
@@ -104,4 +104,16 @@ public class User {
 		this.judges = judges;
 	}
 
+	public Integer getAssignedHackathon() {
+		return assignedHackathon;
+	}
+
+	public void setAssignedHackathon(Integer assignedHackathon) {
+		this.assignedHackathon = assignedHackathon;
+	}
+
+	public void setParticipants(List<Participant> participants) {
+		this.participants = participants;
+	}
+    
 }

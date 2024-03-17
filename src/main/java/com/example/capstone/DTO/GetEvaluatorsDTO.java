@@ -8,6 +8,34 @@ public class GetEvaluatorsDTO {
 	private String email;
 	private String name;
 	private Enum<Role> role;
+    private boolean isAvailable;
+    private Integer assignedHackathon;
+	public GetEvaluatorsDTO(int userId, String email, String name, Enum<Role> role, boolean isAvailable,
+			Integer assignedHackathon) {
+		super();
+		this.userId = userId;
+		this.email = email;
+		this.name = name;
+		this.role = role;
+		this.isAvailable = isAvailable;
+		this.assignedHackathon = assignedHackathon;
+	}
+
+	public boolean isAvailable() {
+		return isAvailable;
+	}
+
+	public void setAvailable(boolean isAvailable) {
+		this.isAvailable = isAvailable;
+	}
+
+	public Integer getAssignedHackathon() {
+		return assignedHackathon;
+	}
+
+	public void setAssignedHackathon(Integer assignedHackathon) {
+		this.assignedHackathon = assignedHackathon;
+	}
 
 	public GetEvaluatorsDTO() {
 

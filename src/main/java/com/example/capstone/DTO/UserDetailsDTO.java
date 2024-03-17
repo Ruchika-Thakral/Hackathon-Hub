@@ -7,6 +7,24 @@ public class UserDetailsDTO {
 	private String name;
 	private String email;
 	private Role role;
+	private boolean isAvailable;
+	private Integer assignedHackathon;
+	public boolean isAvailable() {
+		return isAvailable;
+	}
+
+	public void setAvailable(boolean isAvailable) {
+		this.isAvailable = isAvailable;
+	}
+
+	public int getAssignedHackathon() {
+		return assignedHackathon;
+	}
+
+	public void setAssignedHackathon(int assignedHackathon) {
+		this.assignedHackathon = assignedHackathon;
+	}
+
 	public UserDetailsDTO() {
 
 	}

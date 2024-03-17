@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query("SELECT u.userId,u.name,u.email,u.role FROM User  u WHERE u.userId=?1")
 	Tuple findUserById(int userId);
 
-	@Query("SELECT new com.example.capstone.DTO.GetEvaluatorsDTO(u.userId, u.name, u.email, u.role) FROM User u WHERE u.role IN :roles")
+	@Query("SELECT new com.example.capstone.DTO.GetEvaluatorsDTO(u.userId, u.name, u.email, u.role,u.isAvailable,u.assignedHackathon) FROM User u WHERE u.role IN :roles")
 	public List<GetEvaluatorsDTO> findUsersByRolesAndIsAvailable(List<Role> roles);
 
 }

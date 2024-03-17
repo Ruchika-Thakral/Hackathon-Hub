@@ -10,15 +10,8 @@ import org.springframework.stereotype.Service;
 import com.example.capstone.DTO.RegisterEvaluatorDTO;
 import com.example.capstone.DTO.EvaluatorDTO;
 import com.example.capstone.DTO.GetEvaluatorsDTO;
-import com.example.capstone.DTO.HackathonDTO;
-import com.example.capstone.DTO.JudgeUserDetailsDTO;
-import com.example.capstone.DTO.PanelistHackathonDTO;
-import com.example.capstone.DTO.PanelistUserDetails;
 import com.example.capstone.DTO.UserDTO;
 import com.example.capstone.DTO.UserDetailsDTO;
-import com.example.capstone.Entity.Hackathon;
-import com.example.capstone.Entity.Judge;
-import com.example.capstone.Entity.Panelist;
 import com.example.capstone.Entity.Participant;
 import com.example.capstone.Entity.Role;
 import com.example.capstone.Entity.User;
@@ -46,10 +39,6 @@ public class UserService {
 
 	@Autowired
 	private PasswordGenerationService passwordGenerationService;
-	@Autowired
-	private JudgeService judgeService;
-	@Autowired
-	private PanelistService panelistService;
 
 	public boolean generateOTP(UserDTO user) {
 		Optional<User> user1 = userRepository.findByEmail(user.getEmail());
@@ -84,51 +73,78 @@ public class UserService {
 			user.setPassword(userDto.getPassword());
 			user.setRole(Role.participant);
 			user.setAvailable(true);
+			user.setAssignedHackathon(-1);
 			userRepository.saveAndFlush(user);
 		}
 	}
-
-	public Object verifyUser(String email, String password) {
-		Optional<User> user = userRepository.findByEmail(email);
-		if (user.isPresent()) {
-			String hash = hashService.generateHash(password);
-			if (user.get().getPassword().equals(hash)) {
-				if (user.get().getRole().equals(Role.participant) || user.get().getRole().equals(Role.admin)) {
-					UserDetailsDTO userDetailsDTO = new UserDetailsDTO();
-					userDetailsDTO.setUserId(user.get().getUserId());
-					userDetailsDTO.setName(user.get().getName());
-					userDetailsDTO.setRole(user.get().getRole());
-					userDetailsDTO.setEmail(user.get().getEmail());
-					return userDetailsDTO;
-				} else if (user.get().getRole().equals(Role.judge)) {
-					JudgeUserDetailsDTO judgeUserDetailsDTO = new JudgeUserDetailsDTO();
-					judgeUserDetailsDTO.setUserId(user.get().getUserId());
-					judgeUserDetailsDTO.setName(user.get().getName());
-					judgeUserDetailsDTO.setRole(user.get().getRole());
-					judgeUserDetailsDTO.setEmail(user.get().getEmail());
-					for (Judge judge : user.get().getJudges()) {
-						judgeUserDetailsDTO.getHackathons().add(judgeService.getJudgeHackathonDTO(judge.getJudgeId()));
-					}
-					return judgeUserDetailsDTO;
-				} else {
-					PanelistUserDetails panelistUserDetails = new PanelistUserDetails();
-					panelistUserDetails.setEmail(user.get().getEmail());
-					panelistUserDetails.setName(user.get().getName());
-					panelistUserDetails.setRole(user.get().getRole());
-					panelistUserDetails.setUserId(user.get().getUserId());
-					for (Panelist panelist : user.get().getPanelists()) {
-						PanelistHackathonDTO hackathon = panelistService.getPanelistHackathonDTO(panelist.getPanelistId());
-						panelistUserDetails.getPanelistHackathonDTO().add(hackathon);
-					}
-					return panelistUserDetails;
-				}
-			} else {
-				throw new InvalidUserException("Invalid email or password");
-			}
-		} else {
-			throw new UserNotFoundException("User not exists");
-		}
-	}
+    public UserDetailsDTO verifyUser(String email,String password)
+    {
+    	Optional<User> optionalUser = userRepository.findByEmail(email);
+    	if(optionalUser.isPresent())
+    	{
+    		User user=optionalUser.get();
+    		String hash=hashService.generateHash(password);
+    		if(user.getPassword().equals(hash))
+    		{
+    			UserDetailsDTO userDetailsDTO=new UserDetailsDTO();
+    			userDetailsDTO.setName(user.getName());
+    			userDetailsDTO.setAvailable(user.isAvailable());
+    			userDetailsDTO.setEmail(user.getEmail());
+    			userDetailsDTO.setRole(user.getRole());
+    			userDetailsDTO.setAssignedHackathon(user.getAssignedHackathon());
+    			return userDetailsDTO;
+    		}
+    		else
+    		{
+    			throw new InvalidUserException("Invalid email or password");
+    		}
+    	}
+    	else
+    	{
+    		throw new UserNotFoundException("User not exists");
+    	}
+    }
+//	public Object verifyUser(String email, String password) {
+//		Optional<User> user = userRepository.findByEmail(email);
+//		if (user.isPresent()) {
+//			String hash = hashService.generateHash(password);
+//			if (user.get().getPassword().equals(hash)) {
+//				if (user.get().getRole().equals(Role.participant) || user.get().getRole().equals(Role.admin)) {
+//					UserDetailsDTO userDetailsDTO = new UserDetailsDTO();
+//					userDetailsDTO.setUserId(user.get().getUserId());
+//					userDetailsDTO.setName(user.get().getName());
+//					userDetailsDTO.setRole(user.get().getRole());
+//					userDetailsDTO.setEmail(user.get().getEmail());
+//					return userDetailsDTO;
+//				} else if (user.get().getRole().equals(Role.judge)) {
+//					JudgeUserDetailsDTO judgeUserDetailsDTO = new JudgeUserDetailsDTO();
+//					judgeUserDetailsDTO.setUserId(user.get().getUserId());
+//					judgeUserDetailsDTO.setName(user.get().getName());
+//					judgeUserDetailsDTO.setRole(user.get().getRole());
+//					judgeUserDetailsDTO.setEmail(user.get().getEmail());
+//					for (Judge judge : user.get().getJudges()) {
+//						judgeUserDetailsDTO.getHackathons().add(judgeService.getJudgeHackathonDTO(judge.getJudgeId()));
+//					}
+//					return judgeUserDetailsDTO;
+//				} else {
+//					PanelistUserDetails panelistUserDetails = new PanelistUserDetails();
+//					panelistUserDetails.setEmail(user.get().getEmail());
+//					panelistUserDetails.setName(user.get().getName());
+//					panelistUserDetails.setRole(user.get().getRole());
+//					panelistUserDetails.setUserId(user.get().getUserId());
+//					for (Panelist panelist : user.get().getPanelists()) {
+//						PanelistHackathonDTO hackathon = panelistService.getPanelistHackathonDTO(panelist.getPanelistId());
+//						panelistUserDetails.getPanelistHackathonDTO().add(hackathon);
+//					}
+//					return panelistUserDetails;
+//				}
+//			} else {
+//				throw new InvalidUserException("Invalid email or password");
+//			}
+//		} else {
+//			throw new UserNotFoundException("User not exists");
+//		}
+//	}
 
 	public void addEvaluator(RegisterEvaluatorDTO addEvaluatorDTO) {
 		Optional<User> user = userRepository.findByEmail(addEvaluatorDTO.getEmail());
@@ -140,6 +156,7 @@ public class UserService {
 			evaluator.setEmail(addEvaluatorDTO.getEmail());
 			evaluator.setName(addEvaluatorDTO.getName());
 			evaluator.setRole(addEvaluatorDTO.getRole());
+			evaluator.setAssignedHackathon(null);
 			String password = passwordGenerationService.generatePassword();
 			evaluator.setPassword(hashService.generateHash(password));
 			String subject = "Welcome to – Your Account Details";

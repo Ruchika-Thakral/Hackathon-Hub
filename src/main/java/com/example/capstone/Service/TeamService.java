@@ -45,12 +45,14 @@ public class TeamService {
 		Participant participantLeader = participantService.getParticipant(team, leader, hackathon, true);
 		leader.setParticipants(participantLeader);
 		leader.setAvailable(false);
+		leader.setAssignedHackathon(hackathon.getHackathonId());
 		List<User> users = userService.getUsers(teamCreationDTO.getEmails());
 		List<Participant> participants = team.getParticipants();
 		participants.add(participantLeader);
 		for (User user : users) {
 			Participant participant = participantService.getParticipant(team, user, hackathon, false);
 			user.setAvailable(false);
+			user.setAssignedHackathon(hackathon.getHackathonId());
 			user.setParticipants(participant);
 			participants.add(participant);
 		}

@@ -34,7 +34,7 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
 	}
 	@PostMapping("login")
-	public ResponseEntity<Object> verifyUser(@RequestBody UserLoginDTO userLoginDto) {
+	public ResponseEntity<UserDetailsDTO> verifyUser(@RequestBody UserLoginDTO userLoginDto) {
 		return ResponseEntity.status(HttpStatus.OK).body(userService.verifyUser(userLoginDto.getEmail(), userLoginDto.getPassword()));
 	}
 	@GetMapping("/{id}")
