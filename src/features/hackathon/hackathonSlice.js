@@ -1,30 +1,60 @@
 import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
-    data: [],
+    hackathons:{
+        data:null,
+        loading:false,
+        error:null
+    }
 };
+export const fetchHackathons=createAsyncThunk(
+    'hackathon/fetchHackathons',
+    async (thunkAPI) => {
+        try {
+            const response = await axios.get('http://localhost:8080/Hackathon/all');
+            return response;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+export const hackathonCreation=createAsyncThunk(
+    'hackathon/hackathonCreation',
+    async (hackathonData,thunkAPI) => {
+        try {
+            const response = await axios.post('http://localhost:8080/Admin/hackathon',hackathonData);
+            return response;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
 
 const hackathonSlice = createSlice({
     name: "hackathon",
     initialState,
-    reducers: {
-        login: (state, action) => {
-            state.data.push({ name: action.payload });
-        },
-        logout: (state, action) => {
-            state.push(action.payload);
-        },
-        register: (state, action) => {
-            const { id, title, content } = action.payload;
-            const existingPost = state.find((post) => post.id === id);
-            if (existingPost) {
-                existingPost.title = title;
-                existingPost.content = content;
-            }
-        },
-    },
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchHackathons.pending, (state) => {
+                state.hackathons.loading = true;
+                state.hackathons.error = null;
+            })
+            .addCase(fetchHackathons.fulfilled, (state, action) => {
+                state.hackathons.loading = false;
+                state.hackathons.data = action.payload; // Extract data from the response
+                state.hackathons.error = null;
+            })
+            .addCase(fetchHackathons.rejected, (state, action) => {
+                state.hackathons.loading = false;
+                state.hackathons.data= null;
+                state.hackathons.error = action.payload; // Set error payload
+            })
+        }
 });
 
-export const { login, logout, register } = hackathonSlice.actions;
+
 
 export default hackathonSlice.reducer;

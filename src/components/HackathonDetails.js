@@ -1,10 +1,9 @@
-import React from "react";
-import { Button, Card, CardBody, Timeline, TimelineBody, TimelineConnector, TimelineHeader, TimelineIcon, TimelineItem, Typography } from "@material-tailwind/react";
+import React, { useEffect } from "react";
+import { Button, Card, CardBody, Timeline, TimelineBody, TimelineConnector, TimelineHeader, TimelineIcon, TimelineItem,Typography} from "@material-tailwind/react";
 import { useContext } from "react";
 import { CreateContext } from "../App";
 import TeamRegistration from "./TeamRegistration";
 import { useState } from "react";
-
 const HackathonDetails = () => {
     const hackathons = [
         {
@@ -197,10 +196,17 @@ const HackathonDetails = () => {
         },
     ];
 
-    const { details } = useContext(CreateContext);
+    const { details} = useContext(CreateContext);
     const [open, setOpen] = useState(false);
+    const [loading,setLoading]=useState(true)
+    useEffect(()=>{
+        if(details){
+            setLoading(false)
+        }
+    },[details])
     return (
-        <div className="px-2 w-full">
+        <>
+        {!loading && <div className="px-2 w-full">
             <Card shadow={false}>
                 <CardBody>
                     <Typography
@@ -208,7 +214,7 @@ const HackathonDetails = () => {
                         variant="h2"
                         // color="black"
                     >
-                        {hackathons[0].name}
+                    {hackathons[0].name}
                     </Typography>
                     <div className="w-full rounded-2xl p-2 text-incedo-tertiary-900">
                         <Typography variant="h4">
@@ -348,6 +354,9 @@ const HackathonDetails = () => {
                 </CardBody>
             </Card>
         </div>
+       }
+        
+        </>
     );
 };
 

@@ -4,10 +4,11 @@ import {
     Typography,
     IconButton,
     Button,
-    Select,
-    Option,
     Input,
 } from "@material-tailwind/react";
+import { useDispatch } from "react-redux";
+import { logout } from "../features/user/userSlice";
+
 
 const DrawerDefault = ({ opens, onClose, user }) => {
     const [editMode, setEditMode] = useState(false);
@@ -24,6 +25,11 @@ const DrawerDefault = ({ opens, onClose, user }) => {
     // const handleSelectChange = (e) => {
     //   setSelectedHackathon(e.taget.value);
     // };
+    const dispatch=useDispatch()
+    const logoutHandler=()=>{
+        dispatch(logout())
+        onClose()
+    }
     return (
         <Drawer
             placement="right"
@@ -60,20 +66,10 @@ const DrawerDefault = ({ opens, onClose, user }) => {
                 <form>
                     <div className="mb-4">
                         <Input
-                            label="First Name"
-                            name="firstName"
-                            value={user.firstName}
+                            label="Name"
+                            name="name"
+                            value={user.name}
                         />
-                    </div>
-                    <div className="mb-4">
-                        <Input
-                            label="Last Name"
-                            name="lastName"
-                            value={user.lastName}
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <Input label="Bio" name="bio" value={user.bio} />
                     </div>
                     <div className="mt-6">
                         <Button size="sm" onClick={handleSave}>
@@ -85,46 +81,18 @@ const DrawerDefault = ({ opens, onClose, user }) => {
                 <div>
                     <div className="mb-4">
                         <Typography variant="subtitle1">
-                            First Name: {user.firstName}
+                            Name: {user.name}
                         </Typography>
                         {/* <Typography variant="body1">{user.firstName}</Typography> */}
                     </div>
-                    <div className="mb-4">
-                        <Typography variant="subtitle1">
-                            Last Name: {user.lastName}
-                        </Typography>
-                        {/* <Typography variant="body1">{user.lastName}</Typography> */}
-                    </div>
+        
                     <div className="mb-4">
                         <Typography variant="subtitle1">
                             Email: {user.email}
                         </Typography>
                         {/* <Typography variant="body1">{user.email}</Typography> */}
                     </div>
-                    <div className="mb-4">
-                        <Typography variant="subtitle1">
-                            Bio: {user.bio}
-                        </Typography>
-                        {/* <Typography variant="body1">{user.bio}</Typography> */}
-                    </div>
-                    <div className="mb-4">
-                        <Select
-                            label="Select Hackathon"
-                            // value={selectedHackathon} onChange={handleSelectChange}
-                        >
-                            {user.hackathons.map((option, index) => (
-                                <Option key={index}>{option}</Option>
-                            ))}
-                        </Select>
-                        {/* {selectedHackathon && (
-        <Typography variant="subtitle1">
-          Selected Hackathon: {selectedHackathon}
-        </Typography>
-      )} */}
-
-                        {/* <Typography variant="subtitle1">Hackathons: {user.hackathons.join(', ')}</Typography> */}
-                        {/* <Typography variant="body1">{user.hackathons.join(', ')}</Typography> */}
-                    </div>
+                    <Button onClick={logoutHandler}>Log Out</Button>
                     <div className="mt-6">
                         <Button size="sm" onClick={handleEdit}>
                             Edit

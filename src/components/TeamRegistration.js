@@ -5,17 +5,28 @@ import {
     Input,
     Typography,
 } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { teamRegistration } from "../features/team/teamSlice";
+import { CreateContext } from "../App";
 
 const TeamRegistration = ({ open, setOpen }) => {
+    const {details}=useContext(CreateContext)
+    const login=useSelector(state=>state.user.login.data)
+    const userId=login?login.data.userId:null
+    const hackathonId=details.hackathonId
     const navigate = useNavigate();
+    const dispatch=useDispatch()
     const [formdata, setFormData] = useState({
-        teamname: "",
+        name: "",
         email1: "",
         email2: "",
         email3: "",
     });
+    const emails=[formdata.email1]
+    const name=formdata.name
+    const team={emails,name}
     const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
@@ -25,7 +36,7 @@ const TeamRegistration = ({ open, setOpen }) => {
     const submitHandler = (e) => {
         e.preventDefault();
         const newErrors = {};
-        if (!formdata.teamname) {
+        if (!formdata.name) {
             newErrors.teamname = "Team Name is Required";
         }
         if (formdata.email1 && !validateEmail(formdata.email1)) {
@@ -40,7 +51,7 @@ const TeamRegistration = ({ open, setOpen }) => {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            navigate("/ideasubmission");
+            dispatch(teamRegistration({hackathonId,userId,team}))
         }
         setErrors(newErrors);
     };
@@ -73,7 +84,7 @@ const TeamRegistration = ({ open, setOpen }) => {
                             type="text"
                             label="Team Name"
                             size="lg"
-                            name="teamname"
+                            name="name"
                             value={formdata.teamname}
                             onChange={handleChange}
                         />

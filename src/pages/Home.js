@@ -3,14 +3,16 @@ import React from "react";
 import HorizontalScrollBar from "../components/HorizontalScrollBar";
 import NavBar from "../components/NavBar";
 import { useState } from "react";
-import SignUpDialog from "../components/SignupDailog";
-import SignInDialog from "../components/LoginDailog";
+import SignInDialog from '../components/ELoginDailog';
+import SignUpDialog from "../components/ESignupDialog";
+// import SignUpDialog from "../components/ESignupDailog";
 import Faq from "../components/Faq";
 import DrawerDefault from "../components/Profile";
 import DualFormCard from "../components/Host";
 import Footer from "../components/Footer";
 import BaseLayout from "../components/BaseLayout";
 import Categories from "../components/Categories";
+import { useSelector } from "react-redux";
 
 function Home() {
     // const [showSignInModal, setShowSignInModal] = useState(false);
@@ -28,13 +30,8 @@ function Home() {
     // const toggleSignUpModal = () => {
     //     setShowSignUpModal(!showSignUpModal);
     // };
-    const dummyUser = {
-        firstName: "John",
-        lastName: "Doe",
-        email: "john@example.com",
-        bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        hackathons: ["Hackathon 1", "Hackathon 2", "Hackathon 3"],
-    };
+    const data=useSelector(state=>state.user.login.data)
+    const dummyUser = data?data.data:{}
     return (
         <BaseLayout>
             <div className="bg-white">

@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 
 // const user = null;
 const user = {role: 'admin'};
-
+import { useSelector } from "react-redux";
 const NavBar = ({ toggleSignInModal, toggleSignUpModal, openDrawer }) => {
     // const [openNav, setOpenNav] = useState(true);
 
@@ -108,6 +108,7 @@ const NavBar = ({ toggleSignInModal, toggleSignUpModal, openDrawer }) => {
         );
     }, []);
 
+    const user = useSelector(state=>state.user.login.data)
     const navList = (
         <ul className="mt-2 mb-4 text-[#eaeff7] flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-4">
             {user ? (
@@ -227,6 +228,20 @@ const NavBar = ({ toggleSignInModal, toggleSignUpModal, openDrawer }) => {
                     Register
                 </Button>
             ) : null}
+            <Typography
+                as="li"
+                variant="small"
+                color="blue-gray"
+                className="flex items-center gap-x-2 p-1 font-medium"
+            >
+                {user && <Link
+                    onClick={openDrawer}
+                    className="flex items-center cursor-pointer"
+                >
+                    Profile
+                </Link>}
+                
+            </Typography>
         </ul>
     );
 
