@@ -73,8 +73,7 @@ public class HackathonService {
 		Optional<Hackathon> hackathon = hackathonRepository.findById(addEvaluatorsDTO.getHackathonId());
 		if (hackathon.isPresent()) {
 			List<User> users = userService.getUsersByIds(addEvaluatorsDTO.getEvaluators());
-			List<Panelist> panelists = hackathon.get().getPanelists();
-			List<Judge> judges = hackathon.get().getJudges();
+			List<User> updatedUsers=new ArrayList<>();
 			for (int i = 0; i < users.size(); i++) {
 				User user = users.get(i);
 				if (user.isAvailable()) {
@@ -106,22 +105,23 @@ public class HackathonService {
 							+ "Team HackerHub";
 					user.setAvailable(false);
 					user.setAssignedHackathon(hackathon.get().getHackathonId());
-					users.add(i, user);
 					reciever = user.getEmail();
 					if (user.getRole().equals(Role.panelist)) {
-						hackathon.get().getPanelists().add(panelistService.createPanelist(user, hackathon.get()));
+						Panelist panelist=panelistService.createPanelist(user, hackathon.get());
+						hackathon.get().getPanelists().add(panelist);
+						user.getPanelists().add(panelist);
 						String.format(body,"shortlisting start time:"+formatDate(hackathon.get().getIdeaSubmissionDeadline()),"shortlisting end time"+formatDate(hackathon.get().getShortListDeadLine()));
 					} 
 					else if (user.getRole().equals(Role.judge))
 					{
-						hackathon.get().getJudges().add(judgeService.createJudge(user, hackathon.get()));
+                        Judge judge=judgeService.createJudge(user, hackathon.get());
+						hackathon.get().getJudges().add(judge);
+						user.getJudges().add(judge);
 						String.format(body,"reviewing start time:"+formatDate(hackathon.get().getReviewStartTime()),"review end time"+formatDate(hackathon.get().getReviewEndTime()));
 					}
 					mailService.sendEmail(reciever, body, subject);
 				}
 			}
-			hackathon.get().setJudges(judges);
-			hackathon.get().setPanelists(panelists);
 			userService.updateUsers(users);
 			hackathonRepository.save(hackathon.get());
 		} else {

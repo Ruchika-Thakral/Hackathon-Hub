@@ -37,7 +37,7 @@ public class PanelistService {
 
 	public List<TeamDetailsToPanelistDTO> getTeamDetailsByUserIdAndHackathonId(Integer hackathonId,
 			Integer userId) {
-		User user=userService.findUserById(userId);
+		User user=userService.getUser(userId);
 		Panelist panelist=null;
 		for(Panelist p:user.getPanelists())
 		{

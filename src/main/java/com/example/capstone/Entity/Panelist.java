@@ -1,5 +1,6 @@
 package com.example.capstone.Entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -21,7 +22,7 @@ public class Panelist {
 	private User user;
 
 	@OneToMany
-	private List<Team> teams;
+	private List<Team> teams=new ArrayList<>();
 
 	public Integer getPanelistId() {
 		return panelistId;

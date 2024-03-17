@@ -238,7 +238,6 @@ public class UserService {
 			throw new UserNotFoundException("User not found exception");
 		}
 	}
-
 	public User getUser(int userId) {
 		Optional<User> user = userRepository.findById(userId);
 		if (user.isEmpty()) {
