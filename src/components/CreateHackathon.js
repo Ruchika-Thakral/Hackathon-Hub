@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { UseDispatch, useDispatch } from "react-redux";
 import {
     Card,
     Input,
@@ -13,6 +14,7 @@ import {
 } from "@material-tailwind/react";
 
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { hackathonCreation } from "../features/hackathon/hackathonSlice";
 
 const CreateHackathon = () => {
     const themes = [
@@ -21,7 +23,20 @@ const CreateHackathon = () => {
         { name: "Telecom" },
         { name: "Product Engineering" },
     ];
-    const [selectedTheme, setSelectedTheme] = useState({ name: "" });
+
+    const dispatch = useDispatch();
+    // const [selectedTheme, setSelectedTheme] = useState({ name: "" });
+
+    const [formData, setFormData] = useState({});
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevstate) => ({ ...prevstate, [name]: value }));
+    };
+
+    const handleSubmit = () => {
+        console.log(formData);
+        dispatch(hackathonCreation(formData));
+    };
 
     return (
         <div className="container my-2 mx-auto px-2 lg:px-4 flex justify-center">
@@ -63,6 +78,8 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
+                                name="name"
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="flex flex-col gap-4">
@@ -82,7 +99,7 @@ const CreateHackathon = () => {
                                             color="blue-gray"
                                             className="relative flex h-10 w-full justify-between gap-2 border border-blue-gray-200 bg-blue-gray-500/10 pl-3 pr-2"
                                         >
-                                            {selectedTheme.name}
+                                            {formData?.theme}
                                             <ChevronDownIcon className="absolute w-4 h-4 right-2" />
                                         </Button>
                                     </MenuHandler>
@@ -94,9 +111,14 @@ const CreateHackathon = () => {
                                                     value={theme.name}
                                                     className="flex items-center gap-2"
                                                     onClick={() =>
-                                                        setSelectedTheme(
-                                                            themes[index]
-                                                        )
+                                                        // setSelectedTheme(
+                                                        //     themes[index]
+                                                        // )
+                                                        setFormData({
+                                                            ...formData,
+                                                            theme: themes[index]
+                                                                .name,
+                                                        })
                                                     }
                                                 >
                                                     {theme.name}
@@ -125,6 +147,9 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
+                                step={1}
+                                name="startDate"
+                                onChange={handleChange}
                             />
                         </div>
 
@@ -146,6 +171,10 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
+                                
+                                step={1}
+                                name="ideaSubmissionDeadLine"
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="flex flex-col gap-4">
@@ -166,6 +195,10 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
+                                
+                                step={1}
+                                name="shortListDeadLine"
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="flex flex-col gap-4">
@@ -186,6 +219,10 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
+                                
+                                step={1}
+                                name="implementationDeadLine"
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="flex flex-col gap-4">
@@ -206,6 +243,10 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
+                                
+                                step={1}
+                                name="reviewStartTime"
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="flex flex-col gap-4">
@@ -226,6 +267,10 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
+                                
+                                step={1}
+                                name="reviewEndTime"
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="flex flex-col gap-4 md:col-span-2">
@@ -246,6 +291,10 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
+                                
+                                name="description"
+                                value={formData?.description}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="flex flex-col gap-4 md:col-span-2">
@@ -266,6 +315,9 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
+                                name="rules"
+                                value={formData?.rules}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="flex flex-col gap-4 md:col-span-2">
@@ -286,6 +338,9 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
+                                name="prizes"
+                                value={formData?.prizes}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="flex flex-col gap-4 md:col-span-2">
@@ -306,10 +361,13 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
+                                name="judging_criteria"
+                                value={formData?.judgingCriteria}
+                                onChange={handleChange}
                             />
                         </div>
                     </div>
-                    <Button className="mt-6" fullWidth>
+                    <Button className="mt-6" onClick={handleSubmit} fullWidth>
                         Create Hackathon
                     </Button>
                 </form>

@@ -10,14 +10,39 @@ import {
     MenuItem,
 } from "@material-tailwind/react";
 
+import { useDispatch } from "react-redux";
+
+
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+
+import { registerEvaluator, fetchEvaluators } from "../features/evaluator/evaluatorSlice";
 
 const EvaluatorRegistration = () => {
-    const roles = [{ name: "Panelist" }, { name: "Judge" }];
+    const roles = [
+        { name: "Panelist", value: "panelist" },
+        { name: "Judge", value: "judge" },
+    ];
     const [selectedRoleIndex, setSelectedRoleIndex] = React.useState(0);
     const selectedRole = roles[selectedRoleIndex];
+
+    const dispatch = useDispatch();
+    // const [selectedTheme, setSelectedTheme] = useState({ name: "" });
+
+
+    const [evaluatorData, setEvaluatorData] = useState({role: roles[selectedRoleIndex].value});
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setEvaluatorData((prevstate) => ({ ...prevstate, [name]: value }));
+    };
+
+    const handleSubmit = () => {
+        console.log(evaluatorData);
+        
+        setEvaluatorData({role: roles[selectedRoleIndex].value})
+        dispatch(registerEvaluator(evaluatorData));
+    };
 
     return (
         <div className="container my-2 mx-auto px-1 flex justify-center">
@@ -51,21 +76,25 @@ const EvaluatorRegistration = () => {
                                         className="relative flex h-10 justify-between gap-2 rounded-r-none border border-r-0 border-blue-gray-200 bg-blue-gray-500/10 pl-3"
                                     >
                                         {selectedRole.name}&nbsp;&nbsp;
-                                        <ChevronDownIcon className="absolute w-4 h-4 right-2"/>
+                                        <ChevronDownIcon className="absolute w-4 h-4 right-2" />
                                     </Button>
                                 </MenuHandler>
                                 <MenuList className="max-h-[20rem] max-w-[18rem]">
-                                    {roles.map(({ name }, index) => {
+                                    {roles.map((item, index) => {
                                         return (
                                             <MenuItem
                                                 key={index}
-                                                value={name}
+                                                value={item.name}
                                                 className="flex items-center gap-2"
-                                                onClick={() =>
-                                                    setSelectedRoleIndex(index)
-                                                }
+                                                onClick={() => {
+                                                    setSelectedRoleIndex(index);
+                                                    setEvaluatorData({
+                                                        ...evaluatorData,
+                                                        role: item.value,
+                                                    });
+                                                }}
                                             >
-                                                {name}
+                                                {item.name}
                                             </MenuItem>
                                         );
                                     })}
@@ -78,9 +107,14 @@ const EvaluatorRegistration = () => {
                                     className:
                                         "before:content-none after:content-none",
                                 }}
-                                containerProps={{
-                                    // className: "min-w-0",
-                                }}
+                                containerProps={
+                                    {
+                                        // className: "min-w-0",
+                                    }
+                                }
+                                value={evaluatorData?.name || ""}
+                                name="name"
+                                onChange={handleChange}
                             />
                         </div>
                         <Typography
@@ -100,9 +134,12 @@ const EvaluatorRegistration = () => {
                             containerProps={{
                                 className: "min-w-0",
                             }}
+                            value={evaluatorData?.email || ""}
+                            name="email"
+                            onChange={handleChange}
                         />
                     </div>
-                    <Button className="mt-6" fullWidth>
+                    <Button className="mt-6" fullWidth onClick={handleSubmit}>
                         Create{" " + selectedRole.name}
                     </Button>
                 </form>

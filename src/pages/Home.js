@@ -7,7 +7,7 @@ import SignInDialog from '../components/ELoginDailog';
 import SignUpDialog from "../components/ESignupDialog";
 // import SignUpDialog from "../components/ESignupDailog";
 import Faq from "../components/Faq";
-import DrawerDefault from "../components/Profile";
+// import DrawerDefault from "../components/Profile";
 import DualFormCard from "../components/Host";
 import Footer from "../components/Footer";
 import BaseLayout from "../components/BaseLayout";
@@ -17,9 +17,9 @@ import { useSelector } from "react-redux";
 function Home() {
     // const [showSignInModal, setShowSignInModal] = useState(false);
     // const [showSignUpModal, setShowSignUpModal] = useState(false);
-    const [showProile, setShowProfile] = useState(false);
-    const openDrawer = () => setShowProfile(true);
-    const closeDrawer = () => setShowProfile(false);
+    // const [showProile, setShowProfile] = useState(false);
+    // const openDrawer = () => setShowProfile(true);
+    // const closeDrawer = () => setShowProfile(false);
 
     // Function to toggle sign-in modal display
     // const toggleSignInModal = () => {
@@ -30,8 +30,10 @@ function Home() {
     // const toggleSignUpModal = () => {
     //     setShowSignUpModal(!showSignUpModal);
     // };
-    const data=useSelector(state=>state.user.login.data)
-    const dummyUser = data?data.data:{}
+
+    // const data=useSelector(state=>state.user.login.data)
+    // const dummyUser = data?data.data:{}
+    
     return (
         <BaseLayout>
             <div className="bg-white">
@@ -45,11 +47,11 @@ function Home() {
                     toggleModal={toggleSignInModal}
                     toggleModals={toggleSignUpModal}
                 /> */}
-                <DrawerDefault
+                {/* <DrawerDefault
                     opens={showProile}
                     onClose={closeDrawer}
                     user={dummyUser}
-                />
+                /> */}
                 <Categories />
                 <HorizontalScrollBar />
                 <DualFormCard />

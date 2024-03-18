@@ -20,9 +20,9 @@ const Results = () => {
                         className="flex flex-col  px-9 py-7 rounded-full
        items-center justify-between bg-gradient-to-b from-violetBlue to-persianBlue"
                     >
-                        <h1 className="text-white text-7xl font-bold">76</h1>
+                        <h1 className="text-white text-7xl font-bold">4.1</h1>
                         <p className="text-lg text-lightLavender font-bold">
-                            of 100
+                            of 5
                         </p>
                     </div>
                     <div
@@ -42,14 +42,14 @@ const Results = () => {
                         <div className="result-element bg-lightRed p-3 rounded-md bg-opacity-20">
                             <div className="flex flex-row justify-between">
                                 <div className="flex flex-row space-x-2">
-                                    <img src="" alt="reaction-icon" />
-                                    <p className="text-lightRed"></p>
+                                    {/* <img src="" alt="reaction-icon" /> */}
+                                    <p className="text-lightRed">Team 1</p>
                                 </div>
                                 <div className="flex flex-row space-x-1">
-                                    <p className="font-bold text-darkGrayBlue"></p>
+                                    <p className="font-bold text-darkGrayBlue">4.9</p>
                                     <p className="text-gray-500 font-semibold">/</p>
                                     <p className="text-gray-500 font-semibold">
-                                        100
+                                        5
                                     </p>
                                 </div>
                             </div>
@@ -57,14 +57,14 @@ const Results = () => {
                         <div className="result-element bg-orangeyYellow p-3 rounded-md bg-opacity-20">
                             <div className="flex flex-row justify-between">
                                 <div className="flex flex-row space-x-2">
-                                    <img src="" alt="reaction-icon" />
-                                    <p className="text-orangeyYellow"></p>
+                                    {/* <img src="" alt="reaction-icon" /> */}
+                                    <p className="text-orangeyYellow">Team 2</p>
                                 </div>
                                 <div className="flex flex-row space-x-1">
-                                    <p className="font-bold text-darkGrayBlue"></p>
+                                    <p className="font-bold text-darkGrayBlue">4.7</p>
                                     <p className="text-gray-500 font-semibold">/</p>
                                     <p className="text-gray-500 font-semibold">
-                                        100
+                                        5
                                     </p>
                                 </div>
                             </div>
@@ -72,23 +72,23 @@ const Results = () => {
                         <div className="result-element bg-greenTeal p-3 rounded-md bg-opacity-20">
                             <div className="flex flex-row justify-between">
                                 <div className="flex flex-row space-x-2">
-                                    <img src="" alt="reaction-icon" />
-                                    <p className="text-greenTeal"></p>
+                                    {/* <img src="" alt="reaction-icon" /> */}
+                                    <p className="text-greenTeal">Team 3</p>
                                 </div>
                                 <div className="flex flex-row space-x-1">
-                                    <p className="font-bold text-darkGrayBlue"></p>
+                                    <p className="font-bold text-darkGrayBlue">4.5</p>
                                     <p className="text-gray-500 font-semibold">/</p>
                                     <p className="text-gray-500 font-semibold">
-                                        100
+                                        5
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div className="result-element bg-cobaltBlue p-3 rounded-md bg-opacity-20">
+                        {/* <div className="result-element bg-cobaltBlue p-3 rounded-md bg-opacity-20">
                             <div className="flex flex-row justify-between">
                                 <div className="flex flex-row space-x-2">
-                                    <img src="" alt="reaction-icon" />
-                                    <p className="text-cobaltBlue"></p>
+                                    {/* <img src="" alt="reaction-icon" /> */}
+                                    {/* <p className="text-cobaltBlue"></p>
                                 </div>
                                 <div className="flex flex-row space-x-1">
                                     <p className="font-bold text-darkGrayBlue"></p>
@@ -98,7 +98,7 @@ const Results = () => {
                                     </p>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                     <button
                         className="container p-4

@@ -87,9 +87,9 @@ const Faq = () => {
                                 Any Questions? Look Here
                             </h2>
                             <p className="text-base text-body-color dark:text-dark-6">
-                                There are many variations of passages of Lorem
+                                {/* There are many variations of passages of Lorem
                                 Ipsum available but the majority have suffered
-                                alteration in some form.
+                                alteration in some form. */}
                             </p>
                         </div>
                     </div>
@@ -106,22 +106,23 @@ const Faq = () => {
                             text="Anyone Part of Incedo above level 2 can participate."
                         />
                         <AccordionItem
-                            header=" Will i get team mates assigned?"
+                            header=" Will I get team mates assigned?"
                             text=" No, you should form your own team."
                         />
                     </div>
                     <div className="w-full px-4 lg:w-1/2">
                         <AccordionItem
-                            header="How long we deliver your first blog post?"
-                            text="It takes 2-3 weeks to get your first blog post ready. That includes the in-depth research & creation of your monthly content marketing strategy that we do before writing your first blog post, Ipsum available ."
+                            header="Are there incentives or awards for the winners?"
+                            text="Yes, the winning teams will receive interesting benefits and incentives, such as cash awards, sponsored items, or chances to develop and carry out their proposals further. All competitors will also get the opportunity to exhibit their work and receive praise from the community."
                         />
                         <AccordionItem
-                            header="How long we deliver your first blog post?"
-                            text="It takes 2-3 weeks to get your first blog post ready. That includes the in-depth research & creation of your monthly content marketing strategy that we do before writing your first blog post, Ipsum available ."
+                            header="What are the benefits of participating?"
+                            text="Participating in a hackathon offers numerous benefits, including opportunities to learn new skills, network with industry professionals, showcase your talent, collaborate with peers, and potentially win prizes or recognition for your work."
                         />
                         <AccordionItem
-                            header="How long we deliver your first blog post?"
-                            text="It takes 2-3 weeks to get your first blog post ready. That includes the in-depth research & creation of your monthly content marketing strategy that we do before writing your first blog post, Ipsum available ."
+                            header="Can non-technical people participate?"
+                            text="Of course! People with a variety of skill sets are accepted at hackathons, including those with non-technical backgrounds like design, business
+                            development, and marketing. A variety of perspectives and skill sets help teams produce well-rounded products."
                         />
                     </div>
                 </div>
@@ -149,16 +150,16 @@ const Faq = () => {
                             y2="-418.681"
                             gradientUnits="userSpaceOnUse"
                         >
-                            <stop stop-color="#3056D3" stop-opacity="0.36" />
+                            <stop stopColor="#3056D3" stopOpacity="0.36" />
                             <stop
                                 offset="1"
-                                stop-color="#F5F2FD"
-                                stop-opacity="0"
+                                stopColor="#F5F2FD"
+                                stopOpacity="0"
                             />
                             <stop
                                 offset="1"
-                                stop-color="#F5F2FD"
-                                stop-opacity="0.096144"
+                                stopColor="#F5F2FD"
+                                stopOpacity="0.096144"
                             />
                         </linearGradient>
                     </defs>

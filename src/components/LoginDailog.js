@@ -1,5 +1,5 @@
 // SignInDialog.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Dialog,
     Card,
@@ -10,6 +10,8 @@ import {
     Button,
 } from "@material-tailwind/react";
 import SignInForm from "./Login";
+import { useDispatch, useSelector } from "react-redux";
+import { userLogin } from "../features/user/userSlice";
 
 const SignInDialog = ({ showModal, toggleModal, toggleModals }) => {
     const handleSignUpClick = () => {
@@ -20,6 +22,38 @@ const SignInDialog = ({ showModal, toggleModal, toggleModals }) => {
         // Call the function to initiate Google Sign-In process
         // For example, you can use the Google Sign-In API
     };
+
+    const [formData1, setFormData1] = useState({
+        email: "",
+        password: "",
+    });
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData1((prevstate) => ({ ...prevstate, [name]: value }));
+    };
+
+    const dispatch = useDispatch();
+    const data = useSelector((state) => state.user.login.data);
+    const status = data ? data.status : null;
+    const error = useSelector((state) => state.user.login.error);
+    const loading = useSelector((state) => state.user.login.loading);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(formData1);
+        dispatch(userLogin(formData1));
+        console.log("loggedin");
+        toggleModal();
+    };
+
+    useEffect(() => {
+        console.log(data);
+    }, [data]);
+
+    // useEffect(() => {
+    //     if (status === 200) {
+    //         onSuccess();
+    //     }
+    // }, [status, onSuccess]);
 
     return (
         <Dialog open={showModal} handler={toggleModal} size="xs">
@@ -39,7 +73,7 @@ const SignInDialog = ({ showModal, toggleModal, toggleModals }) => {
                     <CardBody>
                         <form
                             className="account-form w-full mx-auto rounded-xl mt-2 p-2"
-                            onSubmit={(e) => e.preventDefault()}
+                            onSubmit={handleSubmit}
                         >
                             <div
                                 className={
@@ -52,13 +86,17 @@ const SignInDialog = ({ showModal, toggleModal, toggleModals }) => {
                                     type="email"
                                     label="E-mail"
                                     placeholder="abc@gmail.com"
+                                    onChange={handleChange}
+                                    value={formData1.email}
                                     required
                                 />
-                                <Input
+                                    <Input
                                     id="password"
                                     name="password"
                                     type="password"
                                     label="Password"
+                                    onChange={handleChange}
+                                    value={formData1.password}
                                     placeholder="*******"
                                     required
                                 />
@@ -75,6 +113,7 @@ const SignInDialog = ({ showModal, toggleModal, toggleModals }) => {
                                 <Button
                                     className="btn-submit-form cursor-pointer"
                                     type="submit"
+                                    // onClick={handleSubmit}
                                     // style={{ cursor: "pointer" }}
                                 >
                                     Sign in

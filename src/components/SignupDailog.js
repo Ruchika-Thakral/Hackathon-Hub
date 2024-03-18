@@ -1,5 +1,12 @@
 // SignUpDialog.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    otpVerification,
+    userLogin,
+    userRegistration,
+} from "../features/user/userSlice";
+
 import {
     Dialog,
     Card,
@@ -12,20 +19,62 @@ import {
 import SignUpForm from "./Singup";
 
 function SignUpDialog({ showModal, toggleModal }) {
-    const [isEmailVerified, setEmailVerified] = useState(false);
-    const [otp, setOtp] = useState("");
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+        otp: "",
+    });
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevstate) => ({ ...prevstate, [name]: value }));
+    };
+    const data = useSelector((state) => state.user.register.data);
+    const status = data ? data.status : null;
+    const error = useSelector((state) => state.user.register.error);
+    const loading = useSelector((state) => state.user.register.loading);
+    const dispatch = useDispatch();
 
+    const [emailVerification, setEmailVerification] = useState(false);
+    const loginDetails = { email: formData.email, password: formData.password };
+    useEffect(() => {
+        if (status === 200) {
+            setEmailVerification(true);
+        }
+        if (status === 201) {
+            dispatch(userLogin(loginDetails));
+            console.log("loggedin")
+            toggleModal();
+            // onSuccess();
+        } // otp is successfullyverified`
+    }, [status, setEmailVerification, dispatch, loginDetails]);
     const handleEmailVerification = () => {
+        dispatch(userRegistration(formData));
         // Perform email verification logic here, e.g., send OTP to the provided email
         // After verification, set isEmailVerified to true
-        setEmailVerified(true);
     };
-
-    const handleVerifyOTP = () => {
+    const otpDetails = { email: formData.email, otp: formData.otp };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        dispatch(otpVerification(otpDetails));
         // Perform OTP verification logic here
         // After verification, you can redirect the user or perform any other action
-        console.log("OTP verified");
     };
+
+    // const [isEmailVerified, setEmailVerified] = useState(false);
+    // const [otp, setOtp] = useState("");
+
+    // const handleEmailVerification = () => {
+    //     // Perform email verification logic here, e.g., send OTP to the provided email
+    //     // After verification, set isEmailVerified to true
+    //     setEmailVerified(true);
+    // };
+
+    // const handleVerifyOTP = () => {
+    //     // Perform OTP verification logic here
+    //     // After verification, you can redirect the user or perform any other action
+    //     console.log("OTP verified");
+    // };
 
     return (
         <Dialog open={showModal} handler={toggleModal} size="xs">
@@ -45,7 +94,7 @@ function SignUpDialog({ showModal, toggleModal }) {
                     <CardBody>
                         <form
                             className="account-form w-full mx-auto rounded-xl mt-2 p-2"
-                            onSubmit={(e) => e.preventDefault()}
+                            onSubmit={handleSubmit}
                         >
                             <div
                                 className={
@@ -53,27 +102,31 @@ function SignUpDialog({ showModal, toggleModal }) {
                                 }
                             >
                                 <Input
-                                    id="first-name"
-                                    name="first-name"
+                                    id="name"
+                                    name="name"
                                     type="text"
-                                    label="First Name"
-                                    placeholder="First Name"
+                                    label="Name"
+                                    placeholder="Name"
+                                    value={formData.name}
+                                    onChange={handleChange}
                                     required
                                 />
-                                <Input
-                                    id="last-name"
-                                    name="last-name"
-                                    type="text"
-                                    label="Last Name"
-                                    placeholder="Last Name"
-                                    required
-                                />
+                                {/* <Input
+                id="last-name"
+                name="last-name"
+                type="text"
+                label="Last Name"
+                placeholder="Last Name"
+                required
+            /> */}
                                 <Input
                                     id="email"
                                     name="email"
                                     type="email"
                                     label="E-mail"
                                     placeholder="Email"
+                                    value={formData.email}
+                                    onChange={handleChange}
                                     required
                                 />
                                 <Input
@@ -82,6 +135,8 @@ function SignUpDialog({ showModal, toggleModal }) {
                                     type="password"
                                     label="Password"
                                     placeholder="Password"
+                                    value={formData.password}
+                                    onChange={handleChange}
                                     required
                                 />
                                 <Input
@@ -92,39 +147,31 @@ function SignUpDialog({ showModal, toggleModal }) {
                                     placeholder="Label Password"
                                     required
                                 />
-                                {!isEmailVerified && (
+                                {!emailVerification && (
                                     <Button
-                                        className="w-fit cursor-pointer"
+                                        className="w-fit"
                                         type="button"
                                         onClick={handleEmailVerification}
-                                        // style={{ cursor: "pointer" }}
+                                        style={{ cursor: "pointer" }}
                                     >
                                         Verify Email
                                     </Button>
                                 )}
-                                {isEmailVerified && (
+
+                                {emailVerification && (
                                     <>
                                         <Input
                                             id="otp"
                                             name="otp"
                                             type="text"
                                             label="Enter OTP"
-                                            value={otp}
-                                            onChange={(evt) =>
-                                                setOtp(evt.target.value)
-                                            }
+                                            value={formData.otp}
+                                            onChange={handleChange}
                                             required
                                         />
-                                        <Button
-                                            className="w-fit cursor-pointer"
-                                            type="button"
-                                            onClick={handleVerifyOTP}
-                                            // style={{ cursor: "pointer" }}
-                                        >
-                                            Verify OTP
-                                        </Button>
                                     </>
                                 )}
+                                {error && <h4>{error.message}</h4>}
                             </div>
                             <br />
                             <div className="w-fit mx-auto">
@@ -132,6 +179,7 @@ function SignUpDialog({ showModal, toggleModal }) {
                                     className="btn-submit-form cursor-pointer"
                                     type="submit"
                                     // style={{ cursor: "pointer" }}
+                                    // onClick={handleSubmit}
                                 >
                                     Sign up
                                 </Button>

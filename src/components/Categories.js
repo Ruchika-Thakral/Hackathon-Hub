@@ -7,13 +7,14 @@ import {
     Button,
     Textarea,
 } from "@material-tailwind/react";
+import { Link } from "react-router-dom";
 
 const Categories = () => {
     const themes = [
-        { name: "Life Sciences" },
-        { name: "Banking and Wealth" },
-        { name: "Telecom" },
-        { name: "Product Engineering" },
+        { name: "Life Sciences", value: "lifesciences" },
+        { name: "Banking and Wealth", value: "banking" },
+        { name: "Telecom", value: "telecom" },
+        { name: "Product Engineering", value: "product" },
     ];
 
     return (
@@ -55,45 +56,57 @@ const Categories = () => {
                                 // color="i"
                                 className="mb-4 font-semibold flex md:hidden self-center text-incedo-secondary-600 text-center"
                             >
-                                Explore
-                                Hackathons
+                                Explore Hackathons
                             </Typography>
                             <div className="grid grid-cols-1 md:grid-cols-2 h-full gap-x-4 gap-y-4">
-                                <Card className="h-24 md:h-40 bg-gradient-to-r from-indigo-500 to-blue-500  px-4  py-2 flex align-middle justify-center">
-                                    <Typography
-                                        variant="h4"
-                                        className="mb-2 font-semibold text-white flex justify-center text-center"
-                                    >
-                                        {themes[0].name}
-                                    </Typography>
-                                </Card>
-
-                                <Card className="h-24 md:h-40 bg-gradient-to-r from-blue-800 to-indigo-900 py-2 px-4 flex align-middle justify-center">
-                                    <Typography
-                                        variant="h4"
-                                        className="mb-2 font-semibold text-white flex justify-center text-center"
-                                    >
-                                        {themes[1].name}
-                                    </Typography>
-                                </Card>
-
-                                <Card className="h-24 md:h-40 bg-gradient-to-r from-deep-purple-300 to-purple-500 px-4 py-2 flex align-middle justify-center">
-                                    <Typography
-                                        variant="h4"
-                                        className="mb-2 font-semibold text-white flex justify-center text-center"
-                                    >
-                                        {themes[2].name}
-                                    </Typography>
-                                </Card>
-
-                                <Card className="h-24 md:h-40 bg-gradient-to-r from-red-400 to-red-500 flex py-2 px-4 align-middle justify-center">
-                                    <Typography
-                                        variant="h4"
-                                        className="mb-2 font-semibold text-white flex justify-center text-center"
-                                    >
-                                        {themes[3].name}
-                                    </Typography>
-                                </Card>
+                                <Link
+                                    to={`/hackathons/?theme=${themes[0].value}`}
+                                >
+                                    <Card className="h-24 md:h-40 bg-gradient-to-r from-indigo-500 to-blue-500  px-4  py-2 flex align-middle justify-center">
+                                        <Typography
+                                            variant="h4"
+                                            className="mb-2 font-semibold text-white flex justify-center text-center"
+                                        >
+                                            {themes[0].name}
+                                        </Typography>
+                                    </Card>
+                                </Link>
+                                <Link
+                                    to={`/hackathons/?theme=${themes[1].value}`}
+                                >
+                                    <Card className="h-24 md:h-40 bg-gradient-to-r from-blue-800 to-indigo-900 py-2 px-4 flex align-middle justify-center">
+                                        <Typography
+                                            variant="h4"
+                                            className="mb-2 font-semibold text-white flex justify-center text-center"
+                                        >
+                                            {themes[1].name}
+                                        </Typography>
+                                    </Card>
+                                </Link>
+                                <Link
+                                    to={`/hackathons/?theme=${themes[2].value}`}
+                                >
+                                    <Card className="h-24 md:h-40 bg-gradient-to-r from-deep-purple-300 to-purple-500 px-4 py-2 flex align-middle justify-center">
+                                        <Typography
+                                            variant="h4"
+                                            className="mb-2 font-semibold text-white flex justify-center text-center"
+                                        >
+                                            {themes[2].name}
+                                        </Typography>
+                                    </Card>
+                                </Link>
+                                <Link
+                                    to={`/hackathons/?theme=${themes[3].value}`}
+                                >
+                                    <Card className="h-24 md:h-40 bg-gradient-to-r from-red-400 to-red-500 flex py-2 px-4 align-middle justify-center">
+                                        <Typography
+                                            variant="h4"
+                                            className="mb-2 font-semibold text-white flex justify-center text-center"
+                                        >
+                                            {themes[3].name}
+                                        </Typography>
+                                    </Card>
+                                </Link>
                             </div>
                             {/* <CardBody>
                                 <form className="flex flex-col gap-y-4">
