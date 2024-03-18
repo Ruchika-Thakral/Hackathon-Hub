@@ -1,5 +1,6 @@
 package com.example.capstone.DTO;
 
+//Data Transfer Object (DTO) for representing user data
 public class UserDTO {
 	private String email;
 	private String name;

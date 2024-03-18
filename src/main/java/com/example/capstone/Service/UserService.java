@@ -40,33 +40,58 @@ public class UserService {
 	@Autowired
 	private PasswordGenerationService passwordGenerationService;
 
+	/**
+	 * Generates OTP for user registration and sends it via email.
+	 * 
+	 * @param user The UserDTO object containing user details
+	 * @return true if OTP generation and email sending were successful, false
+	 *         otherwise
+	 * @throws UserAlreadyExistsException if a user with the provided email already
+	 *                                    exists
+	 */
 	public boolean generateOTP(UserDTO user) {
 		Optional<User> user1 = userRepository.findByEmail(user.getEmail());
 		if (user1.isEmpty()) {
+			// Generate OTP
 			String otp = otpService.generateOTP();
 			String subject = "Otp verification";
+			// Email body
 			String body = "Dear Candidate,\r\n" + "\r\n" + "Your One-Time Password (OTP) is: " + otp + " .\r\n" + "\r\n"
 					+ "If you did not request this OTP, please ignore this message.\r\n" + "\r\n"
 					+ "For security reasons, do not share this OTP with anyone.\r\n" + "\r\n" + "Thank you,\r\n"
 					+ "\r\n" + "\n" + "Regards,\n" + "Team HackerHub";
+			// Send email with OTP
 			if (mailService.sendEmail(user.getEmail(), body, subject)) {
+				// Generate hash for OTP and password
 				String otpHash = hashService.generateHash(otp);
 				String passwordHash = hashService.generateHash(user.getPassword());
+				// Save OTP and user details
 				otpService.saveOtp(user.getEmail(), user.getName(), passwordHash, otpHash);
 				return true;
 			} else {
-				return false;
+				return false; // Email sending failed
 			}
 		} else {
 			throw new UserAlreadyExistsException("User already exists");
 		}
 	}
 
+	/**
+	 * Validates the OTP for user registration and creates a new user if not already
+	 * existing.
+	 * 
+	 * @param email The email address of the user
+	 * @param otp   The One-Time Password (OTP) for verification
+	 * @throws InvalidUserException if a user with the provided email already exists
+	 */
 	public void validateOTP(String email, String otp) {
+		// Verify OTP
 		UserDTO userDto = otpService.verifyOtp(email, hashService.generateHash(otp));
+		// Check if user already exists
 		if (userRepository.findByEmail(email).isPresent())
 			throw new InvalidUserException("User already exists");
 		else {
+			// Create new user
 			User user = new User();
 			user.setEmail(userDto.getEmail());
 			user.setName(userDto.getName());
@@ -74,37 +99,45 @@ public class UserService {
 			user.setRole(Role.participant);
 			user.setAvailable(true);
 			user.setAssignedHackathon(-1);
-			userRepository.saveAndFlush(user);
+			userRepository.saveAndFlush(user); // Save user to database
 		}
 	}
-    public UserDetailsDTO verifyUser(String email,String password)
-    {
-    	Optional<User> optionalUser = userRepository.findByEmail(email);
-    	if(optionalUser.isPresent())
-    	{
-    		User user=optionalUser.get();
-    		String hash=hashService.generateHash(password);
-    		if(user.getPassword().equals(hash))
-    		{
-    			UserDetailsDTO userDetailsDTO=new UserDetailsDTO();
-    			userDetailsDTO.setUserId(user.getUserId());
-    			userDetailsDTO.setName(user.getName());
-    			userDetailsDTO.setAvailable(user.isAvailable());
-    			userDetailsDTO.setEmail(user.getEmail());
-    			userDetailsDTO.setRole(user.getRole());
-    			userDetailsDTO.setAssignedHackathon(user.getAssignedHackathon());
-    			return userDetailsDTO;
-    		}
-    		else
-    		{
-    			throw new InvalidUserException("Invalid email or password");
-    		}
-    	}
-    	else
-    	{
-    		throw new UserNotFoundException("User not exists");
-    	}
-    }
+
+	/**
+	 * Method to verify user credentials and retrieve user details if authentication
+	 * is successful
+	 * 
+	 * @param email    The email address of the user
+	 * @param password The password of the user
+	 * @return UserDetailsDTO containing user details if authentication is
+	 *         successful
+	 * @throws InvalidUserException  if email or password is incorrect
+	 * @throws UserNotFoundException if the user does not exist
+	 */
+	public UserDetailsDTO verifyUser(String email, String password) {
+		// Check if user exists
+		Optional<User> optionalUser = userRepository.findByEmail(email);
+		if (optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			String hash = hashService.generateHash(password);
+			// Verify password
+			if (user.getPassword().equals(hash)) {
+				// Create UserDetailsDTO with user details
+				UserDetailsDTO userDetailsDTO = new UserDetailsDTO();
+				userDetailsDTO.setUserId(user.getUserId());
+				userDetailsDTO.setName(user.getName());
+				userDetailsDTO.setAvailable(user.isAvailable());
+				userDetailsDTO.setEmail(user.getEmail());
+				userDetailsDTO.setRole(user.getRole());
+				userDetailsDTO.setAssignedHackathon(user.getAssignedHackathon());
+				return userDetailsDTO; // Return UserDetailsDTO
+			} else {
+				throw new InvalidUserException("Invalid email or password");
+			}
+		} else {
+			throw new UserNotFoundException("User not exists");
+		}
+	}
 //	public Object verifyUser(String email, String password) {
 //		Optional<User> user = userRepository.findByEmail(email);
 //		if (user.isPresent()) {
@@ -147,19 +180,34 @@ public class UserService {
 //		}
 //	}
 
+	/**
+	 * Adds a new evaluator to the system and sends welcome email with login
+	 * credentials.
+	 * 
+	 * @param addEvaluatorDTO The RegisterEvaluatorDTO containing evaluator details
+	 * @throws UserAlreadyExistsException if a user with the provided email already
+	 *                                    exists
+	 * @throws FailedToSendEmailException if the email sending process fails
+	 */
 	public void addEvaluator(RegisterEvaluatorDTO addEvaluatorDTO) {
+		// Check if the user already exists
 		Optional<User> user = userRepository.findByEmail(addEvaluatorDTO.getEmail());
 		if (user.isPresent()) {
+			// Throw exception if user already exists
 			throw new UserAlreadyExistsException("User already exists as " + user.get().getRole());
 		} else {
+			// Create a new evaluator
 			User evaluator = new User();
 			evaluator.setAvailable(true);
 			evaluator.setEmail(addEvaluatorDTO.getEmail());
 			evaluator.setName(addEvaluatorDTO.getName());
 			evaluator.setRole(addEvaluatorDTO.getRole());
 			evaluator.setAssignedHackathon(null);
+			// Generate a random password
 			String password = passwordGenerationService.generatePassword();
+			// Hash the password
 			evaluator.setPassword(hashService.generateHash(password));
+			// Compose email
 			String subject = "Welcome to – Your Account Details";
 			String body = "Dear Evaluator,\r\n" + "\r\n" + "We are delighted to welcome you to HackerHub as a "
 					+ addEvaluatorDTO.getRole()
@@ -169,14 +217,23 @@ public class UserService {
 					+ "Please use the provided credentials to log in to your account." + "\r\n"
 					+ "We appreciate your participation and look forward to your valuable contributions to HackerHub.\r\n"
 					+ "\r\n" + "Best regards,\r\n" + "\r\n" + "Team HackerHub";
+			// Send email with login credentials
 			if (mailService.sendEmail(addEvaluatorDTO.getEmail(), body, subject)) {
+				// Save the evaluator to the database
 				userRepository.save(evaluator);
 			} else {
+				// Throw exception if email sending fails
 				throw new FailedToSendEmailException("Failed to send Email Exception");
 			}
 		}
 	}
 
+	/**
+	 * Retrieves users from the database based on their IDs.
+	 * 
+	 * @param evaluators The list of EvaluatorDTO objects containing user IDs
+	 * @return The list of users retrieved from the database
+	 */
 	public List<User> getUsersByIds(List<EvaluatorDTO> evaluators) {
 		List<User> users = new ArrayList<>();
 		for (EvaluatorDTO e : evaluators) {
@@ -186,6 +243,12 @@ public class UserService {
 		return users;
 	}
 
+	/**
+	 * Retrieves users from the database based on their email addresses.
+	 * 
+	 * @param evaluators The list of email addresses of the users
+	 * @return The list of users retrieved from the database
+	 */
 	public List<User> getUsers(List<String> evaluators) {
 		List<User> users = new ArrayList<>();
 		for (String e : evaluators) {
@@ -195,10 +258,21 @@ public class UserService {
 		return users;
 	}
 
+	/**
+	 * Updates the information of users in the database.
+	 *
+	 * @param users The list of users to be updated
+	 */
 	public synchronized void updateUsers(List<User> users) {
 		userRepository.saveAll(users);
 	}
 
+	/**
+	 * Retrieves user details from the database based on the user ID.
+	 * 
+	 * @param id The ID of the user
+	 * @return The UserDetailsDTO containing user details
+	 */
 	public UserDetailsDTO returnUserDetails(int id) {
 		Tuple t = userRepository.findUserById(id);
 		UserDetailsDTO user = new UserDetailsDTO();
@@ -209,6 +283,16 @@ public class UserService {
 		return user;
 	}
 
+	/**
+	 * Checks if the user is present and available. Throws exceptions if user is not
+	 * found or not available.
+	 * 
+	 * @param user The Optional<User> object representing the user
+	 * @return The User object if present and available
+	 * @throws UserAlreadyExistsException if the user is already assigned to another
+	 *                                    team
+	 * @throws UserNotFoundException      if the user is not found
+	 */
 	public User check(Optional<User> user) {
 		if (user.isPresent()) {
 			if (!user.get().isAvailable()) {
@@ -221,12 +305,28 @@ public class UserService {
 		}
 	}
 
+	/**
+	 * Finds a user in the database based on the email address.
+	 * 
+	 * @param email The email address of the user
+	 * @return The User object found in the database
+	 * @throws UserNotFoundException if the user is not found
+	 */
 	public User findUserByEmail(String email) {
 		Optional<User> user = userRepository.findByEmail(email);
 		return check(user);
 
 	}
 
+	/**
+	 * Finds a user in the database based on the user ID.
+	 * 
+	 * @param id The ID of the user
+	 * @return The User object found in the database
+	 * @throws UserAlreadyExistsException if the user is already assigned to another
+	 *                                    team
+	 * @throws UserNotFoundException      if the user is not found
+	 */
 	public User findUserById(int id) {
 		Optional<User> user = userRepository.findById(id);
 		if (user.isPresent()) {
@@ -239,6 +339,14 @@ public class UserService {
 			throw new UserNotFoundException("User not found exception");
 		}
 	}
+
+	/**
+	 * Retrieves a user from the database based on the user ID.
+	 * 
+	 * @param userId The ID of the user
+	 * @return The User object found in the database
+	 * @throws UserNotFoundException if the user is not found
+	 */
 	public User getUser(int userId) {
 		Optional<User> user = userRepository.findById(userId);
 		if (user.isEmpty()) {
@@ -249,10 +357,23 @@ public class UserService {
 
 	}
 
+	/**
+	 * Retrieves available evaluators from the database based on their roles.
+	 * 
+	 * @param roles The list of roles of evaluators to retrieve
+	 * @return The list of GetEvaluatorsDTO containing available evaluators
+	 */
 	public List<GetEvaluatorsDTO> getAvailableEvaluators(List<Role> roles) {
 		return userRepository.findUsersByRolesAndIsAvailable(roles);
 	}
 
+	/**
+	 * Removes a participant from the user's list of participants.
+	 * 
+	 * @param user        The User object from which the participant is to be
+	 *                    removed
+	 * @param participant The Participant object to be removed
+	 */
 	public void removeParticipant(User user, Participant participant) {
 		user.getParticipants().remove(participant);
 		userRepository.save(user);

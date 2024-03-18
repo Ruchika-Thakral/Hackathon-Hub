@@ -23,20 +23,28 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	// API endpoint for registering a new user and generating OTP
 	@PostMapping("register")
 	public ResponseEntity<String> generateOtp(@RequestBody UserDTO userDto) {
 		userService.generateOTP(userDto);
 		return ResponseEntity.status(HttpStatus.OK).body("OTP generated successfully");
 	}
+
+	// API endpoint for validating OTP and completing user registration
 	@PostMapping("verifyOtp")
 	public ResponseEntity<String> validateOtp(@RequestBody EmailVerificationDTO emailVerificationDto) {
 		userService.validateOTP(emailVerificationDto.getEmail(), emailVerificationDto.getOtp());
 		return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
 	}
+
+	// API endpoint for user login
 	@PostMapping("login")
 	public ResponseEntity<UserDetailsDTO> verifyUser(@RequestBody UserLoginDTO userLoginDto) {
-		return ResponseEntity.status(HttpStatus.OK).body(userService.verifyUser(userLoginDto.getEmail(), userLoginDto.getPassword()));
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(userService.verifyUser(userLoginDto.getEmail(), userLoginDto.getPassword()));
 	}
+
+	// API endpoint for retrieving user details by ID
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDetailsDTO> getUser(@PathVariable int id) {
 		return ResponseEntity.status(HttpStatus.OK).body(userService.returnUserDetails(id));
