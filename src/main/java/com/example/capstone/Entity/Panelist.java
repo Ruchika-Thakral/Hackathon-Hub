@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
+//Entity class representing a panelist participating in a hackathon
 @Entity
 public class Panelist {
 	@Id

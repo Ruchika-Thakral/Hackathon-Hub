@@ -12,12 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.capstone.DTO.HackathonDTO;
 import com.example.capstone.Service.HackathonService;
 
+//Controller for Hackathon related API endpoints
 @RestController
 @RequestMapping("Hackathon")
 public class HackathonController {
+	
+	// Injecting the HackathonService dependency
 	@Autowired
 	private HackathonService hackathonService;
 
+	// Endpoint to retrieve a list of all hackathons
 	@GetMapping
 	public ResponseEntity<List<HackathonDTO>> getHackathons() {
 		return ResponseEntity.status(HttpStatus.OK).body(hackathonService.getAllHackathons());
