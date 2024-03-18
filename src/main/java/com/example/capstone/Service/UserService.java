@@ -87,6 +87,7 @@ public class UserService {
     		if(user.getPassword().equals(hash))
     		{
     			UserDetailsDTO userDetailsDTO=new UserDetailsDTO();
+    			userDetailsDTO.setUserId(user.getUserId());
     			userDetailsDTO.setName(user.getName());
     			userDetailsDTO.setAvailable(user.isAvailable());
     			userDetailsDTO.setEmail(user.getEmail());
