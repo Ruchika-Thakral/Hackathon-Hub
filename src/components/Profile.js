@@ -30,6 +30,8 @@ const DrawerDefault = ({ opens, onClose, user }) => {
         dispatch(logout())
         onClose()
     }
+
+    console.log(user)
     return (
         <Drawer
             placement="right"
@@ -80,15 +82,15 @@ const DrawerDefault = ({ opens, onClose, user }) => {
             ) : (
                 <div>
                     <div className="mb-4">
-                        <Typography variant="subtitle1">
-                            Name: {user.name}
+                        <Typography>
+                            Name: {user?.name}
                         </Typography>
                         {/* <Typography variant="body1">{user.firstName}</Typography> */}
                     </div>
         
                     <div className="mb-4">
-                        <Typography variant="subtitle1">
-                            Email: {user.email}
+                        <Typography>
+                            Email: {user?.email}
                         </Typography>
                         {/* <Typography variant="body1">{user.email}</Typography> */}
                     </div>

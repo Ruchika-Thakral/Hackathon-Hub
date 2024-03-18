@@ -11,7 +11,7 @@ const VerticalBar = () => {
     };
     return (
         <div
-            className={`${styles.main} w-1/3 overflow-y-auto h-full`}
+            className={`${styles.main} w-full overflow-y-auto h-full`}
             style={{ position: "sticky", top: 0 }}
         >
             {arr.map((item) => (
