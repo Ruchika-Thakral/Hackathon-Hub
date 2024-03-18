@@ -1,5 +1,6 @@
 package com.example.capstone.DTO;
 
+//Data Transfer Object (DTO) representing team details for a panelist
 public class TeamDetailsToPanelistDTO {
 	
 	    private Integer teamId;
