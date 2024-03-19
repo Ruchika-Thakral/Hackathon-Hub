@@ -1,5 +1,6 @@
 package com.example.capstone.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +38,14 @@ public class TeamService {
 
 	@Transactional
 	public void CreateTeam(int hackathonid, int userid, TeamCreationDTO teamCreationDTO) {
+		if(checkTimeBound(hackathonid))
+		{
+		Hackathon hackathon=hackathonService.findHackathon(hackathonid);
 		Team team = new Team();
 		team.setName(teamCreationDTO.getName());
+		team.setStatus(Status.registered);
 		User leader = userService.findUserById(userid);
 		teamRepository.save(team);
-		Hackathon hackathon = hackathonService.findHackathon(hackathonid);
 		Participant participantLeader = participantService.getParticipant(team, leader, hackathon, true);
 		leader.setParticipants(participantLeader);
 		leader.setAvailable(false);
@@ -66,10 +70,29 @@ public class TeamService {
 		userService.updateUsers(users);
 		panelistService.updatePanelist(panelist);
 		hackathonService.updateHackathon(hackathon);
+		}
 	}
-
+    public boolean checkTimeBound(int hackathonId)
+    {
+		Hackathon hackathon = hackathonService.findHackathon(hackathonId);
+		LocalDateTime currentTime=LocalDateTime.now();
+		if(currentTime.isBefore(hackathon.getStartDate()))
+		{
+			throw new UnauthorizedException("Hackathon is not Started");
+		}
+		else if(currentTime.isAfter(hackathon.getIdeaSubmissionDeadline()))
+		{
+			throw new UnauthorizedException("Team registration and idea submmission is closed");
+		}
+		else
+		{
+			return true;
+		}
+    }
 	@Transactional
 	public void updateTeamDetails(AddIdeaDTO teamUpdateDTO, int userId, int hackathonId) {
+        if(checkTimeBound(hackathonId))
+        {
 		User user = userService.getUser(userId);
 		List<Participant> participants = user.getParticipants();
 		if (participants != null && !participants.isEmpty()) {
@@ -84,10 +107,11 @@ public class TeamService {
 						teamRepository.save(team);
 					}
 				} else {
-					throw new UnauthorizedException("Your not a leader to add Idea ");
+					throw new UnauthorizedException("Sorry, your not a leader to add Idea ");
 				}
 			}
 		}
+        }
 	}
 
 	@Transactional

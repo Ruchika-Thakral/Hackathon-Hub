@@ -13,6 +13,7 @@ import com.example.capstone.Entity.Hackathon;
 import com.example.capstone.Entity.Panelist;
 import com.example.capstone.Entity.User;
 import com.example.capstone.Exceptions.HackathonNotExistsException;
+import com.example.capstone.Exceptions.TeamNotFoundException;
 import com.example.capstone.Exceptions.UnauthorizedException;
 import com.example.capstone.Exceptions.UserNotFoundException;
 import com.example.capstone.Repository.PanelistRepository;
@@ -54,7 +55,7 @@ public class PanelistService {
 		if (currentTime.isAfter(panelist.getHackathon().getIdeaSubmissionDeadline())
 				&& currentTime.isBefore(panelist.getHackathon().getShortListDeadLine())) {
 			if (panelist.getHackathon().getHackathonId().equals(hackathonId)) {
-				return panelist.getTeam().stream().map(team -> {
+				List<TeamDetailsToPanelistDTO> teamDetailsToPanelistDTOs=panelist.getTeam().stream().map(team -> {
 					TeamDetailsToPanelistDTO teamDTO = new TeamDetailsToPanelistDTO();
 					teamDTO.setTeamId(team.getTeamId());
 					teamDTO.setIdeaBody(team.getIdeaBody());
@@ -63,6 +64,15 @@ public class PanelistService {
 					teamDTO.setTeamName(team.getName());
 					return teamDTO;
 				}).collect(Collectors.toList());
+				if(teamDetailsToPanelistDTOs.size()==0)
+				{
+					throw new TeamNotFoundException("No team assigned");
+				}
+				else
+				{
+					return teamDetailsToPanelistDTOs;
+				}
+				
 			} else {
 				throw new HackathonNotExistsException("hackathon not found");
 			}

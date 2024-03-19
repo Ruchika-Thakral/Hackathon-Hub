@@ -157,6 +157,7 @@ public class UserService {
 			evaluator.setEmail(addEvaluatorDTO.getEmail());
 			evaluator.setName(addEvaluatorDTO.getName());
 			evaluator.setRole(addEvaluatorDTO.getRole());
+			evaluator.setAssignedHackathon(-1);
 			evaluator.setAssignedHackathon(null);
 			String password = passwordGenerationService.generatePassword();
 			evaluator.setPassword(hashService.generateHash(password));

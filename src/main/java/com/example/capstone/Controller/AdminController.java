@@ -31,12 +31,12 @@ public class AdminController {
 	public ResponseEntity<String> createHackathon(@RequestBody CreateHackathonDTO createHackathonDTO) {
 		adminService.createHackathon(createHackathonDTO);
 		return ResponseEntity.status(HttpStatus.CREATED).body("Hackathon created successfully");
-		}
+	}
 
 	@PostMapping("Evaluator")
 	public ResponseEntity<String> addEvaluator(@RequestBody RegisterEvaluatorDTO addEvaluatorDTO) {
 		adminService.addEvaluator(addEvaluatorDTO);
-		return  ResponseEntity.status(HttpStatus.CREATED).body("Evaluator added successfully");
+		return ResponseEntity.status(HttpStatus.CREATED).body("Evaluator added successfully");
 	}
 
 	@PostMapping("assign")
@@ -55,9 +55,9 @@ public class AdminController {
 		return ResponseEntity.status(HttpStatus.OK).body(adminService.getEvaluators());
 
 	}
+
 	@PutMapping("hackathon/end/{hackathonid}")
-	public ResponseEntity<?> endHackathon(@PathVariable int hackathonid)
-	{
+	public ResponseEntity<?> endHackathon(@PathVariable int hackathonid) {
 		adminService.endHackathon(hackathonid);
 		return ResponseEntity.status(HttpStatus.OK).body("Hackathon ended successfully");
 	}

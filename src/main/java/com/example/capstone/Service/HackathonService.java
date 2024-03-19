@@ -73,7 +73,6 @@ public class HackathonService {
 		Optional<Hackathon> hackathon = hackathonRepository.findById(addEvaluatorsDTO.getHackathonId());
 		if (hackathon.isPresent()) {
 			List<User> users = userService.getUsersByIds(addEvaluatorsDTO.getEvaluators());
-			List<User> updatedUsers=new ArrayList<>();
 			for (int i = 0; i < users.size(); i++) {
 				User user = users.get(i);
 				if (user.isAvailable()) {

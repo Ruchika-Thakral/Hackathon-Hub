@@ -20,15 +20,10 @@ public class PanelistController {
 	private PanelistService panelistService;
 
 	@GetMapping("{hackathonId}/{userId}")
-	public ResponseEntity<?> getTeamNamesByPanelistAndHackathon(@PathVariable Integer hackathonId,
-			@PathVariable Integer userId) {
-		List<TeamDetailsToPanelistDTO> teamNames = panelistService.getTeamDetailsByUserIdAndHackathonId(hackathonId,
-				userId);
-		if (teamNames != null && !teamNames.isEmpty()) {
-			return new ResponseEntity<>(teamNames, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("Panelist not found or Panelist does not handle this hackathon",
-					HttpStatus.NOT_FOUND);
-		}
+	public ResponseEntity<List<TeamDetailsToPanelistDTO>> getTeamNamesByPanelistAndHackathon(
+			@PathVariable Integer hackathonId, @PathVariable Integer userId) {
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(panelistService.getTeamDetailsByUserIdAndHackathonId(hackathonId, userId));
+
 	}
 }

@@ -5,8 +5,8 @@ import com.example.capstone.Entity.Role;
 public class GetEvaluatorsDTO {
 
 	private int userId;
-	private String email;
 	private String name;
+	private String email;
 	private Enum<Role> role;
     private boolean isAvailable;
     private Integer assignedHackathon;

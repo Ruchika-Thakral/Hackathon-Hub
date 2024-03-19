@@ -22,19 +22,21 @@ public class JudgeController {
 
 	@Autowired
 	private JudgeService judgeService;
+
 	@PostMapping("review/{teamId}")
 	public ResponseEntity<String> addReview(@PathVariable int teamId, @RequestBody ReviewDTO reviewDTO) {
 		judgeService.addReview(teamId, reviewDTO);
-		return  ResponseEntity.status(HttpStatus.OK).body("Review added successfully");
+		return ResponseEntity.status(HttpStatus.OK).body("Review added successfully");
 	}
+
 	@GetMapping("selectedTeams/{hackathonId}")
-    public ResponseEntity<List<TeamDetailsToJudgeDTO>> getSelectedTeamsDetails(@PathVariable int hackathonId) {
-        List<TeamDetailsToJudgeDTO> selectedTeams = judgeService.getSelectedTeamsDetails(hackathonId);
-        if (selectedTeams != null && !selectedTeams.isEmpty()) {
-            return ResponseEntity.ok(selectedTeams);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-    }
+	public ResponseEntity<List<TeamDetailsToJudgeDTO>> getSelectedTeamsDetails(@PathVariable int hackathonId) {
+		List<TeamDetailsToJudgeDTO> selectedTeams = judgeService.getSelectedTeamsDetails(hackathonId);
+		if (selectedTeams != null && !selectedTeams.isEmpty()) {
+			return ResponseEntity.ok(selectedTeams);
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+	}
 
 }
