@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.capstone.DTO.AddIdeaDTO;
 import com.example.capstone.DTO.IdeaDetailsRequestDTO;
+import com.example.capstone.DTO.MessageResponse;
 import com.example.capstone.DTO.TeamCreationDTO;
 import com.example.capstone.Service.TeamService;
 
@@ -29,10 +30,10 @@ public class TeamController {
 	// Create a new team for a hackathon
 	// The team is created by a user
 	@PostMapping("{hackathonId}/{userId}")
-	public ResponseEntity<?> createTeam(@PathVariable int hackathonId, @PathVariable int userId,
+	public ResponseEntity<MessageResponse> createTeam(@PathVariable int hackathonId, @PathVariable int userId,
 			@RequestBody TeamCreationDTO teamCreationDTO) {
 		teamService.CreateTeam(hackathonId, userId, teamCreationDTO);
-		return ResponseEntity.status(HttpStatus.CREATED).body("Team created successfully");
+		return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Team created successfully"));
 	}
 
 	// Update the team details by adding an idea
@@ -45,17 +46,17 @@ public class TeamController {
 		return ResponseEntity.status(HttpStatus.OK).body("Idea submitted successfully");
 	}
 	@PostMapping("rejected/{teamId}")
-	public ResponseEntity<String> updateTeamStatus(@PathVariable int teamId) {
+	public ResponseEntity<MessageResponse> updateTeamStatus(@PathVariable int teamId) {
 		teamService.deleteTeam(teamId);
-		return ResponseEntity.status(HttpStatus.OK).body("Team rejected successfully");
+		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Team rejected successfully"));
 	}
 
 	// Update the team status to selected.
 	// The teamId identifies the team to be selected.
 	@PutMapping("selected/{teamId}")
-	public ResponseEntity<String> updateSelectedTeamStatus(@PathVariable int teamId) {
+	public ResponseEntity<MessageResponse> updateSelectedTeamStatus(@PathVariable int teamId) {
 		teamService.selectTeamForNextStep(teamId);
-		return ResponseEntity.status(HttpStatus.OK).body("Team selected successfully");
+		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Team selected successfully"));
 
 	}
 

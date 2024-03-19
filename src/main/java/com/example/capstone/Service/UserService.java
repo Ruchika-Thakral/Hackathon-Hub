@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ import com.example.capstone.Repository.UserRepository;
 import jakarta.persistence.Tuple;
 
 @Service
-public class UserService {
+public class UserService{
 	@Autowired
 	private UserRepository userRepository;
 
@@ -46,6 +47,7 @@ public class UserService {
 	@Autowired
 	private PasswordGenerationService passwordGenerationService;
 
+	
 	/**
 	 * Generates OTP for user registration and sends it via email.
 	 * 
@@ -412,4 +414,5 @@ public class UserService {
 			throw new UserNotFoundException("User not found exception");
 		}
 	}
+
 }

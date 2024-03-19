@@ -1,5 +1,10 @@
 package com.example.capstone.DTO;
 
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.example.capstone.Entity.Role;
 
 public class UserDetailsDTO {
@@ -60,6 +65,5 @@ public class UserDetailsDTO {
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-
     
 }

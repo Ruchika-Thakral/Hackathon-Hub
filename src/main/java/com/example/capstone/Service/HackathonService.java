@@ -58,6 +58,10 @@ public class HackathonService {
 		hackathon.setShortListDeadLine(createHackathonDTO.getShortListDeadLine());
 		hackathon.setReviewStartTime(createHackathonDTO.getReviewStartTime());
 		hackathon.setReviewEndTime(createHackathonDTO.getReviewEndTime());
+		hackathon.setDescription(createHackathonDTO.getDescription());
+		hackathon.setPrizes(createHackathonDTO.getPrizes());
+		hackathon.setRules(createHackathonDTO.getGuidelines());
+		hackathon.setJudging_criteria(createHackathonDTO.getJudgingCriteria());
 		hackathonRepository.save(hackathon);
 	}
 

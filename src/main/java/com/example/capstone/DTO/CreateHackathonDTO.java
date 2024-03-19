@@ -13,6 +13,43 @@ public class CreateHackathonDTO {
 	private LocalDateTime implementationDeadLine;
 	private LocalDateTime reviewStartTime;
 	private LocalDateTime reviewEndTime;
+	private String description;
+	private String guidelines;
+	private String prizes;
+	private String judgingCriteria;
+	
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getGuidelines() {
+		return guidelines;
+	}
+
+	public void setGuidelines(String guidelines) {
+		this.guidelines = guidelines;
+	}
+
+	public String getPrizes() {
+		return prizes;
+	}
+
+	public void setPrizes(String prizes) {
+		this.prizes = prizes;
+	}
+
+	public String getJudgingCriteria() {
+		return judgingCriteria;
+	}
+
+	public void setJudgingCriteria(String judgingCriteria) {
+		this.judgingCriteria = judgingCriteria;
+	}
 
 	public String getName() {
 		return name;
