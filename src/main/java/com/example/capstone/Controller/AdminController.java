@@ -18,6 +18,7 @@ import com.example.capstone.DTO.AddEvaluatorsDTO;
 import com.example.capstone.DTO.CreateHackathonDTO;
 import com.example.capstone.DTO.GetEvaluatorsDTO;
 import com.example.capstone.DTO.HackathonDTO;
+import com.example.capstone.DTO.MessageResponse;
 import com.example.capstone.Service.AdminService;
 
 
@@ -32,9 +33,9 @@ public class AdminController {
 
 	// Endpoint to create a new hackathon
 	@PostMapping("hackathon")
-	public ResponseEntity<String> createHackathon(@RequestBody CreateHackathonDTO createHackathonDTO) {
+	public ResponseEntity<MessageResponse> createHackathon(@RequestBody CreateHackathonDTO createHackathonDTO) {
 		adminService.createHackathon(createHackathonDTO);
-		return ResponseEntity.status(HttpStatus.CREATED).body("Hackathon created successfully");
+		return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Hackathon created successfully"));
 	}
 
 	// Endpoint to register a new evaluator

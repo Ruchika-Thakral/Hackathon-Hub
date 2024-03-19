@@ -3,19 +3,25 @@ package com.example.capstone.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.capstone.DTO.RegisterEvaluatorDTO;
+import com.example.capstone.DTO.TeamDetailsDTO;
+import com.example.capstone.DTO.TeamUserDetailsDTO;
+import com.example.capstone.DTO.ChangePasswordDTO;
 import com.example.capstone.DTO.EvaluatorDTO;
 import com.example.capstone.DTO.GetEvaluatorsDTO;
 import com.example.capstone.DTO.UserDTO;
 import com.example.capstone.DTO.UserDetailsDTO;
 import com.example.capstone.Entity.Participant;
 import com.example.capstone.Entity.Role;
+import com.example.capstone.Entity.Team;
 import com.example.capstone.Entity.User;
 import com.example.capstone.Exceptions.FailedToSendEmailException;
+import com.example.capstone.Exceptions.InvalidEmailException;
 import com.example.capstone.Exceptions.InvalidUserException;
 import com.example.capstone.Exceptions.UserAlreadyExistsException;
 import com.example.capstone.Exceptions.UserNotFoundException;
@@ -138,47 +144,6 @@ public class UserService {
 			throw new UserNotFoundException("User not exists");
 		}
 	}
-//	public Object verifyUser(String email, String password) {
-//		Optional<User> user = userRepository.findByEmail(email);
-//		if (user.isPresent()) {
-//			String hash = hashService.generateHash(password);
-//			if (user.get().getPassword().equals(hash)) {
-//				if (user.get().getRole().equals(Role.participant) || user.get().getRole().equals(Role.admin)) {
-//					UserDetailsDTO userDetailsDTO = new UserDetailsDTO();
-//					userDetailsDTO.setUserId(user.get().getUserId());
-//					userDetailsDTO.setName(user.get().getName());
-//					userDetailsDTO.setRole(user.get().getRole());
-//					userDetailsDTO.setEmail(user.get().getEmail());
-//					return userDetailsDTO;
-//				} else if (user.get().getRole().equals(Role.judge)) {
-//					JudgeUserDetailsDTO judgeUserDetailsDTO = new JudgeUserDetailsDTO();
-//					judgeUserDetailsDTO.setUserId(user.get().getUserId());
-//					judgeUserDetailsDTO.setName(user.get().getName());
-//					judgeUserDetailsDTO.setRole(user.get().getRole());
-//					judgeUserDetailsDTO.setEmail(user.get().getEmail());
-//					for (Judge judge : user.get().getJudges()) {
-//						judgeUserDetailsDTO.getHackathons().add(judgeService.getJudgeHackathonDTO(judge.getJudgeId()));
-//					}
-//					return judgeUserDetailsDTO;
-//				} else {
-//					PanelistUserDetails panelistUserDetails = new PanelistUserDetails();
-//					panelistUserDetails.setEmail(user.get().getEmail());
-//					panelistUserDetails.setName(user.get().getName());
-//					panelistUserDetails.setRole(user.get().getRole());
-//					panelistUserDetails.setUserId(user.get().getUserId());
-//					for (Panelist panelist : user.get().getPanelists()) {
-//						PanelistHackathonDTO hackathon = panelistService.getPanelistHackathonDTO(panelist.getPanelistId());
-//						panelistUserDetails.getPanelistHackathonDTO().add(hackathon);
-//					}
-//					return panelistUserDetails;
-//				}
-//			} else {
-//				throw new InvalidUserException("Invalid email or password");
-//			}
-//		} else {
-//			throw new UserNotFoundException("User not exists");
-//		}
-//	}
 
 	/**
 	 * Adds a new evaluator to the system and sends welcome email with login
@@ -378,5 +343,73 @@ public class UserService {
 	public void removeParticipant(User user, Participant participant) {
 		user.getParticipants().remove(participant);
 		userRepository.save(user);
+	}
+
+	public void generateOTP(int userId, String email) {
+		String otp = otpService.generateOTP();
+		Optional<User> user = userRepository.findById(userId);
+		if (user.isPresent()) {
+			if (email.equals(user.get().getEmail())) {
+				String subject = "Otp verification";
+				String body = "Dear Candidate,\r\n" + "\r\n" + "Your One-Time Password (OTP) is: " + otp + " .\r\n"
+						+ "\r\n" + "If you did not request this OTP, please ignore this message.\r\n" + "\r\n"
+						+ "For security reasons, do not share this OTP with anyone.\r\n" + "\r\n" + "Thank you,\r\n"
+						+ "\r\n" + "\n" + "Regards,\n" + "Team HackerHub";
+				if (mailService.sendEmail(email, body, subject)) {
+					otpService.saveOtp(email, null, null, otp);
+				} else {
+					throw new FailedToSendEmailException("Failed to send Email Exception");
+				}
+			} else {
+				throw new InvalidEmailException("Email is not valid");
+			}
+		} else {
+			throw new InvalidUserException("User not found");
+		}
+
+	}
+
+	public void verifyUserAndChangePassword(ChangePasswordDTO changePasswordDTO) {
+		String otp = otpService.getOTP(changePasswordDTO.getEmail());
+		if (otp.equals(changePasswordDTO.getOtp())) {
+			Optional<User> user = userRepository.findByEmail(changePasswordDTO.getEmail());
+			user.get().setPassword(hashService.generateHash(changePasswordDTO.getPassword()));
+			userRepository.save(user.get());
+			otpService.deleteById(changePasswordDTO.getEmail());
+
+		}
+	}
+
+	public List<TeamDetailsDTO> getTeamDetails(int userId) {
+		User user = userRepository.findById(userId).orElse(null);
+
+		if (user != null) {
+			List<TeamDetailsDTO> teamDetailsDTOs = user.getParticipants().stream().map(participant -> {
+				TeamDetailsDTO teamDetailsDTO = new TeamDetailsDTO();
+				Team team = participant.getTeam();
+				teamDetailsDTO.setTeamId(team.getTeamId());
+				teamDetailsDTO.setConsolidatedRating(team.getConsolidatedRating());
+				teamDetailsDTO.setIdeaDomain(team.getIdeaDomain());
+				teamDetailsDTO.setIdeaFiles(team.getIdeaFiles());
+				teamDetailsDTO.setIdeaRepo(team.getIdeaRepo());
+				teamDetailsDTO.setIdeaTitle(team.getIdeaTitle());
+				teamDetailsDTO.setStatus(team.getStatus());
+				teamDetailsDTO.setName(team.getName());
+				teamDetailsDTO.setTeamUserDetailsDTOs(team.getParticipants().stream().map(userParticipant -> {
+					User teamMember = userParticipant.getUser();
+					TeamUserDetailsDTO teamUserDetailsDTO = new TeamUserDetailsDTO();
+					teamUserDetailsDTO.setEmail(teamMember.getName());
+					teamUserDetailsDTO.setLeader(userParticipant.isLeader());
+					teamUserDetailsDTO.setUserId(teamMember.getUserId());
+					teamUserDetailsDTO.setName(teamMember.getName());
+					return teamUserDetailsDTO;
+				}).collect(Collectors.toList()));
+				return teamDetailsDTO;
+			}).collect(Collectors.toList());
+
+			return teamDetailsDTOs;
+		} else {
+			throw new UserNotFoundException("User not found exception");
+		}
 	}
 }

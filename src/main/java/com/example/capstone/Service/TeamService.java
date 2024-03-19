@@ -37,93 +37,91 @@ public class TeamService {
 	private MailService mailService;
 
 	// Create a new team for a hackathon
-	// This method creates a new team with the given name and assigns the given user as the team leader.
+	// This method creates a new team with the given name and assigns the given user
+	// as the team leader.
 	// It also adds the team to the given hackathon and sets the team's panelist.
 	@Transactional
 	public void CreateTeam(int hackathonid, int userid, TeamCreationDTO teamCreationDTO) {
-		if(checkTimeBound(hackathonid))
-		{
-		Hackathon hackathon=hackathonService.findHackathon(hackathonid);
-		Team team = new Team();
-		team.setName(teamCreationDTO.getName());
-		team.setStatus(Status.registered);
-		User leader = userService.findUserById(userid);
-		teamRepository.save(team);
-		Participant participantLeader = participantService.getParticipant(team, leader, hackathon, true);
-		leader.setParticipants(participantLeader);
-		leader.setAvailable(false);
-		leader.setAssignedHackathon(hackathon.getHackathonId());
-		List<User> users = userService.getUsers(teamCreationDTO.getEmails());
-		List<Participant> participants = team.getParticipants();
-		participants.add(participantLeader);
-		for (User user : users) {
-			Participant participant = participantService.getParticipant(team, user, hackathon, false);
-			user.setAvailable(false);
-			user.setAssignedHackathon(hackathon.getHackathonId());
-			user.setParticipants(participant);
-			participants.add(participant);
-		}
-		team.setParticipants(participants);
-		int index = (team.getTeamId() + 1) % (hackathon.getPanelists().size());
-		Panelist panelist = hackathon.getPanelists().get(index);
-		team.setPanelist(panelist);
-		panelist.setTeam(team);
-		hackathon.setTeams(team);
-		team.setHackathon(hackathon);
-		userService.updateUsers(users);
-		panelistService.updatePanelist(panelist);
-		hackathonService.updateHackathon(hackathon);
+		if (checkTimeBound(hackathonid)) {
+			Hackathon hackathon = hackathonService.findHackathon(hackathonid);
+			Team team = new Team();
+			team.setName(teamCreationDTO.getName());
+			team.setStatus(Status.registered);
+			User leader = userService.findUserById(userid);
+			teamRepository.save(team);
+			Participant participantLeader = participantService.getParticipant(team, leader, hackathon, true);
+			leader.setParticipants(participantLeader);
+			leader.setAvailable(false);
+			leader.setAssignedHackathon(hackathon.getHackathonId());
+			List<User> users = userService.getUsers(teamCreationDTO.getEmails());
+			List<Participant> participants = team.getParticipants();
+			participants.add(participantLeader);
+			for (User user : users) {
+				Participant participant = participantService.getParticipant(team, user, hackathon, false);
+				user.setAvailable(false);
+				user.setAssignedHackathon(hackathon.getHackathonId());
+				user.setParticipants(participant);
+				participants.add(participant);
+			}
+			team.setParticipants(participants);
+			int index = (team.getTeamId() + 1) % (hackathon.getPanelists().size());
+			Panelist panelist = hackathon.getPanelists().get(index);
+			team.setPanelist(panelist);
+			panelist.setTeam(team);
+			hackathon.setTeams(team);
+			team.setHackathon(hackathon);
+			userService.updateUsers(users);
+			panelistService.updatePanelist(panelist);
+			hackathonService.updateHackathon(hackathon);
 		}
 	}
-    public boolean checkTimeBound(int hackathonId)
-    {
+
+	public boolean checkTimeBound(int hackathonId) {
 		Hackathon hackathon = hackathonService.findHackathon(hackathonId);
-		LocalDateTime currentTime=LocalDateTime.now();
-		if(currentTime.isBefore(hackathon.getStartDate()))
-		{
+		LocalDateTime currentTime = LocalDateTime.now();
+		if (currentTime.isBefore(hackathon.getStartDate())) {
 			throw new UnauthorizedException("Hackathon is not Started");
-		}
-		else if(currentTime.isAfter(hackathon.getIdeaSubmissionDeadline()))
-		{
+		} else if (currentTime.isAfter(hackathon.getIdeaSubmissionDeadline())) {
 			throw new UnauthorizedException("Team registration and idea submmission is closed");
-		}
-		else
-		{
+		} else {
 			return true;
 		}
-    }
+	}
+
 	// Update the team details with the provided idea details
-	// This method updates the team's name, idea title, idea body, and idea domain with the provided
-	// details. It only updates the team's details if the user is a leader of the team and the team
+	// This method updates the team's name, idea title, idea body, and idea domain
+	// with the provided
+	// details. It only updates the team's details if the user is a leader of the
+	// team and the team
 	// is participating in the given hackathon.
 	// If the user is not a leader, the method throws an UnauthorizedException.
 	@Transactional
 	public void updateTeamDetails(AddIdeaDTO teamUpdateDTO, int userId, int hackathonId) {
-        if(checkTimeBound(hackathonId))
-        {
-		User user = userService.getUser(userId);
-		List<Participant> participants = user.getParticipants();
-		if (participants != null && !participants.isEmpty()) {
-			for (Participant participant : participants) {
-				if (participant.isLeader()) {
-					Team team = participant.getTeam();
-					if (team.getHackathon() != null && team.getHackathon().getHackathonId().equals(hackathonId)) {
-						team.setName(teamUpdateDTO.getUpdatedName());
-						team.setIdeaTitle(teamUpdateDTO.getUpdatedIdeaTitle());
-						team.setIdeaBody(teamUpdateDTO.getUpdatedIdeaBody());
-						team.setIdeaDomain(teamUpdateDTO.getUpdatedIdeaDomain());
-						teamRepository.save(team);
+		if (checkTimeBound(hackathonId)) {
+			User user = userService.getUser(userId);
+			List<Participant> participants = user.getParticipants();
+			if (participants != null && !participants.isEmpty()) {
+				for (Participant participant : participants) {
+					if (participant.isLeader()) {
+						Team team = participant.getTeam();
+						if (team.getHackathon() != null && team.getHackathon().getHackathonId().equals(hackathonId)) {
+							team.setName(teamUpdateDTO.getUpdatedName());
+							team.setIdeaTitle(teamUpdateDTO.getUpdatedIdeaTitle());
+							team.setIdeaBody(teamUpdateDTO.getUpdatedIdeaBody());
+							team.setIdeaDomain(teamUpdateDTO.getUpdatedIdeaDomain());
+							teamRepository.save(team);
+						}
+					} else {
+						throw new UnauthorizedException("Sorry, your not a leader to add Idea ");
 					}
-				} else {
-					throw new UnauthorizedException("Sorry, your not a leader to add Idea ");
 				}
 			}
 		}
-        }
 	}
 
 	// Reject a team by setting status of team as rejected.
-	// This method sets the team's status to "rejected" and sends an email to all team members
+	// This method sets the team's status to "rejected" and sends an email to all
+	// team members
 	// notifying them that their submission did not advance to the next phase.
 	@Transactional
 	public void deleteTeam(int id) {
@@ -149,7 +147,8 @@ public class TeamService {
 	}
 
 	// Update the team status to selected.
-	// This method sets the team's status to "selected" and sends an email to all team members
+	// This method sets the team's status to "selected" and sends an email to all
+	// team members
 	// notifying them that they have been selected to move forward to the next step.
 	// If the team is not found, the method throws a TeamNotFoundException.
 	public void selectTeamForNextStep(int teamId) {
@@ -186,32 +185,28 @@ public class TeamService {
 	}
 
 	// Handle file submission for a team's idea
-	// This method checks if the user is a leader of a selected team for the given hackathon.
-	// If the user is a leader of a selected team, the method updates the team's idea repository and files
+	// This method checks if the user is a leader of a selected team for the given
+	// hackathon.
+	// If the user is a leader of a selected team, the method updates the team's
+	// idea repository and files
 	// and saves the updated team to the database.
-	// If the user is not a leader or the team is not selected, the method throws an UnauthorizedException.
+	// If the user is not a leader or the team is not selected, the method throws an
+	// UnauthorizedException.
 	public String FileSubmission(int hackathonId, int userId, IdeaDetailsRequestDTO requestBody) {
 		User user = userService.findUserById(userId);
 		List<Participant> participants = user.getParticipants();
-		for (Participant participant : participants) 
-		{
-			if (participant.isLeader() && participant.getTeam().getHackathon().getHackathonId().equals(hackathonId)) 
-			{
+		for (Participant participant : participants) {
+			if (participant.isLeader() && participant.getTeam().getHackathon().getHackathonId().equals(hackathonId)) {
 				Team team = participant.getTeam();
-				if (team.getStatus().equals(Status.selected)) 
-				{
+				if (team.getStatus().equals(Status.selected)) {
 					team.setIdeaRepo(requestBody.getIdeaRepo());
 					team.setIdeaFiles(requestBody.getIdeaFiles());
 					teamRepository.save(team);
 					return "Your idea files have been submitted.";
-				}
-				else
-				{
+				} else {
 					throw new UnauthorizedException("Your team is not selected, Better luck next time champ!");
 				}
-			} 
-			else 
-			{
+			} else {
 				throw new UnauthorizedException("Oops, You are not a leader!");
 			}
 		}

@@ -23,10 +23,10 @@ import com.example.capstone.Repository.PanelistRepository;
 public class PanelistService {
 	@Autowired
 	private PanelistRepository panelistRepository;
-    @Autowired
+	@Autowired
 	private UserService userService;
-    
-    // Create a new panelist
+
+	// Create a new panelist
 	public Panelist createPanelist(User user, Hackathon hackathon) {
 		Panelist panelist = new Panelist();
 		panelist.setHackathon(hackathon);
@@ -34,22 +34,19 @@ public class PanelistService {
 		panelistRepository.save(panelist);
 		return panelist;
 	}
-	
+
 	// Update panelist information
 	public synchronized void updatePanelist(Panelist panelist) {
 		panelistRepository.save(panelist);
 	}
 
 	// Get team details by user ID and hackathon ID
-	public List<TeamDetailsToPanelistDTO> getTeamDetailsByUserIdAndHackathonId(Integer hackathonId,
-			Integer userId) {
-		User user=userService.getUser(userId);
-		Panelist panelist=null;
-		for(Panelist p:user.getPanelists())
-		{
-			if(p.getHackathon().getHackathonId()==hackathonId)
-			{
-				panelist=p;
+	public List<TeamDetailsToPanelistDTO> getTeamDetailsByUserIdAndHackathonId(Integer hackathonId, Integer userId) {
+		User user = userService.getUser(userId);
+		Panelist panelist = null;
+		for (Panelist p : user.getPanelists()) {
+			if (p.getHackathon().getHackathonId() == hackathonId) {
+				panelist = p;
 				break;
 			}
 		}
@@ -60,7 +57,7 @@ public class PanelistService {
 		if (currentTime.isAfter(panelist.getHackathon().getIdeaSubmissionDeadline())
 				&& currentTime.isBefore(panelist.getHackathon().getShortListDeadLine())) {
 			if (panelist.getHackathon().getHackathonId().equals(hackathonId)) {
-				List<TeamDetailsToPanelistDTO> teamDetailsToPanelistDTOs=panelist.getTeam().stream().map(team -> {
+				List<TeamDetailsToPanelistDTO> teamDetailsToPanelistDTOs = panelist.getTeam().stream().map(team -> {
 					TeamDetailsToPanelistDTO teamDTO = new TeamDetailsToPanelistDTO();
 					teamDTO.setTeamId(team.getTeamId());
 					teamDTO.setIdeaBody(team.getIdeaBody());
@@ -69,15 +66,12 @@ public class PanelistService {
 					teamDTO.setTeamName(team.getName());
 					return teamDTO;
 				}).collect(Collectors.toList());
-				if(teamDetailsToPanelistDTOs.size()==0)
-				{
+				if (teamDetailsToPanelistDTOs.size() == 0) {
 					throw new TeamNotFoundException("No team assigned");
-				}
-				else
-				{
+				} else {
 					return teamDetailsToPanelistDTOs;
 				}
-				
+
 			} else {
 				throw new HackathonNotExistsException("hackathon not found");
 			}
@@ -86,12 +80,11 @@ public class PanelistService {
 		} else {
 			throw new UnauthorizedException("Idea reviewing is not started");
 		}
-		
+
 	}
-	
+
 	// Get panelist hackathon DTO
-	public PanelistHackathonDTO getPanelistHackathonDTO(int panelistId)
-	{
+	public PanelistHackathonDTO getPanelistHackathonDTO(int panelistId) {
 		return panelistRepository.findAssignedHackathon(panelistId);
 	}
 }

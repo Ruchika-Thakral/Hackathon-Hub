@@ -9,16 +9,16 @@ import com.example.capstone.Entity.Team;
 
 @Service
 public class ReviewService {
-@Autowired
-private TeamService teamService;
-public void addReview(int teamid,ReviewDTO reviewDTO)
-{
-Review review=new Review();	
-Team team=teamService.getTeam(teamid);
-review.setRating(reviewDTO.getRating());
-review.setTeam(team);
-team.getReviews().add(review);
-teamService.updateTeam(team);
-}
+	@Autowired
+	private TeamService teamService;
+
+	public void addReview(int teamid, ReviewDTO reviewDTO) {
+		Review review = new Review();
+		Team team = teamService.getTeam(teamid);
+		review.setRating(reviewDTO.getRating());
+		review.setTeam(team);
+		team.getReviews().add(review);
+		teamService.updateTeam(team);
+	}
 
 }

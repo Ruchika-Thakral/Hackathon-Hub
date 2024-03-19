@@ -6,10 +6,12 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import com.example.capstone.DTO.UserDTO;
 import com.example.capstone.Entity.OtpEntity;
 import com.example.capstone.Exceptions.InvalidOtpException;
 import com.example.capstone.Exceptions.InvalidUserException;
+import com.example.capstone.Exceptions.UnauthorizedException;
 import com.example.capstone.Repository.OtpRepository;
 
 @Service
@@ -28,7 +30,6 @@ public class OtpService {
 	public void saveOtp(String email, String name, String password, String otp) {
 		otpRepository.save(new OtpEntity(email, name, password, otp));
 	}
-
 	public UserDTO verifyOtp(String email, String otp) throws InvalidOtpException, InvalidUserException {
 		Optional<OtpEntity> otpEntity = otpRepository.findById(email);
 		if (otpEntity.isPresent()) {
@@ -42,5 +43,21 @@ public class OtpService {
 		} else {
 			throw new InvalidUserException("User is not valid");
 		}
+}
+	public String getOTP(String email)
+	{
+		Optional<OtpEntity> otpEntity=otpRepository.findById(email);
+		if(otpEntity.isPresent())
+		{
+			return otpEntity.get().getOtp();
+		}
+		else
+		{
+			throw new UnauthorizedException("Invalid email");
+		}
+	}
+	public void deleteById(String email)
+	{
+		otpRepository.deleteById(email);
 	}
 }
