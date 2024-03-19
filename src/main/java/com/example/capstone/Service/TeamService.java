@@ -42,6 +42,7 @@ public class TeamService {
 	// It also adds the team to the given hackathon and sets the team's panelist.
 	@Transactional
 	public void CreateTeam(int hackathonid, int userid, TeamCreationDTO teamCreationDTO) {
+		
 		if (checkTimeBound(hackathonid)) {
 			Hackathon hackathon = hackathonService.findHackathon(hackathonid);
 			Team team = new Team();
@@ -105,9 +106,10 @@ public class TeamService {
 					if (participant.isLeader()) {
 						Team team = participant.getTeam();
 						if (team.getHackathon() != null && team.getHackathon().getHackathonId().equals(hackathonId)) {
-							team.setIdeaTitle(teamUpdateDTO.getUpdatedIdeaTitle());
-							team.setIdeaBody(teamUpdateDTO.getUpdatedIdeaBody());
-							team.setIdeaDomain(teamUpdateDTO.getUpdatedIdeaDomain());
+							team.setIdeaTitle(teamUpdateDTO.getIdeaTitle());
+							team.setIdeaBody(teamUpdateDTO.getIdeaBody());
+							team.setIdeaDomain(teamUpdateDTO.getIdeaDomain());
+							System.out.println("---------------------------");
 							teamRepository.save(team);
 						}
 					} else {

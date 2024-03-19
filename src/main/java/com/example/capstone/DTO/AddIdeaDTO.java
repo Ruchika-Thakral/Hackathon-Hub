@@ -10,32 +10,28 @@ public class AddIdeaDTO {
 
 	}
 
-	public AddIdeaDTO(String updatedIdeaTitle, String updatedIdeaBody, String updatedIdeaDomain) {
-		this.ideaTitle = updatedIdeaTitle;
-		this.ideaBody = updatedIdeaBody;
-		this.ideaDomain = updatedIdeaDomain;
-	}
-	public String getUpdatedIdeaTitle() {
+	public String getIdeaTitle() {
 		return ideaTitle;
 	}
 
-	public void setUpdatedIdeaTitle(String updatedIdeaTitle) {
-		this.ideaTitle = updatedIdeaTitle;
+	public void setIdeaTitle(String ideaTitle) {
+		this.ideaTitle = ideaTitle;
 	}
 
-	public String getUpdatedIdeaBody() {
+	public String getIdeaBody() {
 		return ideaBody;
 	}
 
-	public void setUpdatedIdeaBody(String updatedIdeaBody) {
-		this.ideaBody = updatedIdeaBody;
+	public void setIdeaBody(String ideaBody) {
+		this.ideaBody = ideaBody;
 	}
 
-	public String getUpdatedIdeaDomain() {
+	public String getIdeaDomain() {
 		return ideaDomain;
 	}
 
-	public void setUpdatedIdeaDomain(String updatedIdeaDomain) {
-		this.ideaDomain = updatedIdeaDomain;
+	public void setIdeaDomain(String ideaDomain) {
+		this.ideaDomain = ideaDomain;
 	}
+
 }

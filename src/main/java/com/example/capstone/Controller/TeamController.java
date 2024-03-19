@@ -40,10 +40,10 @@ public class TeamController {
 	// The user submitting the idea is identified by the userId
 	// The hackathonId identifies the hackathon
 	@PostMapping("idea/{hackathonId}/{userId}")
-	public ResponseEntity<String> updateTeamDetails(@PathVariable int hackathonId, @PathVariable int userId,
+	public ResponseEntity<MessageResponse> updateTeamDetails(@PathVariable int hackathonId, @PathVariable int userId,
 			@RequestBody AddIdeaDTO teamUpdateDTO) {
 		teamService.updateTeamDetails(teamUpdateDTO, userId, hackathonId);
-		return ResponseEntity.status(HttpStatus.OK).body("Idea submitted successfully");
+		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Idea submitted successfully"));
 	}
 	@PostMapping("rejected/{teamId}")
 	public ResponseEntity<MessageResponse> updateTeamStatus(@PathVariable int teamId) {
