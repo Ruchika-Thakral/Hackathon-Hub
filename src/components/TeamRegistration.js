@@ -1,6 +1,7 @@
 import {
     Button,
     Card,
+    CardHeader,
     Dialog,
     Input,
     Typography,
@@ -12,21 +13,21 @@ import { teamRegistration } from "../features/team/teamSlice";
 import { CreateContext } from "../App";
 
 const TeamRegistration = ({ open, setOpen }) => {
-    const {details}=useContext(CreateContext)
-    const login=useSelector(state=>state.user.login.data)
-    const userId=login?login.data.userId:null
-    const hackathonId=details.hackathonId
+    const { details } = useContext(CreateContext);
+    const login = useSelector((state) => state.user.login.data);
+    const userId = login ? login.data.userId : null;
+    const hackathonId = details.hackathonId;
     const navigate = useNavigate();
-    const dispatch=useDispatch()
+    const dispatch = useDispatch();
     const [formdata, setFormData] = useState({
         name: "",
         email1: "",
         email2: "",
         email3: "",
     });
-    const emails=[formdata.email1]
-    const name=formdata.name
-    const team={emails,name}
+    const emails = [formdata.email1];
+    const name = formdata.name;
+    const team = { emails, name };
     const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
@@ -51,7 +52,7 @@ const TeamRegistration = ({ open, setOpen }) => {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            dispatch(teamRegistration({hackathonId,userId,team}))
+            dispatch(teamRegistration({ hackathonId, userId, team }));
         }
         setErrors(newErrors);
     };
@@ -68,72 +69,74 @@ const TeamRegistration = ({ open, setOpen }) => {
                 handler={() => setOpen((cur) => !cur)}
                 className="bg-transparent shadow-none"
             >
-                <Card>
+                <Card className="mx-auto w-full px-16 py-4">
+                    <CardHeader
+                        variant="gradient"
+                        color="gray"
+                        className="mb-4 grid w-full h-16 place-items-center place-self-center"
+                    >
+                        <Typography variant="h5" color="white">
+                            Register Your Team
+                        </Typography>
+                    </CardHeader>
                     <form
                         onSubmit={submitHandler}
-                        className="flex flex-col gap-y-4 mx-auto my-4 w-96 border border-black hover:border-cyan-400 rounded-xl p-2"
+                        className="flex flex-col gap-y-4 mx-auto my-4 w-96 borderrounded-xl p-2"
                     >
-                        <Typography
-                            variant="h2"
-                            color="black"
-                            className="w-fit mx-auto"
-                        >
-                            Team Registration
-                        </Typography>
                         <Input
                             type="text"
-                            label="Team Name"
-                            size="lg"
+                            label="Team Name*"
+                            size="sm"
                             name="name"
                             value={formdata.teamname}
                             onChange={handleChange}
                         />
                         {errors.teamname && (
-                            <div className="text-red-500 w-fit">
-                                {errors.teamname}
-                            </div>
+                            <Typography className="text-red-500 text-xs w-fit">
+                                {"*"+errors.teamname}
+                            </Typography>
                         )}
 
                         <Input
                             type="email"
-                            label="Email 1"
-                            size="lg"
+                            label="Member 1 Email"
+                            size="sm"
                             name="email1"
                             value={formdata.email1}
                             onChange={handleChange}
                         />
                         {errors.email1 && (
-                            <div className="text-red-500 w-fit">
+                            <Typography className="text-red-500 text-xs w-fit">
                                 {errors.email1}
-                            </div>
+                           </Typography>
                         )}
 
                         <Input
                             type="email"
-                            label="Email 2"
-                            size="lg"
+                            label="Member 2 Email"
+                            size="sm"
                             name="email2"
                             value={formdata.email2}
                             onChange={handleChange}
                         />
                         {errors.email2 && (
-                            <div className="text-red-500 w-fit">
+                            <Typography className="text-red-500 text-xs w-fit">
                                 {errors.email2}
-                            </div>
+                           </Typography>
                         )}
 
                         <Input
                             type="email"
-                            label="Email 3"
-                            size="lg"
+                            label="Member 3 Email"
+                            size="sm"
                             name="email3"
                             value={formdata.email3}
                             onChange={handleChange}
                         />
                         {errors.email3 && (
-                            <div className="text-red-500 w-fit">
+                            <Typography className="text-red-500 text-xs w-fit">
                                 {errors.email3}
-                            </div>
+                            </Typography>
                         )}
                         <div className="w-fit mx-auto">
                             <Button className="mt-2" type="submit">

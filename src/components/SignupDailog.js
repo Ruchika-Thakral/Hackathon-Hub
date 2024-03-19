@@ -16,7 +16,7 @@ import {
     Input,
     Button,
 } from "@material-tailwind/react";
-import SignUpForm from "./Singup";
+// import SignUpForm from "./Singup";
 
 function SignUpDialog({ showModal, toggleModal }) {
     const [formData, setFormData] = useState({

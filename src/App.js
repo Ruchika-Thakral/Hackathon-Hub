@@ -20,6 +20,7 @@ import YourComponent from "./components/PanelHackathonDropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchHackathons } from "./features/hackathon/hackathonSlice";
 import BaseLayout from "./components/BaseLayout";
+import TeamDetails from "./pages/TeamDetails";
 export const CreateContext = React.createContext();
 const Provider = CreateContext.Provider;
 function App() {
@@ -249,10 +250,10 @@ function App() {
                             path="admin/evaluators"
                             element={<AdminEvaluators />}
                         />
-                        <Route
+                        {/* <Route
                             path="ideasubmission"
                             element={<BaseLayout><IdeaSubmission /></BaseLayout>}
-                        />
+                        /> */}
                         {/* <Route
                             path="judge"
                             element={<Judge />}
@@ -262,7 +263,7 @@ function App() {
                             element={<YourComponent />}
                         /> */}
                         <Route path="results" element={<BaseLayout><Results /></BaseLayout>} />
-                        <Route path="trial" element={<BaseLayout />} />
+                        <Route path="teamdetails" element={<TeamDetails />} />
                     </Routes>
                 </BrowserRouter>
                 {/* <Judge arr={arr}/> */}

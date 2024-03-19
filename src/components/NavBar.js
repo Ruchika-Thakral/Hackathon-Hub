@@ -228,7 +228,7 @@ const NavBar = ({ toggleSignInModal, toggleSignUpModal, openDrawer }) => {
                     className="flex items-center gap-x-2 p-1 font-semibold"
                 >
                     <Link
-                        to="/ideasubmission"
+                        to="/teamdetails"
                         className="flex items-center gap-x-1"
                     >
                         {/* <svg
