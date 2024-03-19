@@ -7,6 +7,7 @@ import {
     Spinner,
     Dialog,
     CardHeader,
+    CardBody,
     Card,
 } from "@material-tailwind/react";
 import { useDispatch, useSelector } from "react-redux";
@@ -46,32 +47,32 @@ const Login = ({ showModal, toggleModal, setShowSignInModal }) => {
 
     return (
         <Dialog open={showModal} handler={toggleModal} size={"xs"}>
-            <div className="container ">
-                <Card className="mx-auto w-full max-w-[36rem] px-8">
+            <div className="container">
+                <Card className="mx-auto w-full px-16 py-4">
                     <CardHeader
+                        variant="gradient"
                         color="gray"
-                        floated={false}
-                        shadow={false}
-                        className="w-72 m-2 grid place-items-center text-center mx-auto"
+                        className="mb-4 grid h-28 place-items-center"
                     >
                         <Typography variant="h5" color="white">
                             Sign in to your account
                         </Typography>
                     </CardHeader>
+                    <CardBody>
                     {loading ? (
                         <div className="w-full h-72">
                             <Spinner className="mx-auto mt-16 h-16 w-16" />
                         </div>
                     ) : (
                         <form
-                            className="account-form  w-96 mx-auto border border-black rounded-xl mt-2 p-2"
-                            onSubmit={handleSubmit}
+                        className="account-form w-full mx-auto rounded-xl mt-2 p-2"
+                        onSubmit={handleSubmit}
+                    >
+                        <div
+                            className={
+                                "account-form-fields sign-in flex flex-col gap-y-4 sign-up w-full mx-auto"
+                            }
                         >
-                            <div
-                                className={
-                                    "account-form-fields sign-in flex flex-col gap-y-4 sign-up w-72 mx-auto"
-                                }
-                            >
                                 <Input
                                     id="email"
                                     name="email"
@@ -137,6 +138,7 @@ const Login = ({ showModal, toggleModal, setShowSignInModal }) => {
                             </div>
                         </form>
                     )}
+                    </CardBody>
                     <Typography
                         variant="small"
                         color="gray"

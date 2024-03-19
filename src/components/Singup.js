@@ -46,7 +46,7 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
 
     return (
         <Dialog
-            className="h-96"
+            // className="h-96"
             open={showModal}
             handler={toggleModal}
             size={"xs"}
@@ -70,14 +70,14 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                             </div>
                         ) : (
                             <form
-                                className="account-form w-full mx-auto rounded-xl mt-2 p-2"
-                                onSubmit={handleSubmit}
-                            >
+                            className="account-form w-full mx-auto rounded-xl mt-2 p-2"
+                            onSubmit={handleSubmit}
+                        >
                                 <div
-                                    className={
-                                        "account-form-fields sign-in flex flex-col gap-y-4 sign-up w-full mx-auto"
-                                    }
-                                >
+                                className={
+                                    "account-form-fields sign-in flex flex-col gap-y-4 sign-up w-full mx-auto"
+                                }
+                            >
                                     <Input
                                         id="name"
                                         name="name"
