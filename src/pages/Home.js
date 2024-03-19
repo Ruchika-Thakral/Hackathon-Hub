@@ -3,8 +3,6 @@ import React from "react";
 import HorizontalScrollBar from "../components/HorizontalScrollBar";
 import NavBar from "../components/NavBar";
 import { useState } from "react";
-import SignInDialog from '../components/ELoginDailog';
-import SignUpDialog from "../components/ESignupDialog";
 // import SignUpDialog from "../components/ESignupDailog";
 import Faq from "../components/Faq";
 // import DrawerDefault from "../components/Profile";
