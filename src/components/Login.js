@@ -103,19 +103,17 @@ const Login = ({ showModal, toggleModal, setShowSignInModal }) => {
                             >
                                 {error && <h4>{error.message}</h4>}
                                 <Button
-                                    className="mt-4"
+                                    className="btn-submit-form cursor-pointer"
                                     type="submit"
-                                    style={{ cursor: "pointer" }}
+                                    // onClick={handleSubmit}
+                                    // style={{ cursor: "pointer" }}
                                 >
                                     Sign in
                                 </Button>
                                 <Button
                                     onClick={handleGoogleSignIn}
-                                    className="btn-google-sign-in"
-                                    style={{
-                                        cursor: "pointer",
-                                        marginTop: "10px",
-                                    }}
+                                    className="btn-google-sign-in mt-2 cursor-pointer"
+                                    // style={{ cursor: "pointer", marginTop: "10px" }}
                                 >
                                     Sign in with Google
                                 </Button>

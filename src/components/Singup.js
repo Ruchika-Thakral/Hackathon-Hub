@@ -118,10 +118,10 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                                     />
                                     {!emailVerification && (
                                         <Button
-                                            className="w-fit"
+                                            className="w-fit cursor-pointer"
                                             type="button"
                                             onClick={handleEmailVerification}
-                                            style={{ cursor: "pointer" }}
+                                            // style={{ cursor: "pointer" }}
                                         >
                                             Verify Email
                                         </Button>
@@ -145,9 +145,9 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                                 <br />
                                 <div className="w-fit mx-auto">
                                     <Button
-                                        className="btn-submit-form"
+                                        className="btn-submit-form cursor-pointer"
                                         type="submit"
-                                        style={{ cursor: "pointer" }}
+                                        // style={{ cursor: "pointer" }}
                                     >
                                         Sign up
                                     </Button>
