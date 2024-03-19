@@ -18,6 +18,7 @@ import com.example.capstone.DTO.AddEvaluatorsDTO;
 import com.example.capstone.DTO.CreateHackathonDTO;
 import com.example.capstone.DTO.GetEvaluatorsDTO;
 import com.example.capstone.DTO.HackathonDTO;
+import com.example.capstone.DTO.MessageResponse;
 import com.example.capstone.Service.AdminService;
 
 
@@ -32,16 +33,16 @@ public class AdminController {
 
 	// Endpoint to create a new hackathon
 	@PostMapping("hackathon")
-	public ResponseEntity<String> createHackathon(@RequestBody CreateHackathonDTO createHackathonDTO) {
+	public ResponseEntity<MessageResponse> createHackathon(@RequestBody CreateHackathonDTO createHackathonDTO) {
 		adminService.createHackathon(createHackathonDTO);
-		return ResponseEntity.status(HttpStatus.CREATED).body("Hackathon created successfully");
+		return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Hackathon created successfully"));
 	}
 
 	// Endpoint to register a new evaluator
 	@PostMapping("Evaluator")
-	public ResponseEntity<String> addEvaluator(@RequestBody RegisterEvaluatorDTO addEvaluatorDTO) {
+	public ResponseEntity<MessageResponse> addEvaluator(@RequestBody RegisterEvaluatorDTO addEvaluatorDTO) {
 		adminService.addEvaluator(addEvaluatorDTO);
-		return ResponseEntity.status(HttpStatus.CREATED).body("Evaluator added successfully");
+		return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Evaluator added successfully"));
 	}
 
 	// Endpoint to assign evaluators to a hackathon
@@ -66,8 +67,8 @@ public class AdminController {
 
 	// Endpoint to mark a hackathon as ended
 	@PutMapping("hackathon/end/{hackathonid}")
-	public ResponseEntity<?> endHackathon(@PathVariable int hackathonid) {
+	public ResponseEntity<MessageResponse> endHackathon(@PathVariable int hackathonid) {
 		adminService.endHackathon(hackathonid);
-		return ResponseEntity.status(HttpStatus.OK).body("Hackathon ended successfully");
+		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Hackathon ended successfully"));
 	}
 }

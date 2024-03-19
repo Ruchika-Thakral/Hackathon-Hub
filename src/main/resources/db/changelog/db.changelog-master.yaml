@@ -27,6 +27,9 @@ databaseChangeLog:
               - column:
                   name: is_available
                   type: boolean
+              - column:
+                  name: assigned_hackathon
+                  type: bigint
       context: "deploy"
       runOnChange: true
   - changeSet:
@@ -44,12 +47,15 @@ databaseChangeLog:
                   value: 50bb949f412cb7213eb3a0b1ee04fb826928c9e4c131f3cafd0d4f8dc4e7fd09
               - column:
                   name: role
-                  value: ADMIN
+                  value: admin
               - column:
                   name: is_available
                   valueBoolean: False
               - column:
                   name: name
                   value: Gokul
+              - column:
+                  name: assigned_hackathon
+                  value: -1
       context: "deploy"
       runOnChange: true
