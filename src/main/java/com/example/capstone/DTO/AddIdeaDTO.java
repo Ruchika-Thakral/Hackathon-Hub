@@ -2,7 +2,6 @@
 package com.example.capstone.DTO;
 
 public class AddIdeaDTO {
-	private String name;
 	private String ideaTitle;
 	private String ideaBody;
 	private String ideaDomain;
@@ -11,21 +10,11 @@ public class AddIdeaDTO {
 
 	}
 
-	public AddIdeaDTO(String updatedName, String updatedIdeaTitle, String updatedIdeaBody, String updatedIdeaDomain) {
-		this.name = updatedName;
+	public AddIdeaDTO(String updatedIdeaTitle, String updatedIdeaBody, String updatedIdeaDomain) {
 		this.ideaTitle = updatedIdeaTitle;
 		this.ideaBody = updatedIdeaBody;
 		this.ideaDomain = updatedIdeaDomain;
 	}
-
-	public String getUpdatedName() {
-		return name;
-	}
-
-	public void setUpdatedName(String updatedName) {
-		this.name = updatedName;
-	}
-
 	public String getUpdatedIdeaTitle() {
 		return ideaTitle;
 	}

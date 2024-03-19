@@ -105,7 +105,6 @@ public class TeamService {
 					if (participant.isLeader()) {
 						Team team = participant.getTeam();
 						if (team.getHackathon() != null && team.getHackathon().getHackathonId().equals(hackathonId)) {
-							team.setName(teamUpdateDTO.getUpdatedName());
 							team.setIdeaTitle(teamUpdateDTO.getUpdatedIdeaTitle());
 							team.setIdeaBody(teamUpdateDTO.getUpdatedIdeaBody());
 							team.setIdeaDomain(teamUpdateDTO.getUpdatedIdeaDomain());
