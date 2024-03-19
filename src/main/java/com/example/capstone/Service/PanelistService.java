@@ -18,12 +18,15 @@ import com.example.capstone.Exceptions.UnauthorizedException;
 import com.example.capstone.Exceptions.UserNotFoundException;
 import com.example.capstone.Repository.PanelistRepository;
 
+//Service to manage panelist-related operations
 @Service
 public class PanelistService {
 	@Autowired
 	private PanelistRepository panelistRepository;
     @Autowired
 	private UserService userService;
+    
+    // Create a new panelist
 	public Panelist createPanelist(User user, Hackathon hackathon) {
 		Panelist panelist = new Panelist();
 		panelist.setHackathon(hackathon);
@@ -31,11 +34,13 @@ public class PanelistService {
 		panelistRepository.save(panelist);
 		return panelist;
 	}
-
+	
+	// Update panelist information
 	public synchronized void updatePanelist(Panelist panelist) {
 		panelistRepository.save(panelist);
 	}
 
+	// Get team details by user ID and hackathon ID
 	public List<TeamDetailsToPanelistDTO> getTeamDetailsByUserIdAndHackathonId(Integer hackathonId,
 			Integer userId) {
 		User user=userService.getUser(userId);
@@ -83,6 +88,8 @@ public class PanelistService {
 		}
 		
 	}
+	
+	// Get panelist hackathon DTO
 	public PanelistHackathonDTO getPanelistHackathonDTO(int panelistId)
 	{
 		return panelistRepository.findAssignedHackathon(panelistId);

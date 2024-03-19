@@ -14,8 +14,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
+// This class represents a team in the system. It includes fields for the team's name, idea details,
+// participants, panelist, and hackathon.
+
+// This class is annotated with @Entity to indicate that it is a JPA entity. It also includes
+// various JPA annotations to define the relationships between the team and other entities.
 @Entity
 public class Team {
+//The team's primary key is the teamId field, which is generated automatically.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer teamId;

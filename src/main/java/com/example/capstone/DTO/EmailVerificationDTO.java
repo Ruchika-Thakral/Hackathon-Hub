@@ -1,6 +1,8 @@
 package com.example.capstone.DTO;
 
+//Data Transfer Object (DTO) for handling email verification data
 public class EmailVerificationDTO {
+
 	private String email;
 	private String otp;
 

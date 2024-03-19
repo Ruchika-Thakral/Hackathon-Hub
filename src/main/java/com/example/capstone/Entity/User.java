@@ -12,28 +12,45 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
+//Entity class representing users in the system
 @Entity
 public class User {
+	// Primary key for the user entity
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer userId;
+
+	// Name of the user
 	private String name;
 	@Column(unique = true)
+	// Email address of the user
 	private String email;
+
+	// Password of the user
 	private String password;
+
+	// Role of the user
 	@Enumerated(EnumType.STRING)
 	private Role role;
+
+	// Availabilty of the user
 	private boolean isAvailable;
-    private Integer assignedHackathon;
+
+	// ID of the hackathon assigned to the user
+	private Integer assignedHackathon;
+
+	// List of participants associated with the user
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Participant> participants;
 
+	// List of panelists associated with the user
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Panelist> panelists;
 
+	// List of judges associated with the user
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Judge> judges;
-  
+
 	public Integer getUserId() {
 		return userId;
 	}
@@ -117,5 +134,5 @@ public class User {
 	public void setParticipants(List<Participant> participants) {
 		this.participants = participants;
 	}
-    
+
 }

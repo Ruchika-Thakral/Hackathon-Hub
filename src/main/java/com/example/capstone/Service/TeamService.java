@@ -36,6 +36,9 @@ public class TeamService {
 	@Autowired
 	private MailService mailService;
 
+	// Create a new team for a hackathon
+	// This method creates a new team with the given name and assigns the given user as the team leader.
+	// It also adds the team to the given hackathon and sets the team's panelist.
 	@Transactional
 	public void CreateTeam(int hackathonid, int userid, TeamCreationDTO teamCreationDTO) {
 		if(checkTimeBound(hackathonid))
@@ -89,6 +92,11 @@ public class TeamService {
 			return true;
 		}
     }
+	// Update the team details with the provided idea details
+	// This method updates the team's name, idea title, idea body, and idea domain with the provided
+	// details. It only updates the team's details if the user is a leader of the team and the team
+	// is participating in the given hackathon.
+	// If the user is not a leader, the method throws an UnauthorizedException.
 	@Transactional
 	public void updateTeamDetails(AddIdeaDTO teamUpdateDTO, int userId, int hackathonId) {
         if(checkTimeBound(hackathonId))
@@ -114,6 +122,9 @@ public class TeamService {
         }
 	}
 
+	// Reject a team by setting status of team as rejected.
+	// This method sets the team's status to "rejected" and sends an email to all team members
+	// notifying them that their submission did not advance to the next phase.
 	@Transactional
 	public void deleteTeam(int id) {
 		Team team = teamRepository.findById(id).get();
@@ -137,6 +148,10 @@ public class TeamService {
 		}
 	}
 
+	// Update the team status to selected.
+	// This method sets the team's status to "selected" and sends an email to all team members
+	// notifying them that they have been selected to move forward to the next step.
+	// If the team is not found, the method throws a TeamNotFoundException.
 	public void selectTeamForNextStep(int teamId) {
 		Team team = teamRepository.findById(teamId).get();
 		if (team != null) {
@@ -160,14 +175,21 @@ public class TeamService {
 		teamRepository.save(team);
 	}
 
+	// Get team details by its ID.
 	public Team getTeam(int id) {
 		return teamRepository.findById(id).get();
 	}
 
+	// Update a team
 	public void updateTeam(Team team) {
 		teamRepository.save(team);
 	}
 
+	// Handle file submission for a team's idea
+	// This method checks if the user is a leader of a selected team for the given hackathon.
+	// If the user is a leader of a selected team, the method updates the team's idea repository and files
+	// and saves the updated team to the database.
+	// If the user is not a leader or the team is not selected, the method throws an UnauthorizedException.
 	public String FileSubmission(int hackathonId, int userId, IdeaDetailsRequestDTO requestBody) {
 		User user = userService.findUserById(userId);
 		List<Participant> participants = user.getParticipants();
