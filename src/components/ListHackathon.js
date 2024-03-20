@@ -7,8 +7,8 @@ import { fetchHackathons } from "../features/hackathon/hackathonSlice";
 const TABLE_HEAD = [
     "Hackathon",
     "Theme",
-    "Panelists",
-    "Judges",
+    // "Panelists",
+    // "Judges",
     "Status",
     "Actions",
 ];
@@ -75,7 +75,7 @@ const ListHackathon = () => {
                                             {hackathon.theme}
                                         </Typography>
                                     </td>
-                                    <td className="p-4 hidden lg:table-cell">
+                                    {/* <td className="p-4 hidden lg:table-cell">
                                         <Typography
                                             variant="small"
                                             color="blue-gray"
@@ -90,7 +90,7 @@ const ListHackathon = () => {
                                             className="font-normal"
                                         >
                                         </Typography>
-                                    </td>
+                                    </td> */}
                                     <td className="p-4">
                                         {/* <Typography
                                             variant="small"

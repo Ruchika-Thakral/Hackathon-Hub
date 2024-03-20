@@ -187,6 +187,7 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                         )}
                                     {!emailVerification && (
                                         <Button
+                                            size="sm"
                                             className="w-fit cursor-pointer"
                                             type="button"
                                             onClick={handleEmailVerification}
@@ -216,6 +217,7 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                                     <Button
                                         className="btn-submit-form cursor-pointer"
                                         type="submit"
+                                        size="sm"
                                         // style={{ cursor: "pointer" }}
                                     >
                                         Sign up

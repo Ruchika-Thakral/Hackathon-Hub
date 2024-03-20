@@ -185,7 +185,7 @@ const EvaluatorAssign = () => {
     const handleSubmit = () => {
         const data = {
             hackathonId: selectedHackathon.hackathonId,
-            evaluators: [{ userId: "6" }],
+            evaluators: [{ userId: selectedEvaluator.userId }],
         };
         console.log({ data });
         setSelectedEvaluator({
@@ -201,6 +201,7 @@ const EvaluatorAssign = () => {
             hackathonId: 0,
             name: "",
         });
+        console.log(data)
         dispatch(assignEvaluator(data));
     };
 

@@ -1,4 +1,3 @@
-import ShortlistDetails from "../components/ShortlistDetails";
 
 import React, { useEffect, useState } from "react";
 import VerticalBar from "../components/VerticalBar";
@@ -19,6 +18,7 @@ import { useSearchParams } from "react-router-dom";
 
 import { IconButton, ButtonGroup } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import ReviewDetails from "../components/ReviewDetails";
 
 const IDEAS = [
     {
@@ -28,7 +28,9 @@ const IDEAS = [
         ideaDomain: "Healthcare Technology",
         ideaTitle: "Genetic-Based Personalized Medicine",
         teamName: "Innovative MedTech Solutions",
-        status: "submitted",
+        status: "implemented",
+        ideaRepo: "https://tailwindcss.com/docs/font-size",
+        ideaFiles: "https://heroicons.com/solid"
     },
     {
         teamId: 102,
@@ -37,7 +39,9 @@ const IDEAS = [
         ideaDomain: "Pharmaceuticals",
         ideaTitle: "AI-Driven Drug Interaction Prediction",
         teamName: "PharmaTech Innovators",
-        status: "submitted",
+        status: "implemented",
+        ideaRepo: "https://whimsical.com/pricing",
+        ideaFiles: "https://github.com/Ruchika-Thakral/Hackathon-Hub"
     },
     {
         teamId: 103,
@@ -46,7 +50,10 @@ const IDEAS = [
         ideaDomain: "Healthcare Technology",
         ideaTitle: "Wearable Biosensor",
         teamName: "BioTech Innovations",
-        status: "selected",
+        status: "rejected",
+        
+        ideaRepo: "https://preline.co/docs/alerts.html",
+        ideaFiles: "https://preline.co/docs/alerts.html"
     },
     {
         teamId: 104,
@@ -55,7 +62,10 @@ const IDEAS = [
         ideaDomain: "Healthcare Technology",
         ideaTitle: "Telemedicine Platform",
         teamName: "TeleHealth Innovations",
-        status: "rejected",
+        status: "shortlist",
+        
+        ideaRepo: "https://preline.co/docs/alerts.html",
+        ideaFiles: "https://preline.co/docs/alerts.html"
     },
 ];
 
@@ -255,19 +265,15 @@ const themes = [
     { name: "Telecom", value: "telecom" },
     { name: "Product Engineering", value: "product" },
 ];
-
-const PanelistShortlist = () => {
-    
+const JudgeReview = () => {
     const [filteredHackathons, setFilteredHackathons] =
         React.useState(hackathons);
-
 
     const [selectedHackathonId, setSelectedHackathonId] = React.useState(
         filteredHackathons[0].hackathonId
     );
 
     const [selectedIdeaId, setSelectedIdeaId] = React.useState(IDEAS[0].teamId);
-
 
     useEffect(() => {
         setSelectedHackathonId(filteredHackathons[0].hackathonId);
@@ -291,7 +297,6 @@ const PanelistShortlist = () => {
 
         setActivePage(activePage - 1);
     };
-
     return (
         <BaseLayout>
             <div className="py-4 px-4 md:px-8">
@@ -304,7 +309,7 @@ const PanelistShortlist = () => {
                                     variant="h4"
                                     className="mb-2 px-2 font-semibold flex text-left justify-start"
                                 >
-                                    Submitted Ideas
+                                    Implemented Ideas
                                     <div className="ml-3 place-self-center">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -339,8 +344,7 @@ const PanelistShortlist = () => {
                                                       {idea.ideaTitle}
                                                       <>
                                                           {idea.status ===
-                                                          "submitted" ? null : idea.status ===
-                                                            "selected" ? (
+                                                          "reviewed" ?  (
                                                               <svg
                                                                   xmlns="http://www.w3.org/2000/svg"
                                                                   viewBox="0 0 24 24"
@@ -350,20 +354,6 @@ const PanelistShortlist = () => {
                                                                   <path
                                                                       fillRule="evenodd"
                                                                       d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
-                                                                      clipRule="evenodd"
-                                                                  />
-                                                              </svg>
-                                                          ) : idea.status ===
-                                                            "rejected" ? (
-                                                              <svg
-                                                                  xmlns="http://www.w3.org/2000/svg"
-                                                                  viewBox="0 0 24 24"
-                                                                  fill="currentColor"
-                                                                  className="w-6 h-6 fill-red-700"
-                                                              >
-                                                                  <path
-                                                                      fillRule="evenodd"
-                                                                      d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
                                                                       clipRule="evenodd"
                                                                   />
                                                               </svg>
@@ -391,8 +381,7 @@ const PanelistShortlist = () => {
                                                       {idea.ideaTitle}
                                                       <>
                                                           {idea.status ===
-                                                          "submitted" ? null : idea.status ===
-                                                            "selected" ? (
+                                                          "reviewed" ?  (
                                                               <svg
                                                                   xmlns="http://www.w3.org/2000/svg"
                                                                   viewBox="0 0 24 24"
@@ -405,34 +394,20 @@ const PanelistShortlist = () => {
                                                                       clipRule="evenodd"
                                                                   />
                                                               </svg>
-                                                          ) : idea.status ===
-                                                            "rejected" ? (
-                                                              <svg
-                                                                  xmlns="http://www.w3.org/2000/svg"
-                                                                  viewBox="0 0 24 24"
-                                                                  fill="currentColor"
-                                                                  className="w-6 h-6 fill-red-700"
-                                                              >
-                                                                  <path
-                                                                      fillRule="evenodd"
-                                                                      d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
-                                                                      clipRule="evenodd"
-                                                                  />
-                                                              </svg>
                                                           ) : null}
                                                       </>
                                                   </ListItem>
                                               );
                                           })}
                                     {/* <ListItem>Hello</ListItem>
-                                    <ListItem>Hello</ListItem>
-                                    <ListItem>Hello</ListItem>
-                                    <ListItem>Hello</ListItem>
-                                    <ListItem>Hello</ListItem>
-                                    <ListItem>Hello</ListItem>
+                            <ListItem>Hello</ListItem>
+                            <ListItem>Hello</ListItem>
+                            <ListItem>Hello</ListItem>
+                            <ListItem>Hello</ListItem>
+                            <ListItem>Hello</ListItem>
 
-                                    <ListItem>Hello</ListItem>
-                                    <ListItem>Hello</ListItem> */}
+                            <ListItem>Hello</ListItem>
+                            <ListItem>Hello</ListItem> */}
                                 </List>
                                 {/* <VerticalBar /> */}
                             </CardBody>
@@ -471,7 +446,7 @@ const PanelistShortlist = () => {
                         {/* <VerticalBar /> */}
                     </div>
                     <div className="col-span-3 md:col-span-2">
-                        <ShortlistDetails
+                        <ReviewDetails
                             hackathons={hackathons}
                             selectedHackathonId={selectedHackathonId}
                             selectedIdeaId={selectedIdeaId}
@@ -484,4 +459,4 @@ const PanelistShortlist = () => {
     );
 };
 
-export default PanelistShortlist;
+export default JudgeReview;

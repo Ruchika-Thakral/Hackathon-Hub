@@ -79,7 +79,7 @@ const Login = ({ showModal, toggleModal, setShowSignInModal }) => {
                     >
                         <div
                             className={
-                                "account-form-fields sign-in flex flex-col gap-y-4 sign-up w-full mx-auto"
+                                "account-form-fields mb-1 sign-in flex flex-col gap-y-4 sign-up w-full mx-auto"
                             }
                         >
                                 <Input
@@ -114,18 +114,19 @@ const Login = ({ showModal, toggleModal, setShowSignInModal }) => {
                                 <Button
                                     className="btn-submit-form cursor-pointer"
                                     type="submit"
+                                    // size="sm"
                                     // onClick={handleSubmit}
                                     // style={{ cursor: "pointer" }}
                                 >
                                     Sign in
                                 </Button>
-                                <Button
+                                {/* <Button
                                     onClick={handleGoogleSignIn}
                                     className="btn-google-sign-in mt-2 cursor-pointer"
                                     // style={{ cursor: "pointer", marginTop: "10px" }}
                                 >
                                     Sign in with Google
-                                </Button>
+                                </Button> */}
                                 <Typography
                                     variant="small"
                                     className="mt-4 flex justify-center"
