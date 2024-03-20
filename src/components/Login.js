@@ -12,6 +12,7 @@ import {
 } from "@material-tailwind/react";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../features/user/userSlice";
+import { Slide, ToastContainer, toast } from 'react-toastify';
 
 const Login = ({ showModal, toggleModal, setShowSignInModal }) => {
     const [formData1, setFormData1] = useState({
@@ -42,11 +43,19 @@ const Login = ({ showModal, toggleModal, setShowSignInModal }) => {
     useEffect(() => {
         if (status === 200) {
             setShowSignInModal(false);
+                // toast.success("SignIn Success!", {
+                //     position: "top-center",
+                //     transition:Slide
+                // });
+  
         }
     }, [status]);
 
     return (
+        <>
+        
         <Dialog open={showModal} handler={toggleModal} size={"xs"}>
+        <ToastContainer/>
             <div className="container">
                 <Card className="mx-auto w-full px-16 py-4">
                     <CardHeader
@@ -147,6 +156,7 @@ const Login = ({ showModal, toggleModal, setShowSignInModal }) => {
                 </Card>
             </div>
         </Dialog>
+        </>
     );
 };
 
