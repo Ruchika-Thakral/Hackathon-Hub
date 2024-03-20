@@ -1,4 +1,4 @@
-import React, {useState } from "react";
+import React, {useState,useEffect } from "react";
 import { useSelector,useDispatch } from "react-redux";
 
 import {
@@ -40,10 +40,18 @@ const IdeaDetails = () => {
     const hackathonId=data?data.data.assignedHackathon:null
     const userId=data?data.data.userId:null
 
+    const teamData=useSelector(state=>state.team.teamdetails.data)
+    const status=teamData?teamData[0].status:null
+    
+    
     const [repoData,setRepoData] = useState({});
     const [ideaData, setIdeaData] = useState({});
-    const [isShortlisted, setIsShortlisted] = useState(true);
-
+    const [isShortlisted, setIsShortlisted] = useState(false);
+    useEffect(() => {
+        if (status === 'selected') {
+            setIsShortlisted(true); // Set isShortlisted to true when status is 'selected'
+        }
+    }, [status]);
     const handleChange = (e) => {
         const { name, value } = e.target;
         setIdeaData((prevstate) => ({ ...prevstate, [name]: value }));
