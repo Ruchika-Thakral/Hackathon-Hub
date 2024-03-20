@@ -218,25 +218,41 @@ public class TeamService {
 	// If the user is not a leader or the team is not selected, the method throws an
 	// UnauthorizedException.
 	public String FileSubmission(int hackathonId, int userId, IdeaDetailsRequestDTO requestBody) {
-		User user = userService.findUserById(userId);
+		User user = userService.getUser(userId);
 		List<Participant> participants = user.getParticipants();
+		Hackathon hackathon=hackathonService.findHackathon(hackathonId);
+		LocalDateTime currentTime=LocalDateTime.now();
+		if(currentTime.isBefore(hackathon.getImplementationSubmissionDeadLine()) && currentTime.isAfter(hackathon.getShortListDeadLine()))
+		{
 		for (Participant participant : participants) {
 			if (participant.isLeader() && participant.getTeam().getHackathon().getHackathonId().equals(hackathonId)) {
 				Team team = participant.getTeam();
 				if (team.getStatus().equals(Status.selected)) {
 					team.setIdeaRepo(requestBody.getIdeaRepo());
 					team.setIdeaFiles(requestBody.getIdeaFiles());
-					team.setStatus(Status.submitted);
+					team.setStatus(Status.implemented);
 					teamRepository.save(team);
 					return "Your idea files have been submitted.";
-				} 
-				else {
+				} else  if(team.getStatus().equals(Status.rejected)){
 					throw new UnauthorizedException("Your team is not selected, Better luck next time champ!");
+				}
+				else if(team.getStatus().equals(Status.submitted))
+				{
+					throw new UnauthorizedException("You are already submitted");
 				}
 			} else {
 				throw new UnauthorizedException("Oops, You are not a leader!");
 			}
 		}
 		return "Idea files submitted successfully";
+		}
+		else if(currentTime.isBefore(hackathon.getShortListDeadLine()))
+		{
+			throw new UnauthorizedException("Implementation submission not started");
+		}
+		else
+		{
+			throw new UnauthorizedException("Implementation submission Ended");
+		}
 	}
 }
