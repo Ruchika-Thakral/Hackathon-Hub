@@ -7,6 +7,8 @@ import {
     userRegistration,
 } from "../features/user/userSlice";
 import { Typography, CardHeader, Card, Dialog, CardBody } from "@material-tailwind/react";
+import { Slide, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
     const [formData, setFormData] = useState({
@@ -15,6 +17,7 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
         password: "",
         otp: "",
     });
+    const [confirmPassword,setConfirmPassword]=useState("")
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevstate) => ({ ...prevstate, [name]: value }));
@@ -32,25 +35,69 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
         }
         if (status === 201) {
             setShowSignUpModal(false);
+            // toast.success("Sign Up Successfull!", {
+            //     position: "top-center",
+            //     transition:Slide
+            // });
             dispatch(userLogin(loginData));
         }
     }, [status]);
+    const [errors, setErrors] = useState({});
     const handleEmailVerification = () => {
-        dispatch(userRegistration(formData));
+        const newErrors = {};
+        if (!formData.name) {
+            newErrors.name = "Name is Required!";
+        }
+        if (!formData.email) {
+            newErrors.email = "Email is Required!";
+        }
+        if (formData.email && !validateEmail(formData.email)) {
+            newErrors.email = "Email is Invalid!";
+        }
+        if (!formData.password) {
+            newErrors.password = "Password is Required!";
+        }
+        if(formData.password !== confirmPassword){
+            newErrors.confirmPassword="Password Does not Match!"
+        }
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+        } else {
+            dispatch(userRegistration(formData))
+        }
+        setErrors(newErrors);
+       
     };
-    const otpDetails = { email: formData.email, otp: formData.otp };
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        dispatch(otpVerification(otpDetails));
+    const otpDetails={email:formData.email,otp:formData.otp}
+    const handleSubmit = async(e) => {
+        e.preventDefault()
+        dispatch(otpVerification(otpDetails))
     };
+    const validateEmail = (email) => {
+        // Regex pattern for email validation
+        const pattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/;
+        return pattern.test(email);
+    };
+    const handler=()=>{
+        toggleModal()
+        setFormData({ name:'',
+        email:'',
+        password:'',
+        otp:''})
+        setEmailVerification(false);
+        setConfirmPassword("")
+        setErrors({})
+ 
+    }
 
     return (
         <Dialog
             // className="h-96"
             open={showModal}
-            handler={toggleModal}
+            handler={handler}
             size={"xs"}
         >
+           
             {/* <span className="close" onClick={toggleModal} style={{ cursor: 'pointer' }}>&times;</span> */}
             <div className="container">
                 <Card className="mx-auto w-full px-16 py-4">
@@ -63,7 +110,7 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                             Sign in to your account
                         </Typography>
                     </CardHeader>
-                    <CardBody>
+                    <CardBody className="max-h-96 overflow-y-auto max">
                         {loading ? (
                             <div className="w-full h-96">
                                 <Spinner className="mx-auto mt-44 h-16 w-16" />
@@ -88,6 +135,11 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                                         onChange={handleChange}
                                         required
                                     />
+                                    {errors.name && (
+                            <Typography className="text-red-500 text-xs w-fit">
+                                {errors.name}
+                            </Typography>
+                        )}
                                     <Input
                                         id="email"
                                         name="email"
@@ -98,6 +150,11 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                                         onChange={handleChange}
                                         required
                                     />
+                                     {errors.email && (
+                            <Typography className="text-red-500 text-xs w-fit">
+                                {errors.email}
+                            </Typography>
+                        )}
                                     <Input
                                         id="password"
                                         name="password"
@@ -108,14 +165,26 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                                         onChange={handleChange}
                                         required
                                     />
+                                    {errors.password && (
+                            <Typography className="text-red-500 text-xs w-fit">
+                                {errors.password}
+                            </Typography>
+                        )}
                                     <Input
                                         id="repeat-password"
-                                        name="repeat-password"
+                                        name="confirmPassword"
                                         type="password"
                                         label="Confirm password"
                                         placeholder="Label Password"
+                                        onChange={e=>setConfirmPassword(e.target.value)}
+                                        value={confirmPassword}
                                         required
                                     />
+                                    {errors.confirmPassword && (
+                            <Typography className="text-red-500 text-xs w-fit">
+                                {errors.confirmPassword}
+                            </Typography>
+                        )}
                                     {!emailVerification && (
                                         <Button
                                             className="w-fit cursor-pointer"
@@ -140,7 +209,7 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                                             />
                                         </>
                                     )}
-                                    {error && <h4>{error.message}</h4>}
+                                    {error && <Typography className="text-red-500 text-xs w-fit">{error.message}</Typography>}
                                 </div>
                                 <br />
                                 <div className="w-fit mx-auto">
