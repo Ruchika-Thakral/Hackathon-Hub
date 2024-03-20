@@ -124,7 +124,6 @@ public class TeamService {
 							team.setIdeaBody(teamUpdateDTO.getIdeaBody());
 							team.setIdeaDomain(teamUpdateDTO.getIdeaDomain());
 							team.setStatus(Status.submitted);
-							System.out.println("---------------------------");
 							teamRepository.save(team);
 						}
 					} else {
@@ -150,7 +149,7 @@ public class TeamService {
 	// team members
 	// notifying them that their submission did not advance to the next phase.
 	@Transactional
-	public void deleteTeam(int id) {
+	public void rejectTeam(int id) {
 		Team team = teamRepository.findById(id).get();
 		if (team != null) {
 			for (Participant participant : team.getParticipants()) {
@@ -227,6 +226,7 @@ public class TeamService {
 				if (team.getStatus().equals(Status.selected)) {
 					team.setIdeaRepo(requestBody.getIdeaRepo());
 					team.setIdeaFiles(requestBody.getIdeaFiles());
+					team.setStatus(Status.submitted);
 					teamRepository.save(team);
 					return "Your idea files have been submitted.";
 				} else {

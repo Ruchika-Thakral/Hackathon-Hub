@@ -397,10 +397,11 @@ public class UserService{
 				teamDetailsDTO.setIdeaTitle(team.getIdeaTitle());
 				teamDetailsDTO.setStatus(team.getStatus());
 				teamDetailsDTO.setName(team.getName());
+				teamDetailsDTO.setHackathonId(team.getHackathon().getHackathonId());
 				teamDetailsDTO.setTeamUserDetailsDTOs(team.getParticipants().stream().map(userParticipant -> {
 					User teamMember = userParticipant.getUser();
 					TeamUserDetailsDTO teamUserDetailsDTO = new TeamUserDetailsDTO();
-					teamUserDetailsDTO.setEmail(teamMember.getName());
+					teamUserDetailsDTO.setEmail(teamMember.getEmail());
 					teamUserDetailsDTO.setLeader(userParticipant.isLeader());
 					teamUserDetailsDTO.setUserId(teamMember.getUserId());
 					teamUserDetailsDTO.setName(teamMember.getName());

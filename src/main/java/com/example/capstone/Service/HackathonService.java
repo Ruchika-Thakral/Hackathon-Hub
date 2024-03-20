@@ -111,7 +111,7 @@ public class HackathonService {
 							+ hackathon.get().getName()
 							+ ", I am delighted to extend an invitation to you to serve as a " + user.getRole()
 							+ " our upcoming event.\r\n" + "\r\n" + "Event Details:\r\n" + "\r\n" + "Date: " + "\r\n"
-							+ "Time: " + formatDate(hackathon.get().getStartDate()) + "\r\n" + "%s" + "\r\n" + "%s"
+							+ "Time: " + formatDate(hackathon.get().getStartDate()) + "\r\n" + " %s " + "\r\n" + " %s "
 							+ "\r\n"
 							+ "As a , your expertise and insights will play a crucial role in evaluating the projects submitted by our participants. Your valuable feedback and assessment will help recognize and reward innovation, creativity, and technical excellence.\r\n"
 							+ "\r\n" + "We look forward to hearing from you soon and working together to make"
@@ -125,15 +125,15 @@ public class HackathonService {
 						Panelist panelist = panelistService.createPanelist(user, hackathon.get());
 						hackathon.get().getPanelists().add(panelist);
 						user.getPanelists().add(panelist);
-						String.format(body,
+						body=String.format(body,
 								"shortlisting start time:" + formatDate(hackathon.get().getIdeaSubmissionDeadline()),
-								"shortlisting end time" + formatDate(hackathon.get().getShortListDeadLine()));
-					} else if (user.getRole().equals(Role.judge)) {
+								"shortlisting end time:" + formatDate(hackathon.get().getShortListDeadLine()));
+					} else if (user.getRole().equals(Role.judge)) {  
 						Judge judge = judgeService.createJudge(user, hackathon.get());
 						hackathon.get().getJudges().add(judge);
 						user.getJudges().add(judge);
-						String.format(body, "reviewing start time:" + formatDate(hackathon.get().getReviewStartTime()),
-								"review end time" + formatDate(hackathon.get().getReviewEndTime()));
+						body=String.format(body, "reviewing start time:" + formatDate(hackathon.get().getReviewStartTime()),
+								"review end time:" + formatDate(hackathon.get().getReviewEndTime()));
 					}
 					mailService.sendEmail(reciever, body, subject);
 				}

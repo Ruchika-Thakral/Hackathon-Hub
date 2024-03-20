@@ -48,7 +48,7 @@ public class TeamController {
 	
 	@PostMapping("rejected/{teamId}")
 	public ResponseEntity<MessageResponse> updateTeamStatus(@PathVariable int teamId) {
-		teamService.deleteTeam(teamId);
+		teamService.rejectTeam(teamId);
 		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Team rejected successfully"));
 	}
 
