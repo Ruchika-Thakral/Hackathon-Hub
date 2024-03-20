@@ -13,7 +13,7 @@ import {
     Typography,
 } from "@material-tailwind/react";
 
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 import { IconButton, ButtonGroup } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
@@ -217,6 +217,7 @@ const themes = [
 
 const Hackathons = () => {
     let [searchParams, setSearchParams] = useSearchParams();
+    const navigate = useNavigate();
 
     const [searchParamsObject, setSearchParamsObject] = useState(
         Object.fromEntries([...searchParams])
@@ -247,7 +248,8 @@ const Hackathons = () => {
         }
         if (searchParamsObject?.hackathonId) {
             setSelectedHackathonId(Number(searchParamsObject.hackathonId));
-            setSearchParams({});
+            // setSearchParams({});
+            navigate("", { replace: true });
         }
     }, [searchParamsObject]);
 
@@ -313,7 +315,6 @@ const Hackathons = () => {
                                               })
                                         : filteredHackathons.map(
                                               (hackathon) => {
-                                                  //   console.log(hackathon.name);
                                                   return (
                                                       <ListItem
                                                           selected={

@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import Login from "./Login";
 import Signup from "./Singup";
 import Footer from "./Footer";
-import DrawerDefault from "../components/Profile";
+import ProfileDrawer from "./ProfileDrawer";
 import { useSelector } from "react-redux";
  
 const BaseLayout = ({ children }) => {
@@ -32,7 +32,7 @@ const BaseLayout = ({ children }) => {
                 toggleSignUpModal={toggleSignUpModal}
                 openDrawer={openDrawer}
             />
-            <DrawerDefault
+            <ProfileDrawer
                 opens={showProile}
                 onClose={closeDrawer}
                 user={data}

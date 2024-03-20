@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchHackathons } from "./features/hackathon/hackathonSlice";
 import BaseLayout from "./components/BaseLayout";
 import TeamDetails from "./pages/TeamDetails";
+import PanelistShortlist from "./pages/PanelistShortlist";
 export const CreateContext = React.createContext();
 const Provider = CreateContext.Provider;
 function App() {
@@ -264,6 +265,8 @@ function App() {
                         /> */}
                         <Route path="results" element={<BaseLayout><Results /></BaseLayout>} />
                         <Route path="teamdetails" element={<TeamDetails />} />
+                        <Route path="panelist/shortlist" element={<PanelistShortlist />} />
+                        <Route path="trial" element={<YourComponent arr={arr}/>} />
                     </Routes>
                 </BrowserRouter>
                 {/* <Judge arr={arr}/> */}

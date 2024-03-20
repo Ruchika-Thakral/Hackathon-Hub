@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "../features/user/userSlice";
 
 
-const DrawerDefault = ({ opens, onClose, user }) => {
+const ProfileDrawer = ({ opens, onClose, user }) => {
     const [editMode, setEditMode] = useState(false);
 
     const handleEdit = () => {
@@ -106,4 +106,4 @@ const DrawerDefault = ({ opens, onClose, user }) => {
     );
 };
 
-export default DrawerDefault;
+export default ProfileDrawer;
