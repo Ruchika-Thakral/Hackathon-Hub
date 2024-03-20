@@ -45,6 +45,7 @@ public class TeamController {
 		teamService.updateTeamDetails(teamUpdateDTO, userId, hackathonId);
 		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Idea submitted successfully"));
 	}
+	
 	@PostMapping("rejected/{teamId}")
 	public ResponseEntity<MessageResponse> updateTeamStatus(@PathVariable int teamId) {
 		teamService.deleteTeam(teamId);

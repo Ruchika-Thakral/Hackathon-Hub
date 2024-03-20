@@ -170,7 +170,6 @@ public class UserService{
 			evaluator.setName(addEvaluatorDTO.getName());
 			evaluator.setRole(addEvaluatorDTO.getRole());
 			evaluator.setAssignedHackathon(-1);
-			evaluator.setAssignedHackathon(null);
 			// Generate a random password
 			String password = passwordGenerationService.generatePassword();
 			// Hash the password
@@ -296,6 +295,7 @@ public class UserService{
 	 * @throws UserNotFoundException      if the user is not found
 	 */
 	public User findUserById(int id) {
+		System.out.println("----------------"+id);
 		Optional<User> user = userRepository.findById(id);
 		if (user.isPresent()) {
 			if (!user.get().isAvailable()) {

@@ -6,15 +6,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import com.example.capstone.DTO.AddIdeaDTO;
 import com.example.capstone.DTO.IdeaDetailsRequestDTO;
 import com.example.capstone.DTO.TeamCreationDTO;
 import com.example.capstone.Entity.Hackathon;
 import com.example.capstone.Entity.Panelist;
 import com.example.capstone.Entity.Participant;
+import com.example.capstone.Entity.Role;
 import com.example.capstone.Entity.Status;
 import com.example.capstone.Entity.Team;
 import com.example.capstone.Entity.User;
+import com.example.capstone.Exceptions.ResourceNotFoundException;
 import com.example.capstone.Exceptions.TeamNotFoundException;
 import com.example.capstone.Exceptions.UnauthorizedException;
 import com.example.capstone.Repository.TeamRepository;
@@ -42,7 +45,6 @@ public class TeamService {
 	// It also adds the team to the given hackathon and sets the team's panelist.
 	@Transactional
 	public void CreateTeam(int hackathonid, int userid, TeamCreationDTO teamCreationDTO) {
-		
 		if (checkTimeBound(hackathonid)) {
 			Hackathon hackathon = hackathonService.findHackathon(hackathonid);
 			Team team = new Team();
@@ -65,6 +67,8 @@ public class TeamService {
 				participants.add(participant);
 			}
 			team.setParticipants(participants);
+			if(hackathon.getPanelists().size()!=0)
+			{
 			int index = (team.getTeamId() + 1) % (hackathon.getPanelists().size());
 			Panelist panelist = hackathon.getPanelists().get(index);
 			team.setPanelist(panelist);
@@ -74,10 +78,16 @@ public class TeamService {
 			userService.updateUsers(users);
 			panelistService.updatePanelist(panelist);
 			hackathonService.updateHackathon(hackathon);
+			}
+			else
+			{
+				throw new ResourceNotFoundException("Panelist not assigned to the hackathon");
+			}
 		}
 	}
 
 	public boolean checkTimeBound(int hackathonId) {
+		System.out.println("---------------------");
 		Hackathon hackathon = hackathonService.findHackathon(hackathonId);
 		LocalDateTime currentTime = LocalDateTime.now();
 		if (currentTime.isBefore(hackathon.getStartDate())) {
@@ -100,22 +110,37 @@ public class TeamService {
 	public void updateTeamDetails(AddIdeaDTO teamUpdateDTO, int userId, int hackathonId) {
 		if (checkTimeBound(hackathonId)) {
 			User user = userService.getUser(userId);
+			if(user.getRole().equals(Role.participant))
+			{
 			List<Participant> participants = user.getParticipants();
 			if (participants != null && !participants.isEmpty()) {
 				for (Participant participant : participants) {
+					if(participant.getTeam().getHackathon().getHackathonId()==hackathonId)
+					{
 					if (participant.isLeader()) {
 						Team team = participant.getTeam();
 						if (team.getHackathon() != null && team.getHackathon().getHackathonId().equals(hackathonId)) {
 							team.setIdeaTitle(teamUpdateDTO.getIdeaTitle());
 							team.setIdeaBody(teamUpdateDTO.getIdeaBody());
 							team.setIdeaDomain(teamUpdateDTO.getIdeaDomain());
+							team.setStatus(Status.submitted);
 							System.out.println("---------------------------");
 							teamRepository.save(team);
 						}
 					} else {
 						throw new UnauthorizedException("Sorry, your not a leader to add Idea ");
 					}
+					}
+					else
+					{
+						throw new ResourceNotFoundException("Team not found");
+					}
 				}
+			}
+			}
+			else
+			{
+				throw new UnauthorizedException("your not participant add idea");
 			}
 		}
 	}

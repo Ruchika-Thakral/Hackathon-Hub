@@ -49,7 +49,6 @@ public class UserController {
 
 	@PostMapping("login")
 	public ResponseEntity<UserDetailsDTO> verifyUser(@RequestBody UserLoginDTO userLoginDto) {
-		System.out.println("--------------------------------------------------------");
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(userService.verifyUser(userLoginDto.getEmail(), userLoginDto.getPassword()));
 	}
