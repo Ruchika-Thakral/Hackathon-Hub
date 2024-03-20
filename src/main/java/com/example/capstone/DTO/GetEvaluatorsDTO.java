@@ -10,12 +10,12 @@ public class GetEvaluatorsDTO {
 	private Enum<Role> role;
     private boolean isAvailable;
     private Integer assignedHackathon;
-	public GetEvaluatorsDTO(int userId, String email, String name, Enum<Role> role, boolean isAvailable,
+	public GetEvaluatorsDTO(int userId, String name, String email, Enum<Role> role, boolean isAvailable,
 			Integer assignedHackathon) {
 		super();
 		this.userId = userId;
-		this.email = email;
 		this.name = name;
+		this.email = email;
 		this.role = role;
 		this.isAvailable = isAvailable;
 		this.assignedHackathon = assignedHackathon;

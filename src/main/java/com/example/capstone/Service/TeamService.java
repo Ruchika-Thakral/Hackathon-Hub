@@ -229,7 +229,8 @@ public class TeamService {
 					team.setStatus(Status.submitted);
 					teamRepository.save(team);
 					return "Your idea files have been submitted.";
-				} else {
+				} 
+				else {
 					throw new UnauthorizedException("Your team is not selected, Better luck next time champ!");
 				}
 			} else {
