@@ -64,6 +64,7 @@ public class PanelistService {
 					teamDTO.setIdeaDomain(team.getIdeaDomain());
 					teamDTO.setIdeaTitle(team.getIdeaTitle());
 					teamDTO.setTeamName(team.getName());
+					teamDTO.setStatus(team.getStatus());
 					return teamDTO;
 				}).collect(Collectors.toList());
 				if (teamDetailsToPanelistDTOs.size() == 0) {

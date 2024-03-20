@@ -1,15 +1,65 @@
 package com.example.capstone.DTO;
 
+import com.example.capstone.Entity.Status;
+
 public class TeamDetailsToJudgeDTO {
-	public TeamDetailsToJudgeDTO(Integer teamId, String ideaRepo, String ideaFiles) {
+	private Integer teamId;
+	private String ideaRepo;
+    private String ideaFiles;
+    private String ideaBody;
+    private String ideaDomain;
+    private String ideaTitle;
+    private String teamName;
+    private Status status;
+    public TeamDetailsToJudgeDTO()
+    {
+    	
+    }
+    
+    public TeamDetailsToJudgeDTO(Integer teamId, String ideaRepo, String ideaFiles, String ideaBody, String ideaDomain,
+			String ideaTitle, String teamName, Status status) {
 		super();
 		this.teamId = teamId;
 		this.ideaRepo = ideaRepo;
 		this.ideaFiles = ideaFiles;
+		this.ideaBody = ideaBody;
+		this.ideaDomain = ideaDomain;
+		this.ideaTitle = ideaTitle;
+		this.teamName = teamName;
+		this.status = status;
 	}
-	private Integer teamId;
-    private String ideaRepo;
-    private String ideaFiles;
+
+	public String getIdeaBody() {
+		return ideaBody;
+	}
+	public void setIdeaBody(String ideaBody) {
+		this.ideaBody = ideaBody;
+	}
+	public String getIdeaDomain() {
+		return ideaDomain;
+	}
+	public void setIdeaDomain(String ideaDomain) {
+		this.ideaDomain = ideaDomain;
+	}
+	public String getIdeaTitle() {
+		return ideaTitle;
+	}
+	public void setIdeaTitle(String ideaTitle) {
+		this.ideaTitle = ideaTitle;
+	}
+	public String getTeamName() {
+		return teamName;
+	}
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
+	}
+	public Status getStatus() {
+		return status;
+	}
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+	
 	public Integer getTeamId() {
 		return teamId;
 	}

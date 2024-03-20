@@ -1,5 +1,7 @@
 package com.example.capstone.DTO;
 
+import com.example.capstone.Entity.Status;
+
 //Data Transfer Object (DTO) representing team details for a panelist
 public class TeamDetailsToPanelistDTO {
 	
@@ -8,7 +10,15 @@ public class TeamDetailsToPanelistDTO {
 	    private String ideaDomain;
 	    private String ideaTitle;
 	    private String teamName;
+	    private Status status;
 	    
+	    
+		public Status getStatus() {
+			return status;
+		}
+		public void setStatus(Status status) {
+			this.status = status;
+		}
 		public Integer getTeamId() {
 			return teamId;
 		}
