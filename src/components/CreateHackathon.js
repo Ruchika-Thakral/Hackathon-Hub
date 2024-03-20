@@ -315,8 +315,8 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
-                                name="rules"
-                                value={formData?.rules}
+                                name="guidelines"
+                                value={formData?.guidelines}
                                 onChange={handleChange}
                             />
                         </div>
@@ -361,7 +361,7 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
-                                name="judging_criteria"
+                                name="judgingCriteria"
                                 value={formData?.judgingCriteria}
                                 onChange={handleChange}
                             />

@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, {useState } from "react";
+import { useSelector,useDispatch } from "react-redux";
+
 import {
-    List,
-    ListItem,
-    ListItemPrefix,
-    Avatar,
+    // List,
+    // ListItem,
+    // ListItemPrefix,
+    // Avatar,
     Card,
     Typography,
     CardHeader,
     CardBody,
     Input,
     Textarea,
-    IconButton,
+    // IconButton,
     Button,
 } from "@material-tailwind/react";
 
@@ -22,6 +24,8 @@ import {
 } from "@material-tailwind/react";
 
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { ideaSubmission} from "../features/team/teamSlice";
+import { repoSubmission } from "../features/team/teamSlice";
 
 const DOMAINS = [
     { name: "Data and AI", value: "data" },
@@ -31,7 +35,15 @@ const DOMAINS = [
 ];
 
 const IdeaDetails = () => {
+    const dispatch = useDispatch();
+    const data=useSelector(state=>state.user.login.data)
+    const hackathonId=data?data.data.assignedHackathon:null
+    const userId=data?data.data.userId:null
+
+    const [repoData,setRepoData] = useState({});
     const [ideaData, setIdeaData] = useState({});
+    const [isShortlisted, setIsShortlisted] = useState(true);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setIdeaData((prevstate) => ({ ...prevstate, [name]: value }));
@@ -39,8 +51,19 @@ const IdeaDetails = () => {
 
     const handleSubmit = () => {
         console.log(ideaData);
-        // dispatch(hackathonCreation(ideaData));
+        dispatch(ideaSubmission({hackathonId,userId,ideaData}));
     };
+
+    const handleRepoChange = (e) => {
+        const { name, value } = e.target;
+        setRepoData((prevstate) => ({ ...prevstate, [name]: value }));
+    };
+
+    const handleRepoSubmit = () => {
+        console.log(repoData);
+        dispatch(repoSubmission({hackathonId,userId,repoData}));
+    };
+    
     return (
         <Card className="w-full">
             <CardHeader floated={false} shadow={false}>
@@ -48,6 +71,7 @@ const IdeaDetails = () => {
             </CardHeader>
             <CardBody className="w-full lg:w-2/3">
                 <Input
+                    disabled={isShortlisted}
                     label="Idea Title*"
                     value={ideaData?.ideaTitle || ""}
                     name="ideaTitle"
@@ -57,6 +81,7 @@ const IdeaDetails = () => {
                     <Menu placement="bottom-start">
                         <MenuHandler>
                             <Button
+                                disabled={isShortlisted}
                                 ripple={false}
                                 variant="text"
                                 color="blue-gray"
@@ -96,20 +121,30 @@ const IdeaDetails = () => {
 
                 <div className="mt-3">
                     <Textarea
+                        disabled={isShortlisted}
                         label="Idea Description*"
                         name="ideaBody"
                         value={ideaData?.ideaBody || ""}
                         onChange={handleChange}
                     />
                 </div>
-                {true ? (
+                {!isShortlisted &&
+                <div className="flex w-full justify-between mt-3 py-1.5">
+                    <div className="flex gap-2 justify-center md:justify-end w-full">
+                        <Button size="sm" className="rounded-md" onClick={handleSubmit}>
+                            Submit Idea
+                        </Button>
+                    </div>
+                </div>
+                }
+                {isShortlisted && (
                     <div>
                         <div className="mt-3">
                             <Input
                                 label="Repository Link"
-                                value={ideaData?.ideaRepo || ""}
+                                value={repoData?.ideaRepo || ""}
                                 name="ideaRepo"
-                                onChange={handleChange}
+                                onChange={handleRepoChange}
                                 icon={
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -131,9 +166,9 @@ const IdeaDetails = () => {
                         <div className="mt-3">
                             <Input
                                 label="Drive Link"
-                                value={ideaData?.ideaFiles || ""}
+                                value={repoData?.ideaFiles || ""}
                                 name="ideaFiles"
-                                onChange={handleChange}
+                                onChange={handleRepoChange}
                                 icon={
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -152,9 +187,7 @@ const IdeaDetails = () => {
                                 }
                             />
                         </div>
-                    </div>
-                ) : null}
-                <div className="flex w-full justify-between mt-3 py-1.5">
+                        <div className="flex w-full justify-between mt-3 py-1.5">
                     {/* <IconButton
                                 variant="text"
                                 color="blue-gray"
@@ -176,14 +209,17 @@ const IdeaDetails = () => {
                                 </svg>
                             </IconButton> */}
                     <div className="flex gap-2 justify-center md:justify-end w-full">
-                        <Button size="sm" className="rounded-md">
-                            Submit Idea
+                        <Button size="sm" className="rounded-md" onClick={handleRepoSubmit}>
+                            Submit Implementation
                         </Button>
                     </div>
                 </div>
+                    </div>
+                )}
             </CardBody>
         </Card>
     );
 };
+
 
 export default IdeaDetails;
