@@ -18,6 +18,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useState } from "react";
 
 import { registerEvaluator, fetchEvaluators } from "../features/evaluator/evaluatorSlice";
+import { fetchHackathons } from "../features/hackathon/hackathonSlice";
 
 const EvaluatorRegistration = () => {
     const roles = [
@@ -36,6 +37,11 @@ const EvaluatorRegistration = () => {
         const { name, value } = e.target;
         setEvaluatorData((prevstate) => ({ ...prevstate, [name]: value }));
     };
+
+    useEffect(()=>{
+        dispatch(fetchEvaluators())
+        dispatch(fetchHackathons())
+    },[dispatch])
 
     const handleSubmit = () => {
         console.log(evaluatorData);

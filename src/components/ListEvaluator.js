@@ -209,14 +209,18 @@ const ListEvaluator = ({ handleAddMembers, handleAssignMembers }) => {
     useEffect(() => {
         dispatch(fetchEvaluators());
         dispatch(fetchHackathons())
-    }, []);
+    }, [dispatch]);
 
     const data = useSelector((state) => state.hackathon.hackathons.data);
     let HACKATHONS = data ? data : [];
-    const TABLE_ROWS = useSelector((state) => state.evaluator.evaluators?.data);
+    const data2 = useSelector((state) => state.evaluator.evaluators.data);
+    const TABLE_ROWS = data2 ? data2 : [];;
 
-    console.log(TABLE_ROWS)
+    // console.log(TABLE_ROWS)
     const [tableData, setTableData] = useState(TABLE_ROWS);
+    useEffect(()=>{
+        setTableData(TABLE_ROWS)
+    },[TABLE_ROWS])
     const handleFilterClick = (keyword = "all") => {
         console.log("hi" + keyword);
         if (keyword === "all") {

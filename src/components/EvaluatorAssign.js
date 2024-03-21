@@ -180,7 +180,7 @@ const EvaluatorAssign = () => {
     useEffect(() => {
         dispatch(fetchEvaluators());
         dispatch(fetchHackathons());
-    }, []);
+    }, [dispatch]);
 
     const handleSubmit = () => {
         const data = {
