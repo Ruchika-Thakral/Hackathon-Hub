@@ -74,6 +74,79 @@ export const fetchTeamDetails=createAsyncThunk(
     }
 );
 
+
+
+
+
+
+export const fetchJudgeTeamsByHackathonId = createAsyncThunk(
+    'team/fetchJudgeTeamsByHackathonId',
+    async (hackathonId, thunkAPI) => { // Assuming hackathonId is already available in the state
+        try {
+            const response = await axios.get(`http://localhost:8080/Judge/selectedTeams/${hackathonId}`);
+            return response;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+ 
+export const fetchPanelistTeamsByHackathonId = createAsyncThunk(
+    'team/fetchPanelistTeamsByHackathonId',
+    async ({hackathonId,panelistid}, thunkAPI) => { // Assuming hackathonId is already available in the state
+        try {
+            const response = await axios.get(`http://localhost:8080/panelist/${hackathonId}/${panelistid}`);
+            console.log(response)
+            return response;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+ 
+export const rejectTeam = createAsyncThunk(
+    'team/rejectTeam',
+    async (teamId, thunkAPI) => { // Assuming hackathonId is already available in the state
+        try {
+            const response = await axios.post(`http://localhost:8080/Team/rejected/${teamId}`);
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+ 
+export const acceptTeam = createAsyncThunk(
+    'team/acceptTeam',
+    async (teamId, thunkAPI) => { // Assuming hackathonId is already available in the state
+        try {
+            const response = await axios.put(`http://localhost:8080/Team/selected/${teamId}`);
+            return response.data;
+            
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+ 
+export const rateTeam = createAsyncThunk(
+    'team/rateTeam',
+    async ({teamId,rating}, thunkAPI) => { // Assuming hackathonId is already available in the state
+        try {
+            const response = await axios.post(`http://localhost:8080/Judge/selectedTeams/${teamId}`,rating);
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+
+
+
+
+
+
+
 const teamSlice = createSlice({
     name: "team",
     initialState,

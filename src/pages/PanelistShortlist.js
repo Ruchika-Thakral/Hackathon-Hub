@@ -304,7 +304,7 @@ const PanelistShortlist = () => {
                                     variant="h4"
                                     className="mb-2 px-2 font-semibold flex text-left justify-start"
                                 >
-                                    Submitted Ideas
+                                    Shortlist Ideas
                                     <div className="ml-3 place-self-center">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
