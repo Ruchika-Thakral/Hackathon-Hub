@@ -105,7 +105,7 @@ const NavBar = ({ toggleSignInModal, toggleSignUpModal, openDrawer }) => {
     
     const user = useSelector((state) => state.user.login?.data?.data);
 
-    console.log(user);
+    // console.log(user);
 
     const [openNav, setOpenNav] = React.useState(false);
 

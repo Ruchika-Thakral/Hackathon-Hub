@@ -264,10 +264,14 @@ const Hackathons = () => {
     }, [searchParamsObject]);
 
     useEffect(() => {
-        if (filteredHackathons.length>0) {
-        setSelectedHackathonId(filteredHackathons[0]?.hackathonId);
+        if (filteredHackathons.length > 0) {
+            setSelectedHackathonId(filteredHackathons[0]?.hackathonId);
         }
     }, [filteredHackathons]);
+
+    useEffect(() => {
+        setFilteredHackathons(hackathons);
+    }, [hackathons]);
 
     const [activePage, setActivePage] = React.useState(1);
 

@@ -23,27 +23,27 @@ const initialState = {
         loading: false,
         error: null,
     },
-    judgeteams:{
-        data:null,
-        loading:false,
-        error:null
+    judgeteams: {
+        data: null,
+        loading: false,
+        error: null,
     },
-    panelistteams:{
-        data:null,
-        loading:false,
-        error:null
-    }
+    panelistteams: {
+        data: null,
+        loading: false,
+        error: null,
+    },
 };
 export const teamRegistration = createAsyncThunk(
     "team/teamRegistration",
     async ({ hackathonId, userId, team }, thunkAPI) => {
         try {
-            console.log({ hackathonId, userId, team })
+            console.log({ hackathonId, userId, team });
             const response = await axios.post(
                 `http://localhost:8080/Team/${hackathonId}/${userId}`,
                 team
             );
-            console.log(response)
+            console.log(response);
             return response;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -72,7 +72,7 @@ export const repoSubmission = createAsyncThunk(
     "team/repoSubmission",
     async ({ hackathonId, userId, repoData }, thunkAPI) => {
         try {
-            console.log({ hackathonId, userId, repoData })
+            console.log({ hackathonId, userId, repoData });
             const response = await axios.post(
                 `http://localhost:8080/Team/ideaFiles/${hackathonId}/${userId}`,
                 repoData
@@ -90,12 +90,15 @@ export const fetchTeamDetails = createAsyncThunk(
     "hackathon/fetchTeamDetails",
     async (userId, thunkAPI) => {
         try {
-            console.log(userId)
-            const response = await axios.get(
-                `http://localhost:8080/User/Teams/${userId}`
-            );
-            console.log(response)
-            return response.data;
+            console.log(userId);
+            if (userId) {
+                const response = await axios.get(
+                    `http://localhost:8080/User/Teams/${userId}`
+                );
+                console.log(response);
+                return response.data;
+            }
+            return []
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
@@ -104,10 +107,9 @@ export const fetchTeamDetails = createAsyncThunk(
 
 export const fetchJudgeTeamsByHackathonId = createAsyncThunk(
     "team/fetchJudgeTeamsByHackathonId",
-    async ({hackathonId}, thunkAPI) => {
+    async ({ hackathonId }, thunkAPI) => {
         // Assuming hackathonId is already available in the state
         try {
-            
             const response = await axios.get(
                 `http://localhost:8080/Judge/selectedTeams/${hackathonId}`
             );
@@ -171,7 +173,7 @@ export const rateTeam = createAsyncThunk(
         try {
             const response = await axios.post(
                 `http://localhost:8080/Judge/review/${teamId}`,
-                {rating}
+                { rating }
             );
             return response.data;
         } catch (error) {
@@ -243,73 +245,82 @@ const teamSlice = createSlice({
                 state.teamdetails.error = action.payload; // Set error payload
             })
             .addCase(fetchJudgeTeamsByHackathonId.pending, (state) => {
-                state.judgeteams.loading= true;
+                state.judgeteams.loading = true;
                 state.judgeteams.error = null;
             })
-            .addCase(fetchJudgeTeamsByHackathonId.fulfilled, (state, action) => {
-                state.judgeteams.loading=false;
-                state.judgeteams.data= action.payload;
-                state.judgeteams.error= null;
-            })
+            .addCase(
+                fetchJudgeTeamsByHackathonId.fulfilled,
+                (state, action) => {
+                    state.judgeteams.loading = false;
+                    state.judgeteams.data = action.payload;
+                    state.judgeteams.error = null;
+                }
+            )
             .addCase(fetchJudgeTeamsByHackathonId.rejected, (state, action) => {
-                state.judgeteams.loading=false;
-                state.judgeteams.data= null;
-                state.judgeteams.error= action.payload;
+                state.judgeteams.loading = false;
+                state.judgeteams.data = null;
+                state.judgeteams.error = action.payload;
             })
             .addCase(fetchPanelistTeamsByHackathonId.pending, (state) => {
-                state.panelistteams.loading= true;
+                state.panelistteams.loading = true;
                 state.panelistteams.error = null;
             })
-            .addCase(fetchPanelistTeamsByHackathonId.fulfilled, (state, action) => {
-                state.panelistteams.loading=false;
-                state.panelistteams.data= action.payload;
-                state.panelistteams.error= null;
-            })
-            .addCase(fetchPanelistTeamsByHackathonId.rejected, (state, action) => {
-                state.panelistteams.loading= false;
-                state.panelistteams.data = null;
-                state.panelistteams.error = action.payload;
-            })
-            
+            .addCase(
+                fetchPanelistTeamsByHackathonId.fulfilled,
+                (state, action) => {
+                    state.panelistteams.loading = false;
+                    state.panelistteams.data = action.payload;
+                    state.panelistteams.error = null;
+                }
+            )
+            .addCase(
+                fetchPanelistTeamsByHackathonId.rejected,
+                (state, action) => {
+                    state.panelistteams.loading = false;
+                    state.panelistteams.data = null;
+                    state.panelistteams.error = action.payload;
+                }
+            )
+
             .addCase(acceptTeam.pending, (state) => {
-                state.panelistteams.loading= true;
+                state.panelistteams.loading = true;
                 state.panelistteams.error = null;
             })
             .addCase(acceptTeam.fulfilled, (state, action) => {
-                state.panelistteams.loading=false;
-                state.panelistteams.data= action.payload;
-                state.panelistteams.error= null;
+                state.panelistteams.loading = false;
+                state.panelistteams.data = action.payload;
+                state.panelistteams.error = null;
             })
             .addCase(acceptTeam.rejected, (state, action) => {
-                state.panelistteams.loading= false;
+                state.panelistteams.loading = false;
                 state.panelistteams.data = null;
                 state.panelistteams.error = action.payload;
             })
             .addCase(rejectTeam.pending, (state) => {
-                state.panelistteams.loading= true;
+                state.panelistteams.loading = true;
                 state.panelistteams.error = null;
             })
             .addCase(rejectTeam.fulfilled, (state, action) => {
-                state.panelistteams.loading=false;
-                state.panelistteams.data= action.payload;
-                state.panelistteams.error= null;
+                state.panelistteams.loading = false;
+                state.panelistteams.data = action.payload;
+                state.panelistteams.error = null;
             })
             .addCase(rejectTeam.rejected, (state, action) => {
-                state.panelistteams.loading= false;
+                state.panelistteams.loading = false;
                 state.panelistteams.data = null;
                 state.panelistteams.error = action.payload;
             })
             .addCase(rateTeam.pending, (state) => {
-                state.judgeteams.loading= true;
+                state.judgeteams.loading = true;
                 state.judgeteams.error = null;
             })
             .addCase(rateTeam.fulfilled, (state, action) => {
-                state.judgeteams.loading=false;
+                state.judgeteams.loading = false;
                 // state.judgeteams.data= action.payload;
-                state.judgeteams.error= null;
+                state.judgeteams.error = null;
             })
             .addCase(rateTeam.rejected, (state, action) => {
-                state.judgeteams.loading= false;
+                state.judgeteams.loading = false;
                 state.judgeteams.data = null;
                 state.judgeteams.error = action.payload;
             });

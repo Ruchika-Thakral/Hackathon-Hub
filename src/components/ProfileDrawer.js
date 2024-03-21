@@ -35,7 +35,7 @@ const ProfileDrawer = ({ opens, onClose, user }) => {
 
     }
 
-    console.log(user)
+    // console.log(user)
     return (
         <Drawer
             placement="right"
