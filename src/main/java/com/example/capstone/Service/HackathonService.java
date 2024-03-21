@@ -194,6 +194,7 @@ public class HackathonService {
 		}
 		for (Participant participant : team.getParticipants()) {
 			participant.getUser().setAvailable(true);
+			participant.getUser().setAssignedHackathon(-1);
 		}
 		Float consolidatedRating = (rating / team.getReviews().size());
 		team.setConsolidatedRating(consolidatedRating);
@@ -215,13 +216,14 @@ public class HackathonService {
 		}
 		for (Judge judge : hackathon.get().getJudges()) {
 			judge.getUser().setAvailable(true);
-			judge.getUser().setAssignedHackathon(null);
+			judge.getUser().setAssignedHackathon(-1);
 		}
 		for (Panelist panelist : hackathon.get().getPanelists()) {
 			panelist.getUser().setAvailable(true);
-			panelist.getUser().setAssignedHackathon(null);
+			panelist.getUser().setAssignedHackathon(-1);
 		}
 		Collections.sort(scores, (s1, s2) -> s1.getSecond().compareTo(s2.getSecond()));
+		hackathon.get().setCompleted(true);
 		hackathon.get().setFirstTeamId(scores.size() >= 1 ? String.valueOf(scores.get(0).getFirst()) : null);
 		hackathon.get().setSecondTeamId(scores.size() >= 2 ? String.valueOf(scores.get(1).getFirst()) : null);
 		hackathon.get().setThirdTeamId(scores.size() >= 3 ? String.valueOf(scores.get(2).getFirst()) : null);

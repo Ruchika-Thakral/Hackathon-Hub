@@ -27,29 +27,109 @@ public class HackathonDTO {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime reviewEndTime;
 
+	private String description;
+	private String prizes;
+	private String rules;
+	private String judgingCriteria;
+	private boolean isCompleted;
+	private String firstTeamId;
+	private String secondTeamId;
+	private String thirdTeamId;
+
 	// constructor
-     public HackathonDTO()
-     {
-    	 
-     }
-	public HackathonDTO(Integer hackathonId, LocalDateTime ideaSubmissionDeadline,
-			LocalDateTime implementationSubmissionDeadLine, String name, LocalDateTime reviewEndTime,
-			LocalDateTime reviewStartTime, LocalDateTime shortListDeadLine, LocalDateTime startDate, String theme) {
+	public HackathonDTO() {
+
+	}
+	
+	public HackathonDTO(int hackathonId, String name, String theme, LocalDateTime startDate,
+			LocalDateTime ideaSubmissionDeadline, LocalDateTime shortListDeadline,
+			LocalDateTime implementationSubmissionDeadline, LocalDateTime reviewStartTime, LocalDateTime reviewEndTime,
+			String description, String prizes, String rules, String judgingCriteria, boolean isCompleted,
+			String firstTeamId, String secondTeamId, String thirdTeamId) {
+		super();
 		this.hackathonId = hackathonId;
-		this.ideaSubmissionDeadline = ideaSubmissionDeadline;
-		this.implementationSubmissionDeadline = implementationSubmissionDeadLine;
 		this.name = name;
-		this.reviewEndTime = reviewEndTime;
-		this.reviewStartTime = reviewStartTime;
-		this.shortListDeadline = shortListDeadLine;
-		this.startDate = startDate;
 		this.theme = theme;
+		this.startDate = startDate;
+		this.ideaSubmissionDeadline = ideaSubmissionDeadline;
+		this.shortListDeadline = shortListDeadline;
+		this.implementationSubmissionDeadline = implementationSubmissionDeadline;
+		this.reviewStartTime = reviewStartTime;
+		this.reviewEndTime = reviewEndTime;
+		this.description = description;
+		this.prizes = prizes;
+		this.rules = rules;
+		this.judgingCriteria = judgingCriteria;
+		this.isCompleted = isCompleted;
+
+		this.firstTeamId = firstTeamId;
+		this.secondTeamId = secondTeamId;
+		this.thirdTeamId = thirdTeamId;
 	}
 
-//    private String firstTeamId;
-//    private String secondTeamId;
-//    private String thirdTeamId;
-//    private boolean completed;
+	public boolean getIsCompleted() {
+		return isCompleted;
+	}
+
+	public void setIsCompleted(boolean isCompleted) {
+		this.isCompleted = isCompleted;
+	}
+
+	public String getFirstTeamId() {
+		return firstTeamId;
+	}
+
+	public void setFirstTeamId(String firstTeamId) {
+		this.firstTeamId = firstTeamId;
+	}
+
+	public String getSecondTeamId() {
+		return secondTeamId;
+	}
+
+	public void setSecondTeamId(String secondTeamId) {
+		this.secondTeamId = secondTeamId;
+	}
+
+	public String getThirdTeamId() {
+		return thirdTeamId;
+	}
+
+	public void setThirdTeamId(String thirdTeamId) {
+		this.thirdTeamId = thirdTeamId;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getPrizes() {
+		return prizes;
+	}
+
+	public void setPrizes(String prizes) {
+		this.prizes = prizes;
+	}
+
+	public String getRules() {
+		return rules;
+	}
+
+	public void setRules(String rules) {
+		this.rules = rules;
+	}
+
+	public String getJudgingCriteria() {
+		return judgingCriteria;
+	}
+
+	public void setJudgingCriteria(String judgingCriteria) {
+		this.judgingCriteria = judgingCriteria;
+	}
 
 	public int getHackathonId() {
 		return hackathonId;

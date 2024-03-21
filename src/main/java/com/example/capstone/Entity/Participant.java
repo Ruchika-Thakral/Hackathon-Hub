@@ -1,5 +1,6 @@
 package com.example.capstone.Entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,7 +16,7 @@ public class Participant {
 
 	@ManyToOne
 	private Team team;
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private User user;
 
 	public Integer getParticipantId() {

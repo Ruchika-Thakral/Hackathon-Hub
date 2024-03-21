@@ -35,7 +35,6 @@ public class Hackathon {
 	private List<Judge> judges;
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Panelist> panelists;
-
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Team> teams;
 	public String getDescription() {
