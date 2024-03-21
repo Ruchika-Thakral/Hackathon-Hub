@@ -2,20 +2,27 @@ import React, { useEffect } from "react";
 
 import { Card, Typography, Chip, Button } from "@material-tailwind/react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchHackathons } from "../features/hackathon/hackathonSlice";
+import {
+    fetchHackathons,
+    hackathonEnd,
+} from "../features/hackathon/hackathonSlice";
 
 const TABLE_HEAD = [
     "Hackathon",
     "Theme",
     // "Panelists",
     // "Judges",
-    "Status",
+    // "Status",
     "Actions",
 ];
 
 const ListHackathon = () => {
-    const data=useSelector(state=>state.hackathon.hackathons.data)
-    let HACKATHONS=data?data:[]
+    const data = useSelector((state) => state.hackathon.hackathons.data);
+    let HACKATHONS = data ? data : [];
+    const dispatch = useDispatch();
+    const handleHackathonEnd = (id) => {
+        dispatch(hackathonEnd(id));
+    };
 
     return (
         <div className="container my-2 mx-auto px-1 flex justify-center">
@@ -91,12 +98,7 @@ const ListHackathon = () => {
                                         >
                                         </Typography>
                                     </td> */}
-                                    <td className="p-4">
-                                        {/* <Typography
-                                            variant="small"
-                                            color="blue-gray"
-                                            className="font-normal"
-                                        > */}
+                                    {/* <td className="p-4">
                                         <Chip
                                             variant="ghost"
                                             color="green"
@@ -104,17 +106,28 @@ const ListHackathon = () => {
                                             value={status}
                                             className="ml-0 mr-auto block w-24 text-center rounded-full"
                                         />
-                                        {/* </Typography> */}
-                                    </td>
+                                    </td> */}
                                     <td className="p-4 hidden lg:table-cell">
                                         <Button
                                             className="flex items-center gap-3"
                                             size="sm"
-                                            // onClick={handleAssignMembers}
+                                            disabled={hackathon?.isCompleted}
+                                            onClick={handleHackathonEnd(
+                                                hackathon.hackathonId
+                                            )}
                                         >
                                             {/* <PencilIcon className="h-4 w-4" /> */}
                                             End
                                         </Button>
+                                        {/* <Button
+                                            className="flex items-center gap-3"
+                                            size="sm"
+                                            onClick={handleHackathonEnd(
+                                                hackathon.hackathonId
+                                            )}
+                                        >
+                                            Results
+                                        </Button> */}
                                     </td>
                                 </tr>
                             );

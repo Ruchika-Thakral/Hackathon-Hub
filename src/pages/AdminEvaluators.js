@@ -7,11 +7,13 @@ import {
     Collapse,
 } from "@material-tailwind/react";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EvaluatorRegistration from "../components/EvaluatorRegistration";
 import EvaluatorAssign from "../components/EvaluatorAssign";
 import ListEvaluator from "../components/ListEvaluator";
 import BaseLayout from "../components/BaseLayout";
+import { useDispatch } from "react-redux";
+import { fetchEvaluators } from "../features/evaluator/evaluatorSlice";
 
 const AdminEvaluators = () => {
     const data = [
@@ -47,6 +49,12 @@ const AdminEvaluators = () => {
         // setSelectedTab("assign");
         toggleEvaluatorCollapseOpen();
     };
+
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchEvaluators);
+    }, []);
 
     return (
         <BaseLayout>

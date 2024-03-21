@@ -13,11 +13,11 @@ import { teamRegistration } from "../features/team/teamSlice";
 import { CreateContext } from "../App";
 
 const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
-    const { details } = useContext(CreateContext);
+    // const { details } = useContext(CreateContext);
     const login = useSelector((state) => state.user.login.data);
     const userId = login ? login.data.userId : null;
     const hackathonId = selectedHackathonId;
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const dispatch = useDispatch();
     const [formdata, setFormData] = useState({
         name: "",

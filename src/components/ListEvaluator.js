@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
@@ -18,6 +18,9 @@ import {
     IconButton,
     Tooltip,
 } from "@material-tailwind/react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchEvaluators } from "../features/evaluator/evaluatorSlice";
+import { fetchHackathons } from "../features/hackathon/hackathonSlice";
 
 const TABS = [
     {
@@ -34,8 +37,8 @@ const TABS = [
     },
 ];
 
-const TABLE_HEAD = ["Member", "Role", "Status", "Actions"];
-
+const TABLE_HEAD = ["Member", "Role", "Status"];
+// , "Actions"
 const TABLE_ROWS = [
     {
         userId: 15672,
@@ -202,6 +205,17 @@ const TABLE_ROWS = [
 // https://ui-avatars.com/api/?background=random&name=Vidit+Bhanja
 
 const ListEvaluator = ({ handleAddMembers, handleAssignMembers }) => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchEvaluators());
+        dispatch(fetchHackathons())
+    }, []);
+
+    const data = useSelector((state) => state.hackathon.hackathons.data);
+    let HACKATHONS = data ? data : [];
+    const TABLE_ROWS = useSelector((state) => state.evaluator.evaluators?.data);
+
+    console.log(TABLE_ROWS)
     const [tableData, setTableData] = useState(TABLE_ROWS);
     const handleFilterClick = (keyword = "all") => {
         console.log("hi" + keyword);
@@ -353,14 +367,14 @@ const ListEvaluator = ({ handleAddMembers, handleAssignMembers }) => {
                                                         ? "Judge"
                                                         : null}
                                                 </Typography>
-                                                {!evaluator.isAvailable && (
+                                                {!evaluator.available && (
                                                     <Typography
                                                         variant="small"
                                                         color="blue-gray"
                                                         className="font-normal opacity-70"
                                                     >
                                                         {
-                                                            evaluator.assignedHackathon
+                                                            HACKATHONS.find(hackathon=> hackathon?.hackathonId === evaluator?.assignedHackathon).name
                                                         }
                                                     </Typography>
                                                 )}
@@ -372,19 +386,19 @@ const ListEvaluator = ({ handleAddMembers, handleAssignMembers }) => {
                                                     variant="ghost"
                                                     size="sm"
                                                     value={
-                                                        evaluator.isAvailable
+                                                        evaluator.available
                                                             ? "Available"
                                                             : "Assigned"
                                                     }
                                                     color={
-                                                        evaluator.isAvailable
+                                                        evaluator.available
                                                             ? "green"
                                                             : "blue-gray"
                                                     }
                                                 />
                                             </div>
                                         </td>
-                                        <td className="p-4 hidden lg:table-cell">
+                                        {/* <td className="p-4 hidden lg:table-cell">
                                             <Button
                                                 className="flex items-center gap-3"
                                                 size="sm"
@@ -396,7 +410,7 @@ const ListEvaluator = ({ handleAddMembers, handleAssignMembers }) => {
                                                 <PencilIcon className="h-4 w-4" />
                                                 Assign
                                             </Button>
-                                        </td>
+                                        </td> */}
                                     </tr>
                                 );
                             })}

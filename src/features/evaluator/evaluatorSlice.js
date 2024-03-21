@@ -50,7 +50,10 @@ export const assignEvaluator = createAsyncThunk(
                 "http://localhost:8080/Admin/assign",
                 evaluatorData
             );
-            return response;
+            const response2 = await axios.get(
+                "http://localhost:8080/Admin/Evaluator"
+            );
+            return response2.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
@@ -87,6 +90,20 @@ const evaluatorSlice = createSlice({
                 state.evaluators.error = null;
             })
             .addCase(registerEvaluator.rejected, (state, action) => {
+                state.evaluators.loading = false;
+                state.evaluators.data = null;
+                state.evaluators.error = action.payload; // Set error payload
+            })
+            .addCase(assignEvaluator.pending, (state) => {
+                state.evaluators.loading = true;
+                state.evaluators.error = null;
+            })
+            .addCase(assignEvaluator.fulfilled, (state, action) => {
+                state.evaluators.loading = false;
+                state.evaluators.data = action.payload; // Refetch and set evalautor list   
+                state.evaluators.error = null;
+            })
+            .addCase(assignEvaluator.rejected, (state, action) => {
                 state.evaluators.loading = false;
                 state.evaluators.data = null;
                 state.evaluators.error = action.payload; // Set error payload

@@ -43,7 +43,7 @@ const ProfileDrawer = ({ opens, onClose, user }) => {
             onClose={onClose}
             className="p-4"
         >
-            <div className="mb-6  bg-orange-600">
+            <div className="mb-6">
                 <IconButton variant="text" color="blue-gray" onClick={onClose}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -99,11 +99,11 @@ const ProfileDrawer = ({ opens, onClose, user }) => {
                         {/* <Typography variant="body1">{user.email}</Typography> */}
                     </div>
                     <Button onClick={logoutHandler}>Log Out</Button>
-                    <div className="mt-6">
+                    {/* <div className="mt-6">
                         <Button size="sm" onClick={handleEdit}>
                             Edit
                         </Button>
-                    </div>
+                    </div> */}
                 </div>
             )}
         </Drawer>

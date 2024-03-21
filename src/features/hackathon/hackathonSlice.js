@@ -34,6 +34,20 @@ export const hackathonCreation=createAsyncThunk(
     }
 );
 
+export const hackathonEnd=createAsyncThunk(
+    'hackathon/hackathonEnd',
+    async (hackathonId,thunkAPI) => {
+        try {
+            const response = await axios.put(`http://localhost:8080/Admin/hackathon/end/${hackathonId}`);
+            console.log(response)
+            const response2 = await axios.get('http://localhost:8080/Hackathon');
+            return response2.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+
 const hackathonSlice = createSlice({
     name: "hackathon",
     initialState,
