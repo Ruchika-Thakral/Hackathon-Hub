@@ -25,6 +25,7 @@ export const hackathonCreation=createAsyncThunk(
     async (hackathonData,thunkAPI) => {
         try {
             const response = await axios.post('http://localhost:8080/Admin/hackathon',hackathonData);
+            console.log(response)
             const response2 = await axios.get('http://localhost:8080/Hackathon');
             return response2.data;
         } catch (error) {

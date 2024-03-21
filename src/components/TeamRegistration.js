@@ -12,11 +12,11 @@ import { useNavigate } from "react-router-dom";
 import { teamRegistration } from "../features/team/teamSlice";
 import { CreateContext } from "../App";
 
-const TeamRegistration = ({ open, setOpen }) => {
+const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
     const { details } = useContext(CreateContext);
     const login = useSelector((state) => state.user.login.data);
     const userId = login ? login.data.userId : null;
-    const hackathonId = details.hackathonId;
+    const hackathonId = selectedHackathonId;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [formdata, setFormData] = useState({
@@ -53,6 +53,12 @@ const TeamRegistration = ({ open, setOpen }) => {
             setErrors(newErrors);
         } else {
             dispatch(teamRegistration({ hackathonId, userId, team }));
+            setFormData({
+                name: "",
+                email1: "",
+                email2: "",
+                email3: "",
+            });
         }
         setErrors(newErrors);
     };
@@ -93,7 +99,7 @@ const TeamRegistration = ({ open, setOpen }) => {
                         />
                         {errors.teamname && (
                             <Typography className="text-red-500 text-xs w-fit">
-                                {"*"+errors.teamname}
+                                {"*" + errors.teamname}
                             </Typography>
                         )}
 
@@ -108,7 +114,7 @@ const TeamRegistration = ({ open, setOpen }) => {
                         {errors.email1 && (
                             <Typography className="text-red-500 text-xs w-fit">
                                 {errors.email1}
-                           </Typography>
+                            </Typography>
                         )}
 
                         <Input
@@ -122,7 +128,7 @@ const TeamRegistration = ({ open, setOpen }) => {
                         {errors.email2 && (
                             <Typography className="text-red-500 text-xs w-fit">
                                 {errors.email2}
-                           </Typography>
+                            </Typography>
                         )}
 
                         <Input

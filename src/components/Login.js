@@ -13,6 +13,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../features/user/userSlice";
 import { Slide, ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from "react-router";
 
 const Login = ({ showModal, toggleModal, setShowSignInModal }) => {
     const [formData1, setFormData1] = useState({
@@ -40,9 +41,12 @@ const Login = ({ showModal, toggleModal, setShowSignInModal }) => {
         e.preventDefault();
         dispatch(userLogin(formData1));
     };
+
+    const navigate = useNavigate();
     useEffect(() => {
         if (status === 200) {
             setShowSignInModal(false);
+            // navigate('/')
                 // toast.success("SignIn Success!", {
                 //     position: "top-center",
                 //     transition:Slide

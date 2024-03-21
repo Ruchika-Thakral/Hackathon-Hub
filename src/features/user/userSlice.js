@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import Cookies from 'js-cookie';
 
 const initialState = {
     register:{
@@ -43,6 +44,12 @@ export const userLogin = createAsyncThunk(
     async (formData, thunkAPI) => {
         try {
             const response = await axios.post('http://localhost:8080/User/login', formData);
+            console.log(response);
+            if (response.status === 200) {
+                Cookies.set('userData', JSON.stringify(response.data) , { expires: 7 });
+                console.log("cookie log set");
+                console.log(JSON.stringify(response.data));
+            }
             return response;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -57,8 +64,18 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         logout(state){
-            state.login.data=null
+            state.login.data=null;
+            Cookies.remove('userData');
+        },
+        reattemptLogin(state){
+            const userCookie = Cookies.get('userData');
+            if (userCookie) {
+                state.login.data={data: JSON.parse(userCookie)};
+                console.log("reloggedin")
+                console.log({data: JSON.parse(userCookie)})
+            }
         }
+
     },
     extraReducers: (builder) => {
         builder
@@ -106,5 +123,5 @@ const userSlice = createSlice({
             })
     },
 });
-export const {logout}=userSlice.actions
+export const {logout, reattemptLogin}=userSlice.actions
 export default userSlice.reducer;

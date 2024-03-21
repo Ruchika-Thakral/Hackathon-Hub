@@ -19,16 +19,17 @@ import Judge from "./components/Judge";
 import YourComponent from "./components/PanelHackathonDropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchHackathons } from "./features/hackathon/hackathonSlice";
+import { reattemptLogin } from "./features/user/userSlice";
 import BaseLayout from "./components/BaseLayout";
 import TeamDetails from "./pages/TeamDetails";
 import PanelistShortlist from "./pages/PanelistShortlist";
 import JudgeReview from "./pages/JudgeReview";
+import { fetchTeamDetails } from "./features/team/teamSlice";
 export const CreateContext = React.createContext();
 const Provider = CreateContext.Provider;
 function App() {
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
-
 
     //dummy content for testing
     const arr1 = [
@@ -213,20 +214,31 @@ function App() {
         },
     ];
 
-
-    
     //change to this for redux integration
     const hackathons = useSelector((state) => state.hackathon.hackathons.data);
+    console.log(hackathons);
     // const arr = hackathons ? hackathons.data : [];
     // const [details, setDetails] = useState(arr[0]);
 
-    // useEffect(() => {
-    //     dispatch(fetchHackathons());
-    // }, [dispatch]);
+    useEffect(() => {
+        dispatch(fetchHackathons());
+    }, [dispatch]);
+
+    useEffect(() => {
+        dispatch(reattemptLogin());
+    }, []);
+
+    const data = useSelector((state) => state.user.login.data);
+    const userId = data ? data.data.userId : null;
+    useEffect(() => {
+        dispatch(fetchTeamDetails(userId));
+    }, [dispatch]);
 
     // useEffect(() => {
     //     setDetails(arr[0]);
     // }, arr);
+
+    const [reviewedIdeas, setReviewedIdeas] = useState([]);
 
     return (
         <Provider
@@ -264,11 +276,32 @@ function App() {
                             path="panelists"
                             element={<YourComponent />}
                         /> */}
-                        <Route path="results" element={<BaseLayout><Results /></BaseLayout>} />
+                        <Route
+                            path="results"
+                            element={
+                                <BaseLayout>
+                                    <Results />
+                                </BaseLayout>
+                            }
+                        />
                         <Route path="teamdetails" element={<TeamDetails />} />
-                        <Route path="panelist/shortlist" element={<PanelistShortlist />} />
-                        <Route path="judge/review" element={<JudgeReview />} />
-                        <Route path="trial" element={<YourComponent arr={arr}/>} />
+                        <Route
+                            path="panelist/shortlist"
+                            element={<PanelistShortlist />}
+                        />
+                        <Route
+                            path="judge/review"
+                            element={
+                                <JudgeReview
+                                    reviewedIdeas={reviewedIdeas}
+                                    setReviewedIdeas={setReviewedIdeas}
+                                />
+                            }
+                        />
+                        <Route
+                            path="trial"
+                            element={<YourComponent arr={arr} />}
+                        />
                     </Routes>
                 </BrowserRouter>
                 {/* <Judge arr={arr}/> */}

@@ -20,6 +20,9 @@ import {
 import { useContext } from "react";
 import { CreateContext } from "../App";
 import TeamRegistration from "./TeamRegistration";
+import { useDispatch, useSelector } from "react-redux";
+import { acceptTeam, rejectTeam } from "../features/team/teamSlice";
+import { fetchHackathons } from "../features/hackathon/hackathonSlice";
 
 const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
     const dateConverter = (date) => {
@@ -37,16 +40,34 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
         return `${shortdate}, ${time}`;
     };
 
-    //use hackathonSlice useSelector to fetch data of assigned hackthon here
-    const [selectedHackathon, setSelectedHackathon] = useState(hackathons[0]);
+    const dispatch = useDispatch();
 
-    const [selectedIdea, setSelectedIdea] = useState(IDEAS[0]);
+    // const hackathons = useSelector((state) => state.hackathon.hackathons.data);
+    const user = useSelector((state) => state.user.login?.data?.data);
+    console.log(hackathons);
+
+    // useEffect(() => {
+    //     dispatch(fetchHackathons());
+    // }, []);
+
+    //use hackathonSlice useSelector to fetch data of assigned hackthon here
+    const [selectedHackathon, setSelectedHackathon] = useState(
+        hackathons?.find(
+            (hackathon) => hackathon.hackathonId === user?.assignedHackathon
+        )
+    );
+
+    const [selectedIdea, setSelectedIdea] = useState(IDEAS?.find(idea=> idea.teamId === selectedIdeaId));
+    console.log(selectedIdea);
+    console.log(IDEAS);
+    console.log(selectedIdeaId)
+
 
     useEffect(() => {
         // console.log(selectedIdeaId)
         setSelectedIdea(
-            IDEAS.find((idea) => idea.teamId === selectedIdeaId) ||
-                hackathons[0]
+            IDEAS?.find((idea) => idea?.teamId === selectedIdeaId) ||
+                IDEAS[0]
         );
     }, [selectedIdeaId]);
 
@@ -58,9 +79,11 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
 
     const handleIdeaAccept = (teamId) => {
         console.log(teamId + "idea accepted");
+        dispatch(acceptTeam(teamId));
     };
     const handleIdeaReject = (teamId) => {
         console.log(teamId + "idea rejected");
+        dispatch(rejectTeam(teamId));
     };
 
     // console.log(selectedHackathon)
@@ -77,7 +100,7 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
                                 variant="h2"
                                 // color="black"
                             >
-                                {selectedHackathon.name}
+                                {selectedHackathon?.name || ""}
                             </Typography>
                             <div className="md:col-span-1 py-1 flex items-center justify-end">
                                 <Button
@@ -92,7 +115,7 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
                         </div>
                         <div className="mb-1 w-full rounded-2xl p-2 py-1 text-incedo-tertiary-900">
                             <Typography variant="h4">
-                                Theme: {selectedHackathon.theme}
+                                Theme: {selectedHackathon?.theme || ""}
                             </Typography>
                         </div>
                         <div className="w-full px-2">
@@ -116,23 +139,25 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
                         <div className="w-full grid md:grid-cols-6">
                             <div className="md:col-span-5 w-full rounded-2xl p-2 py-1 text-incedo-tertiary-900">
                                 <Typography variant="h3">
-                                    {selectedIdea.ideaTitle}
+                                    {selectedIdea?.ideaTitle || ""}
                                 </Typography>
                                 <Typography
                                     variant="h5"
                                     className=" text-gray-600"
                                 >
-                                    {selectedIdea.ideaDomain}
+                                    {selectedIdea?.ideaDomain || ""}
                                 </Typography>
                             </div>
                             <div className="md:col-span-1 px-2 flex items-center justify-end">
                                 <IconButton
                                     variant="text"
                                     onClick={() => {
-                                        handleIdeaAccept(selectedIdea.teamId);
+                                        handleIdeaAccept(
+                                            selectedIdea?.teamId || ""
+                                        );
                                     }}
                                     disabled={
-                                        selectedIdea.status !== "submitted"
+                                        selectedIdea?.status !== "submitted"
                                     }
                                 >
                                     <svg
@@ -151,10 +176,12 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
                                 <IconButton
                                     variant="text"
                                     onClick={() => {
-                                        handleIdeaReject(selectedIdea.teamId);
+                                        handleIdeaReject(
+                                            selectedIdea?.teamId || ""
+                                        );
                                     }}
                                     disabled={
-                                        selectedIdea.status !== "submitted"
+                                        selectedIdea?.status !== "submitted"
                                     }
                                 >
                                     <svg
@@ -175,7 +202,7 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
 
                         <div className="w-full mt-1 rounded-2xl p-2">
                             <Typography className="">
-                                {selectedIdea.ideaBody}
+                                {selectedIdea?.ideaBody || ""}
                             </Typography>
                         </div>
                     </CardBody>
@@ -187,14 +214,14 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
                             variant="h2"
                             // color="black"
                         >
-                            {selectedHackathon.name}
+                            {selectedHackathon?.name || ""}
                         </Typography>
                     </DialogHeader>
                     <DialogBody>
                         <div className="overflow-auto  max-h-[60vh]">
                             <div className="w-full mt-1 rounded-2xl p-2">
                                 <Typography className="">
-                                    {selectedHackathon.description}
+                                    {selectedHackathon?.description || ""}
                                 </Typography>
                             </div>
                             <div className="w-full mt-1 rounded-2xl p-2">
@@ -202,7 +229,7 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
                                     Rules and Guidlines
                                 </Typography>
                                 <Typography>
-                                    {selectedHackathon.description}
+                                    {selectedHackathon?.description || ""}
                                 </Typography>
                             </div>
                             <div className="w-full rounded-2xl p-2">
@@ -210,7 +237,7 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
                                     Judging Criteria
                                 </Typography>
                                 <Typography>
-                                    {selectedHackathon.description}
+                                    {selectedHackathon?.description || ""}
                                 </Typography>
                             </div>
                         </div>

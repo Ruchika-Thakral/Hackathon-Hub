@@ -21,8 +21,17 @@ import {
 import { useContext } from "react";
 import { CreateContext } from "../App";
 import TeamRegistration from "./TeamRegistration";
+import { UseDispatch, useDispatch, useSelector } from "react-redux";
+
 import { Link } from "react-router-dom";
-const ReviewDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
+import { rateTeam } from "../features/team/teamSlice";
+const ReviewDetails = ({
+    hackathons,
+    selectedIdeaId,
+    IDEAS,
+    reviewedIdeas,
+    setReviewedIdeas,
+}) => {
     const dateConverter = (date) => {
         const shortdate = new Date(date).toLocaleString("en-GB", {
             weekday: "long",
@@ -38,16 +47,25 @@ const ReviewDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
         return `${shortdate}, ${time}`;
     };
 
-    //use hackathonSlice useSelector to fetch data of assigned hackthon here
-    const [selectedHackathon, setSelectedHackathon] = useState(hackathons[0]);
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.user.login?.data?.data);
+    console.log(hackathons);
 
-    const [selectedIdea, setSelectedIdea] = useState(IDEAS[0]);
+    //use hackathonSlice useSelector to fetch data of assigned hackthon here
+    const [selectedHackathon, setSelectedHackathon] = useState(
+        hackathons?.find(
+            (hackathon) => hackathon.hackathonId === user?.assignedHackathon
+        )
+    );
+
+    const [selectedIdea, setSelectedIdea] = useState(
+        IDEAS?.find((idea) => idea.teamId === selectedIdeaId)
+    );
 
     useEffect(() => {
         // console.log(selectedIdeaId)
         setSelectedIdea(
-            IDEAS.find((idea) => idea.teamId === selectedIdeaId) ||
-                hackathons[0]
+            IDEAS?.find((idea) => idea?.teamId === selectedIdeaId) || IDEAS[0]
         );
     }, [selectedIdeaId]);
 
@@ -60,11 +78,16 @@ const ReviewDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
 
     const handleRating = (rate) => {
         console.log(rate);
-        setReviewData({ rating: rate });
+        setReviewData({ rating: rate, teamId: selectedIdeaId });
+        setReviewedIdeas([
+            ...reviewedIdeas,
+            { rating: rate, teamId: selectedIdeaId },
+        ]);
     };
 
     useEffect(() => {
         //dispatch judge review here
+        dispatch(rateTeam(reviewData));
     }, [reviewData]);
     return (
         <>
@@ -78,7 +101,7 @@ const ReviewDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
                                 variant="h2"
                                 // color="black"
                             >
-                                {selectedHackathon.name}
+                                {selectedHackathon?.name || ""}
                             </Typography>
                             <div className="md:col-span-1 py-1 flex items-center justify-end">
                                 <Button
@@ -93,7 +116,7 @@ const ReviewDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
                         </div>
                         <div className="mb-1 w-full rounded-2xl p-2 py-1 text-incedo-tertiary-900">
                             <Typography variant="h4">
-                                Theme: {selectedHackathon.theme}
+                                Theme: {selectedHackathon?.theme || ""}
                             </Typography>
                         </div>
                         <div className="w-full px-2">
@@ -117,22 +140,37 @@ const ReviewDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
                         <div className="w-full grid md:grid-cols-12">
                             <div className="md:col-span-9 w-full rounded-2xl p-2 py-1 text-incedo-tertiary-900">
                                 <Typography variant="h3">
-                                    {selectedIdea.ideaTitle}
+                                    {selectedIdea?.ideaTitle || ""}
                                 </Typography>
                                 <Typography
                                     variant="h5"
                                     className=" text-gray-600"
                                 >
-                                    {selectedIdea.ideaDomain}
+                                    {selectedIdea?.ideaDomain || ""}
                                 </Typography>
                             </div>
                             <div className="md:col-span-3 px-2 flex items-center justify-end">
                                 <Rating
                                     unratedColor="amber"
                                     ratedColor="amber"
-                                    value={reviewData.rating}
+                                    value={
+                                        // reviewData.rating ||
+                                        reviewedIdeas.find(
+                                            (idea) =>
+                                                idea.teamId ===
+                                                selectedIdea?.teamId
+                                        )?.rating
+                                    }
                                     onChange={(value) => handleRating(value)}
-                                    readonly={reviewData.rating !== 0}
+                                    readonly={
+                                        // reviewedIdeas.includes(selectedIdea?.teamId)
+
+                                        reviewedIdeas?.filter(
+                                            (obj) =>
+                                                obj.teamId ===
+                                                selectedIdea?.teamId
+                                        ).length > 0
+                                    }
                                 />
                                 {/* <IconButton
                                     variant="text"
@@ -183,26 +221,30 @@ const ReviewDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
 
                         <div className="w-full mt-1 rounded-2xl p-2">
                             <Typography className="">
-                                {selectedIdea.ideaBody}
+                                {selectedIdea?.ideaBody || ""}
                             </Typography>
                         </div>
                         <div className="w-full mt-1 rounded-2xl p-2 gap-1">
                             <Link
-                                to={selectedIdea.ideaRepo}
+                                to={selectedIdea?.ideaRepo || "#"}
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
                                 <Typography className="underline">
-                                    Repo Link
+                                    {selectedIdea?.ideaRepo
+                                        ? "Repo Link"
+                                        : null}
                                 </Typography>
                             </Link>
                             <Link
-                                to={selectedIdea.ideaFiles}
+                                to={selectedIdea?.ideaFiles || "#"}
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
                                 <Typography className="underline">
-                                    Files Link
+                                    {selectedIdea?.ideaFiles
+                                        ? "Files Link"
+                                        : null}
                                 </Typography>
                             </Link>
                         </div>
@@ -215,14 +257,14 @@ const ReviewDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
                             variant="h2"
                             // color="black"
                         >
-                            {selectedHackathon.name}
+                            {selectedHackathon?.name || ""}
                         </Typography>
                     </DialogHeader>
                     <DialogBody>
                         <div className="overflow-auto  max-h-[60vh]">
                             <div className="w-full mt-1 rounded-2xl p-2">
                                 <Typography className="">
-                                    {selectedHackathon.description}
+                                    {selectedHackathon?.description || ""}
                                 </Typography>
                             </div>
                             <div className="w-full mt-1 rounded-2xl p-2">
@@ -230,7 +272,7 @@ const ReviewDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
                                     Rules and Guidlines
                                 </Typography>
                                 <Typography>
-                                    {selectedHackathon.description}
+                                    {selectedHackathon?.description || ""}
                                 </Typography>
                             </div>
                             <div className="w-full rounded-2xl p-2">
@@ -238,7 +280,7 @@ const ReviewDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
                                     Judging Criteria
                                 </Typography>
                                 <Typography>
-                                    {selectedHackathon.description}
+                                    {selectedHackathon?.description || ""}
                                 </Typography>
                             </div>
                         </div>

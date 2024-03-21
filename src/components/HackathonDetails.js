@@ -14,6 +14,7 @@ import {
 import { useContext } from "react";
 import { CreateContext } from "../App";
 import TeamRegistration from "./TeamRegistration";
+import { useSelector } from "react-redux";
 const HackathonDetails = ({ hackathons, selectedHackathonId }) => {
     // const hackathons = [
     //     {
@@ -225,6 +226,8 @@ const HackathonDetails = ({ hackathons, selectedHackathonId }) => {
         return `${shortdate}, ${time}`;
     };
 
+    const user = useSelector((state) => state.user.login?.data?.data);
+
     // useEffect(()=>{
     //     if(details){
     //         setLoading(false)
@@ -254,28 +257,27 @@ const HackathonDetails = ({ hackathons, selectedHackathonId }) => {
                             variant="h2"
                             // color="black"
                         >
-                            {selectedHackathon.name}
+                            {selectedHackathon?.name}
                         </Typography>
                         <div className="w-full rounded-2xl p-2 text-incedo-tertiary-900">
                             <Typography variant="h4">
-                                Theme: {selectedHackathon.theme}
+                                Theme: {selectedHackathon?.theme}
                             </Typography>
                             <Typography variant="h4">
                                 Start Date:{" "}
-                                {selectedHackathon.startDate.split("T")[0]}
+                                {selectedHackathon?.startDate?.split(" ")[0] ||
+                                    ""}
                             </Typography>
                             <Typography variant="h4">
                                 Time:{" "}
-                                {
-                                    selectedHackathon.startDate
-                                        .split("T")[1]
-                                        .split(".")[0]
-                                }
+                                {selectedHackathon?.startDate
+                                    ?.split(" ")[1]
+                                    ?.split(".")[0] || ""}
                             </Typography>
                         </div>
                         <div className="w-full mt-1 rounded-2xl p-2">
                             <Typography>
-                                {selectedHackathon.description}
+                                {selectedHackathon?.description}
                             </Typography>
                         </div>
                         <div className="w-full mt-1 rounded-2xl p-2">
@@ -293,7 +295,7 @@ const HackathonDetails = ({ hackathons, selectedHackathonId }) => {
                                             >
                                                 Start:{" "}
                                                 {dateConverter(
-                                                    selectedHackathon.startDate
+                                                    selectedHackathon?.startDate
                                                 ) || " "}
                                             </Typography>
                                         </TimelineHeader>
@@ -323,7 +325,7 @@ const HackathonDetails = ({ hackathons, selectedHackathonId }) => {
                                             >
                                                 Idea Deadline:{" "}
                                                 {dateConverter(
-                                                    selectedHackathon.ideaSubmissionDeadline
+                                                    selectedHackathon?.ideaSubmissionDeadline
                                                 ) || " "}
                                             </Typography>
                                         </TimelineHeader>
@@ -333,14 +335,14 @@ const HackathonDetails = ({ hackathons, selectedHackathonId }) => {
                                                 color="gray"
                                                 className="font-normal text-gray-600"
                                             >
-                                                Submit
-                                                your innovative ideas before the
-                                                deadline. Late submissions won't
-                                                be considered. Your idea will be
-                                                reviewed by panelists, and if
-                                                it's promising, you'll proceed
-                                                to the next step. Let your
-                                                creativity shine!
+                                                Submit your innovative ideas
+                                                before the deadline. Late
+                                                submissions won't be considered.
+                                                Your idea will be reviewed by
+                                                panelists, and if it's
+                                                promising, you'll proceed to the
+                                                next step. Let your creativity
+                                                shine!
                                                 {/* took me twenty five years to get
                                             these plants, twenty five years of
                                             blood sweat and tears, and I&apos;m
@@ -361,7 +363,7 @@ const HackathonDetails = ({ hackathons, selectedHackathonId }) => {
                                             >
                                                 Implementation Deadline:{" "}
                                                 {dateConverter(
-                                                    selectedHackathon.implementationSubmissionDeadline
+                                                    selectedHackathon?.implementationSubmissionDeadline
                                                 ) || " "}
                                             </Typography>
                                         </TimelineHeader>
@@ -393,7 +395,7 @@ const HackathonDetails = ({ hackathons, selectedHackathonId }) => {
                                             >
                                                 Results:{" "}
                                                 {dateConverter(
-                                                    selectedHackathon.reviewEndTime
+                                                    selectedHackathon?.reviewEndTime
                                                 ) || " "}
                                             </Typography>
                                         </TimelineHeader>
@@ -422,31 +424,37 @@ const HackathonDetails = ({ hackathons, selectedHackathonId }) => {
                             <Typography variant="h4">
                                 Rules and Guidlines
                             </Typography>
-                            <Typography>{selectedHackathon.rules}</Typography>
+                            <Typography>{selectedHackathon?.rules}</Typography>
                         </div>
                         <div className="w-full rounded-2xl p-2">
                             <Typography variant="h4">
                                 Judging Criteria
                             </Typography>
                             <Typography>
-                                {selectedHackathon.judgingCriteria}
+                                {selectedHackathon?.judgingCriteria}
                             </Typography>
                         </div>
                         <div className="w-full mt-1 rounded-2xl p-2">
                             <Typography variant="h4">
                                 Rewards and Prizes
                             </Typography>
-                            <Typography>{selectedHackathon.prizes}</Typography>
+                            <Typography>{selectedHackathon?.prizes}</Typography>
                         </div>
                         <div className="w-fit mt-2 mx-auto">
-                            <Button onClick={() => setOpen((cur) => !cur)}>
-                                Register
-                            </Button>
+                            {user?.role === "participant" ? (
+                                <Button onClick={() => setOpen((cur) => !cur)}>
+                                    Register
+                                </Button>
+                            ) : null}
 
                             {/* This Message Should Be displayed After Registering to Particular Hackathon instead of Register Button */}
                             {/* <Typography variant='h4' color='black'>You Have Registered To This Hackathon</Typography> */}
                         </div>
-                        <TeamRegistration open={open} setOpen={setOpen} />
+                        <TeamRegistration
+                            open={open}
+                            setOpen={setOpen}
+                            selectedHackathonId={selectedHackathonId}
+                        />
                     </CardBody>
                 </Card>
             </div>

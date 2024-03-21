@@ -8,10 +8,12 @@ import {
 } from "@material-tailwind/react";
 import { useDispatch } from "react-redux";
 import { logout } from "../features/user/userSlice";
+import { useNavigate } from "react-router";
 
 
 const ProfileDrawer = ({ opens, onClose, user }) => {
     const [editMode, setEditMode] = useState(false);
+    const navigate = useNavigate();
 
     const handleEdit = () => {
         setEditMode(true);
@@ -29,6 +31,8 @@ const ProfileDrawer = ({ opens, onClose, user }) => {
     const logoutHandler=()=>{
         dispatch(logout())
         onClose()
+        navigate('/')
+
     }
 
     console.log(user)

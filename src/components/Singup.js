@@ -9,6 +9,7 @@ import {
 import { Typography, CardHeader, Card, Dialog, CardBody } from "@material-tailwind/react";
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from "react-router";
 
 const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
     const [formData, setFormData] = useState({
@@ -29,6 +30,10 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
     const dispatch = useDispatch();
     const loginData = { email: formData.email, password: formData.password };
     const [emailVerification, setEmailVerification] = useState(false);
+
+    
+    const navigate = useNavigate();
+
     useEffect(() => {
         if (status === 200) {
             setEmailVerification(true);
@@ -40,6 +45,7 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
             //     transition:Slide
             // });
             dispatch(userLogin(loginData));
+            // navigate('/')
         }
     }, [status]);
     const [errors, setErrors] = useState({});
