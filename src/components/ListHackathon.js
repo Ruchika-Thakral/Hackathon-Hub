@@ -112,9 +112,11 @@ const ListHackathon = () => {
                                             className="flex items-center gap-3"
                                             size="sm"
                                             disabled={hackathon?.isCompleted}
-                                            onClick={handleHackathonEnd(
-                                                hackathon.hackathonId
-                                            )}
+                                            onClick={() => {
+                                                handleHackathonEnd(
+                                                    hackathon.hackathonId
+                                                );
+                                            }}
                                         >
                                             {/* <PencilIcon className="h-4 w-4" /> */}
                                             End

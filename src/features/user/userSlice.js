@@ -50,7 +50,7 @@ export const userLogin = createAsyncThunk(
                 console.log("cookie log set");
                 console.log(JSON.stringify(response.data));
             }
-            return response;
+            return {data: response.data, status:response.status};
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }

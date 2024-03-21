@@ -129,14 +129,15 @@ const EvaluatorAssign = () => {
         EVALUATORS.filter((evaluator) => evaluator.role === "panelist")
     );
 
-    console.log(JUDGES);
-    console.log(PANELISTS);
+    // console.log(JUDGES);
+    // console.log(PANELISTS);
 
     useEffect(() => {
         setJUDGES(EVALUATORS.filter((evaluator) => evaluator.role === "judge"));
         setPANELISTS(
             EVALUATORS.filter((evaluator) => evaluator.role === "panelist")
         );
+        console.log("hi")
     }, [EVALUATORS]);
 
     const dispatch = useDispatch();
