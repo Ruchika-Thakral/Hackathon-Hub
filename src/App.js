@@ -241,15 +241,15 @@ function App() {
     const [reviewedIdeas, setReviewedIdeas] = useState([]);
 
     return (
-        <Provider
-            value={{
-                arr,
-                details,
-                setDetails,
-                open,
-                setOpen,
-            }}
-        >
+        // <Provider
+        //     value={{
+        //         arr,
+        //         details,
+        //         setDetails,
+        //         open,
+        //         setOpen,
+        //     }}
+        // >
             <div className="App">
                 <BrowserRouter>
                     <Routes>
@@ -277,7 +277,7 @@ function App() {
                             element={<YourComponent />}
                         /> */}
                         <Route
-                            path="results"
+                            path="results/:hackathonId"
                             element={
                                 <BaseLayout>
                                     <Results />
@@ -298,15 +298,15 @@ function App() {
                                 />
                             }
                         />
-                        <Route
+                        {/* <Route
                             path="trial"
                             element={<YourComponent arr={arr} />}
-                        />
+                        /> */}
                     </Routes>
                 </BrowserRouter>
                 {/* <Judge arr={arr}/> */}
                 {/* <YourComponent arr={arr}/> */}
-            </div>
+                
 
             {/* <div className="App bg-gray-200 min-h-screen pb-4"> */}
             {/* <Button>Hello</Button> */}
@@ -320,7 +320,8 @@ function App() {
             {/* <AdminDashboard /> */}
             {/* <Results/> */}
             {/* </div> */}
-        </Provider>
+             {/* </Provider> */}
+            </div>
     );
 }
 

@@ -287,7 +287,7 @@ const NavBar = ({ toggleSignInModal, toggleSignUpModal, openDrawer }) => {
                     </Link>
                 </Typography>
             ) : null}
-            {user?.role === "participant" && user?.assignedHackathon > 0 ? (
+            {user?.role === "participant" ? (
                 <Typography
                     as="li"
                     variant="small"

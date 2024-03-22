@@ -1,5 +1,5 @@
-import React, {useState,useEffect } from "react";
-import { useSelector,useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import {
     // List,
@@ -24,7 +24,7 @@ import {
 } from "@material-tailwind/react";
 
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { ideaSubmission} from "../features/team/teamSlice";
+import { ideaSubmission } from "../features/team/teamSlice";
 import { repoSubmission } from "../features/team/teamSlice";
 
 const DOMAINS = [
@@ -36,19 +36,25 @@ const DOMAINS = [
 
 const IdeaDetails = () => {
     const dispatch = useDispatch();
-    const data=useSelector(state=>state.user.login.data)
-    const hackathonId=data?data.data.assignedHackathon:null
-    const userId=data?data.data.userId:null
+    const data = useSelector((state) => state.user.login.data);
+    const hackathonId = data ? data.data.assignedHackathon : null;
+    const userId = data ? data.data.userId : null;
 
-    const teamData=useSelector(state=>state.team.teamdetails.data)
-    const status=teamData?teamData[0].status:null
-    
-    
-    const [repoData,setRepoData] = useState({});
+    // const teamData=useSelector(state=>state.team.teamdetails.data)
+    const data2 = useSelector((state) => state.team.teamdetails.data);
+
+    const [teamData, setTeamData] = useState({});
+    useEffect(() => {
+        setTeamData(data2);
+    }, [data2]);
+
+    const status = teamData.length > 0 ? teamData[0].status : null;
+
+    const [repoData, setRepoData] = useState({});
     const [ideaData, setIdeaData] = useState({});
     const [isShortlisted, setIsShortlisted] = useState(false);
     useEffect(() => {
-        if (status === 'selected') {
+        if (status === "selected") {
             setIsShortlisted(true); // Set isShortlisted to true when status is 'selected'
         }
     }, [status]);
@@ -59,7 +65,7 @@ const IdeaDetails = () => {
 
     const handleSubmit = () => {
         console.log(ideaData);
-        dispatch(ideaSubmission({hackathonId,userId,ideaData}));
+        dispatch(ideaSubmission({ hackathonId, userId, ideaData }));
     };
 
     const handleRepoChange = (e) => {
@@ -69,9 +75,9 @@ const IdeaDetails = () => {
 
     const handleRepoSubmit = () => {
         console.log(repoData);
-        dispatch(repoSubmission({hackathonId,userId,repoData}));
+        dispatch(repoSubmission({ hackathonId, userId, repoData }));
     };
-    
+
     return (
         <Card className="w-full">
             <CardHeader floated={false} shadow={false}>
@@ -136,15 +142,19 @@ const IdeaDetails = () => {
                         onChange={handleChange}
                     />
                 </div>
-                {!isShortlisted &&
-                <div className="flex w-full justify-between mt-3 py-1.5">
-                    <div className="flex gap-2 justify-center md:justify-end w-full">
-                        <Button size="sm" className="rounded-md" onClick={handleSubmit}>
-                            Submit Idea
-                        </Button>
+                {!isShortlisted && (
+                    <div className="flex w-full justify-between mt-3 py-1.5">
+                        <div className="flex gap-2 justify-center md:justify-end w-full">
+                            <Button
+                                size="sm"
+                                className="rounded-md"
+                                onClick={handleSubmit}
+                            >
+                                Submit Idea
+                            </Button>
+                        </div>
                     </div>
-                </div>
-                }
+                )}
                 {isShortlisted && (
                     <div>
                         <div className="mt-3">
@@ -196,7 +206,7 @@ const IdeaDetails = () => {
                             />
                         </div>
                         <div className="flex w-full justify-between mt-3 py-1.5">
-                    {/* <IconButton
+                            {/* <IconButton
                                 variant="text"
                                 color="blue-gray"
                                 size="sm"
@@ -216,18 +226,21 @@ const IdeaDetails = () => {
                                     />
                                 </svg>
                             </IconButton> */}
-                    <div className="flex gap-2 justify-center md:justify-end w-full">
-                        <Button size="sm" className="rounded-md" onClick={handleRepoSubmit}>
-                            Submit Implementation
-                        </Button>
-                    </div>
-                </div>
+                            <div className="flex gap-2 justify-center md:justify-end w-full">
+                                <Button
+                                    size="sm"
+                                    className="rounded-md"
+                                    onClick={handleRepoSubmit}
+                                >
+                                    Submit Implementation
+                                </Button>
+                            </div>
+                        </div>
                     </div>
                 )}
             </CardBody>
         </Card>
     );
 };
-
 
 export default IdeaDetails;
