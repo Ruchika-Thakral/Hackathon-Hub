@@ -87,7 +87,6 @@ public class TeamService {
 	}
 
 	public boolean checkTimeBound(int hackathonId) {
-		System.out.println("---------------------");
 		Hackathon hackathon = hackathonService.findHackathon(hackathonId);
 		LocalDateTime currentTime = LocalDateTime.now();
 		if (currentTime.isBefore(hackathon.getStartDate())) {

@@ -24,6 +24,7 @@ import com.example.capstone.Entity.User;
 import com.example.capstone.Exceptions.FailedToSendEmailException;
 import com.example.capstone.Exceptions.InvalidEmailException;
 import com.example.capstone.Exceptions.InvalidUserException;
+import com.example.capstone.Exceptions.UnauthorizedException;
 import com.example.capstone.Exceptions.UserAlreadyExistsException;
 import com.example.capstone.Exceptions.UserNotFoundException;
 import com.example.capstone.Repository.UserRepository;
@@ -216,9 +217,9 @@ public class UserService{
 	 * @param evaluators The list of email addresses of the users
 	 * @return The list of users retrieved from the database
 	 */
-	public List<User> getUsers(List<String> evaluators) {
+	public List<User> getUsers(List<String> teamMembers) {
 		List<User> users = new ArrayList<>();
-		for (String e : evaluators) {
+		for (String e : teamMembers) {
 			Optional<User> user = userRepository.findByEmail(e);
 			users.add(check(user));
 		}
@@ -262,10 +263,17 @@ public class UserService{
 	 */
 	public User check(Optional<User> user) {
 		if (user.isPresent()) {
+			if(user.get().getRole().equals(Role.participant))
+			{
 			if (!user.get().isAvailable()) {
 				throw new UserAlreadyExistsException(user.get().getName() + " User is already exists in another team");
 			} else {
 				return user.get();
+			}
+			}
+			else
+			{
+				throw new UnauthorizedException(user.get().getEmail()+" is not participant");
 			}
 		} else {
 			throw new UserNotFoundException("User not found exception");
