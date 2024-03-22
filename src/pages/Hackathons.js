@@ -10,6 +10,9 @@ import {
     CardHeader,
     List,
     ListItem,
+    Tab,
+    Tabs,
+    TabsHeader,
     Typography,
 } from "@material-tailwind/react";
 
@@ -20,12 +23,34 @@ import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchHackathons } from "../features/hackathon/hackathonSlice";
 
-
 const themes = [
     { name: "Life Sciences", value: "lifesciences" },
     { name: "Banking and Wealth", value: "banking" },
     { name: "Telecom", value: "telecom" },
     { name: "Product Engineering", value: "product" },
+];
+
+const TABS = [
+    {
+        label: "All",
+        value: "all",
+    },
+    {
+        label: "LS",
+        value: "lifesciences",
+    },
+    {
+        label: "B&WM",
+        value: "banking",
+    },
+    {
+        label: "Tele",
+        value: "telecom",
+    },
+    {
+        label: "Product",
+        value: "product",
+    },
 ];
 
 const Hackathons = () => {
@@ -103,6 +128,22 @@ const Hackathons = () => {
         setActivePage(activePage - 1);
     };
 
+    const handleFilterClick = (keyword = "all") => {
+        // console.log("hi" + keyword);
+        if (keyword === "all") {
+            setFilteredHackathons(hackathons);
+            return;
+        }
+
+        setFilteredHackathons(
+            hackathons.filter(
+                (hackathon) =>
+                    themes.find((theme) => theme.name === hackathon.theme)
+                        .value === keyword
+            )
+        );
+    };
+
     return (
         <BaseLayout>
             <div className="py-4 px-4 md:px-8">
@@ -125,12 +166,40 @@ const Hackathons = () => {
                                     >
                                         Hackathons List
                                     </Typography>
+                                    <Tabs
+                                        value={
+                                            searchParamsObject?.theme || "all"
+                                        }
+                                        className="w-full md:w-max"
+                                    >
+                                        <TabsHeader>
+                                            {TABS.map(({ label, value }) => (
+                                                <Tab
+                                                    key={value}
+                                                    value={value}
+                                                    onClick={() => {
+                                                        handleFilterClick(
+                                                            value
+                                                        );
+                                                    }}
+                                                >
+                                                    &nbsp;&nbsp;{label}
+                                                    &nbsp;&nbsp;
+                                                </Tab>
+                                            ))}
+                                        </TabsHeader>
+                                    </Tabs>
                                 </CardHeader>
-                                <CardBody className="h-full py-2">
+                                <CardBody className="h-[68%] py-2">
                                     <List>
-                                        {filteredHackathons.length > 8
+                                        {filteredHackathons.length === 0 ? (
+                                            <ListItem disabled={true}>
+                                                No hackthons available.
+                                            </ListItem>
+                                        ) : null}
+                                        {filteredHackathons.length > 6
                                             ? filteredHackathons
-                                                  .slice(7)
+                                                  .slice(5)
                                                   .map((hackathon) => {
                                                       console.log(
                                                           hackathon.name
@@ -229,12 +298,14 @@ const Hackathons = () => {
                             </Card>
                             {/* <VerticalBar /> */}
                         </div>
-                        <div className="col-span-3 md:col-span-2">
-                            <HackathonDetails
-                                hackathons={hackathons}
-                                selectedHackathonId={selectedHackathonId}
-                            />
-                        </div>
+                        {filteredHackathons.length !== 0 ? (
+                            <div className="col-span-3 md:col-span-2">
+                                <HackathonDetails
+                                    hackathons={hackathons}
+                                    selectedHackathonId={selectedHackathonId}
+                                />
+                            </div>
+                        ) : null}
                     </div>
                 )}
                 {/* <VerticalBar /> */}

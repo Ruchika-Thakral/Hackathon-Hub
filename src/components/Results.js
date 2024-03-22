@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import "./Results.css";
 import { useSelector } from "react-redux";
 import { Alert, Typography } from "@material-tailwind/react";
+import { Link } from "react-router-dom";
 
 const Results = () => {
     let { hackathonId } = useParams();
@@ -18,16 +19,38 @@ const Results = () => {
         null;
     console.log(hackathonId);
 
+    const data2 = useSelector((state) => state.team.teamdetails.data) || [];
+    // const teamdetails=data.length>0?data[0].teamUserDetailsDTOs:[]
+    const [teams, setTeams] = useState(data2);
+
+    useEffect(() => {
+        if (data2.length > 0) {
+            setTeams(data2);
+        }
+    }, [data2]);
+
+    const [teamDetails, setTeamDetails] = useState(
+        teams.find((team) => team.hackathonId === Number(hackathonId))
+    );
+
+    useEffect(() => {
+        if (teams.length > 0) {
+            setTeamDetails(
+                teams.find((team) => team.hackathonId === Number(hackathonId))
+            );
+        }
+    }, [teams]);
+
     return (
         <div className="py-6">
-            {!hackathon ? (
+            {!hackathon || !hackathon.isCompleted ? (
                 <div className="w-fit mx-auto justify-self-center">
                     <Alert
                         variant="ghost"
                         className="flex justify-center items-center"
                     >
                         <Typography className="w-full justify-center flex">
-                            Hackathon doesn't exist
+                            Hackathon is not finished or doesn't exist.
                         </Typography>
                     </Alert>
                 </div>
@@ -49,7 +72,7 @@ const Results = () => {
        items-center justify-between bg-gradient-to-b from-violetBlue to-persianBlue"
                         >
                             <h1 className="text-white text-7xl font-bold">
-                                4.1
+                                {teamDetails?.conslidatedRating || "NA"}
                             </h1>
                             <p className="text-lg text-lightLavender font-bold">
                                 of 5
@@ -60,11 +83,12 @@ const Results = () => {
         w-3/4 space-y-2 md:w-3/5"
                         >
                             <h3 className="text-3xl text-white font-bold">
-                                Great
+                                {teamDetails ? "Great" : ""}
                             </h3>
                             <p className=" text-lightLavender text-lg font-bold">
-                                You scored higher than 65% of the people who
-                                have taken these tests.
+                                {teamDetails
+                                    ? "You scored well amongst the people who have taken these tests."
+                                    : "You didn't participate in this hackathon"}
                             </p>
                         </div>
                     </div>
@@ -155,13 +179,20 @@ const Results = () => {
                             </div>
                         </div> */}
                         </div>
-                        <button
+                        <Link
+                            to="/"
                             className="container p-4
        bg-darkGrayBlue rounded-full text-lg font-bold text-white
        hover:bg-gradient-to-b from-lightSlateBlue to-lightRoyalBlue"
                         >
-                            Continue
-                        </button>
+                            <button className="w-full"
+                            //                         className="container p-4
+                            //    bg-darkGrayBlue rounded-full text-lg font-bold text-white
+                            //    hover:bg-gradient-to-b from-lightSlateBlue to-lightRoyalBlue"
+                            >
+                                Close
+                            </button>
+                        </Link>
                     </div>
                 </div>
             )}

@@ -35,11 +35,22 @@ import { fetchTeamDetails } from "../features/team/teamSlice";
 // ];
 
 const TeamMembers = () => {
-    const data = useSelector((state) => state.team.teamdetails.data);
+    const dispatch = useDispatch();
+    const data = useSelector((state) => state.team.teamdetails.data) || [];
     // const teamdetails=data.length>0?data[0].teamUserDetailsDTOs:[]
-    const [teamdetails, setTeamdetails] = useState([]);
+    const login = useSelector((state) => state.user.login.data);
+    const userId = login ? login.data.userId : null;
+    const [teamdetails, setTeamdetails] = useState(
+        data.length > 0 ? data[0].teamUserDetailsDTOs : []
+    );
     useEffect(() => {
-        setTeamdetails(data);
+        console.log("hi");
+        dispatch(fetchTeamDetails(userId));
+    }, [dispatch]);
+    useEffect(() => {
+        if (data.length > 0) {
+            setTeamdetails(data[0].teamUserDetailsDTOs);
+        }
     }, [data]);
 
     return (

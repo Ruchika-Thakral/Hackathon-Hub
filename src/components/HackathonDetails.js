@@ -13,8 +13,8 @@ import {
 } from "@material-tailwind/react";
 import TeamRegistration from "./TeamRegistration";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 const HackathonDetails = ({ hackathons, selectedHackathonId }) => {
-
     // const { details } = useContext(CreateContext);
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -61,14 +61,26 @@ const HackathonDetails = ({ hackathons, selectedHackathonId }) => {
                 <Card shadow={false}>
                     <CardBody>
                         <div className="w-full mb-2 px-2 flex justify-between">
-                        <Typography
-                            className="font-semibold flex text-incedo-secondary-600 text-left justify-start"
-                            variant="h2"
-                            // color="black"
-                        >
-                            {selectedHackathon?.name}
-                        </Typography>
-                        <Button size="sm" className="h-8" color="green">Result</Button>
+                            <Typography
+                                className="font-semibold flex text-incedo-secondary-600 text-left justify-start"
+                                variant="h2"
+                                // color="black"
+                            >
+                                {selectedHackathon?.name}
+                            </Typography>
+                            {selectedHackathon.isCompleted ? (
+                                <Link
+                                    to={`/results/${selectedHackathon.hackathonId}`}
+                                >
+                                    <Button
+                                        size="sm"
+                                        className="h-8"
+                                        color="green"
+                                    >
+                                        Result
+                                    </Button>
+                                </Link>
+                            ) : null}
                         </div>
                         <div className="w-full rounded-2xl p-2 text-incedo-tertiary-900">
                             <Typography variant="h4">
@@ -253,7 +265,10 @@ const HackathonDetails = ({ hackathons, selectedHackathonId }) => {
                         </div>
                         <div className="w-fit mt-2 mx-auto">
                             {user?.role === "participant" ? (
-                                <Button onClick={() => setOpen((cur) => !cur)}>
+                                <Button
+                                    disabled={!user.available}
+                                    onClick={() => setOpen((cur) => !cur)}
+                                >
                                     Register
                                 </Button>
                             ) : null}

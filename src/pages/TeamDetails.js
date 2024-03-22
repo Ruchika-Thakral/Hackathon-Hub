@@ -21,12 +21,11 @@ import {
     MenuItem,
 } from "@material-tailwind/react";
 
-
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import BaseLayout from "../components/BaseLayout";
 import TeamMembers from "../components/TeamMembers";
 import IdeaDetails from "../components/IdeaDetails";
-import { useDispatch ,useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchTeamDetails } from "../features/team/teamSlice";
 
 // const DOMAINS = [
@@ -54,19 +53,17 @@ const TeamDetails = () => {
     //     console.log(ideaData);
     //     // dispatch(hackathonCreation(ideaData));
     // };
-    const data=useSelector(state=>state.user.login.data)
-    const userId=data?data.data.userId:null
+    const data = useSelector((state) => state.user.login.data);
+    const userId = data ? data.data.userId : null;
     // const teamData=useSelector(state=>state.team.teamdetails.data)
     // const teamDatas=teamData?teamData[0]:[]
 
     const dispatch = useDispatch();
 
-    useEffect(()=>{
-        dispatch(fetchTeamDetails(userId))
-    },[dispatch])
+    useEffect(() => {
+        dispatch(fetchTeamDetails(userId));
+    }, [dispatch]);
 
- 
-    
     return (
         <BaseLayout>
             <div className="container my-2 mx-auto py-4 px-2 flex justify-center">
@@ -170,7 +167,7 @@ const TeamDetails = () => {
                                     </MenuList>
                                 </Menu>
                             </div>
-
+ 
                             <div className="mt-3">
                                 <Textarea
                                     label="Idea Description*"
