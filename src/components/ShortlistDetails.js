@@ -57,17 +57,17 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
         )
     );
 
-    const [selectedIdea, setSelectedIdea] = useState(IDEAS?.find(idea=> idea.teamId === selectedIdeaId));
+    const [selectedIdea, setSelectedIdea] = useState(
+        IDEAS?.find((idea) => idea.teamId === selectedIdeaId)
+    );
     console.log(selectedIdea);
     console.log(IDEAS);
-    console.log(selectedIdeaId)
-
+    console.log(selectedIdeaId);
 
     useEffect(() => {
         // console.log(selectedIdeaId)
         setSelectedIdea(
-            IDEAS?.find((idea) => idea?.teamId === selectedIdeaId) ||
-                IDEAS[0]
+            IDEAS?.find((idea) => idea?.teamId === selectedIdeaId) || IDEAS[0]
         );
     }, [selectedIdeaId]);
 
@@ -131,82 +131,84 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
                         </div>
                     </CardBody>
                 </Card>
-                <Card
-                    shadow={false}
-                    className="md:min-h-[52.2vh] md:max-h-[52.2vh] overflow-auto"
-                >
-                    <CardBody>
-                        <div className="w-full grid md:grid-cols-6">
-                            <div className="md:col-span-5 w-full rounded-2xl p-2 py-1 text-incedo-tertiary-900">
-                                <Typography variant="h3">
-                                    {selectedIdea?.ideaTitle || ""}
-                                </Typography>
-                                <Typography
-                                    variant="h5"
-                                    className=" text-gray-600"
-                                >
-                                    {selectedIdea?.ideaDomain || ""}
-                                </Typography>
-                            </div>
-                            <div className="md:col-span-1 px-2 flex items-center justify-end">
-                                <IconButton
-                                    variant="text"
-                                    onClick={() => {
-                                        handleIdeaAccept(
-                                            selectedIdea?.teamId || ""
-                                        );
-                                    }}
-                                    disabled={
-                                        selectedIdea?.status !== "submitted"
-                                    }
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="currentColor"
-                                        className="w-6 h-6 fill-green-400"
+                {IDEAS.length !== 0 ? (
+                    <Card
+                        shadow={false}
+                        className="md:min-h-[52.2vh] md:max-h-[52.2vh] overflow-auto"
+                    >
+                        <CardBody>
+                            <div className="w-full grid md:grid-cols-6">
+                                <div className="md:col-span-5 w-full rounded-2xl p-2 py-1 text-incedo-tertiary-900">
+                                    <Typography variant="h3">
+                                        {selectedIdea?.ideaTitle || ""}
+                                    </Typography>
+                                    <Typography
+                                        variant="h5"
+                                        className=" text-gray-600"
                                     >
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
-                                            clipRule="evenodd"
-                                        />
-                                    </svg>
-                                </IconButton>
-                                <IconButton
-                                    variant="text"
-                                    onClick={() => {
-                                        handleIdeaReject(
-                                            selectedIdea?.teamId || ""
-                                        );
-                                    }}
-                                    disabled={
-                                        selectedIdea?.status !== "submitted"
-                                    }
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="currentColor"
-                                        className="w-6 h-6 fill-red-700"
+                                        {selectedIdea?.ideaDomain || ""}
+                                    </Typography>
+                                </div>
+                                <div className="md:col-span-1 px-2 flex items-center justify-end">
+                                    <IconButton
+                                        variant="text"
+                                        onClick={() => {
+                                            handleIdeaAccept(
+                                                selectedIdea?.teamId || ""
+                                            );
+                                        }}
+                                        disabled={
+                                            selectedIdea?.status !== "submitted"
+                                        }
                                     >
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
-                                            clipRule="evenodd"
-                                        />
-                                    </svg>
-                                </IconButton>
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            fill="currentColor"
+                                            className="w-6 h-6 fill-green-400"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                                                clipRule="evenodd"
+                                            />
+                                        </svg>
+                                    </IconButton>
+                                    <IconButton
+                                        variant="text"
+                                        onClick={() => {
+                                            handleIdeaReject(
+                                                selectedIdea?.teamId || ""
+                                            );
+                                        }}
+                                        disabled={
+                                            selectedIdea?.status !== "submitted"
+                                        }
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            fill="currentColor"
+                                            className="w-6 h-6 fill-red-700"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
+                                                clipRule="evenodd"
+                                            />
+                                        </svg>
+                                    </IconButton>
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="w-full mt-1 rounded-2xl p-2">
-                            <Typography className="">
-                                {selectedIdea?.ideaBody || ""}
-                            </Typography>
-                        </div>
-                    </CardBody>
-                </Card>
+                            <div className="w-full mt-1 rounded-2xl p-2">
+                                <Typography className="">
+                                    {selectedIdea?.ideaBody || ""}
+                                </Typography>
+                            </div>
+                        </CardBody>
+                    </Card>
+                ) : null}
                 <Dialog open={openRules} handler={handleOpenRules}>
                     <DialogHeader>
                         <Typography

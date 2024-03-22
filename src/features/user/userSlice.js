@@ -1,26 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 const initialState = {
-    register:{
+    register: {
         data: null,
         loading: false,
-        error: null,},
-    login:{
+        error: null,
+    },
+    login: {
         data: null,
         loading: false,
-        error: null,},
-    
+        error: null,
+    },
 };
 
 export const userRegistration = createAsyncThunk(
-    'user/userRegistration',
+    "user/userRegistration",
     async (formData, thunkAPI) => {
         try {
-            const response = await axios.post('http://localhost:8080/User/register', formData);
-            return response;
+            const response = await axios.post(
+                "http://localhost:8080/User/register",
+                formData
+            );
+            return { data: response.data, status: response.status };
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
@@ -28,10 +32,13 @@ export const userRegistration = createAsyncThunk(
 );
 
 export const otpVerification = createAsyncThunk(
-    'user/otpVerification',
+    "user/otpVerification",
     async (otpDetails, thunkAPI) => {
         try {
-            const response = await axios.post('http://localhost:8080/User/verifyOtp', otpDetails);
+            const response = await axios.post(
+                "http://localhost:8080/User/verifyOtp",
+                otpDetails
+            );
             return response;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -40,42 +47,44 @@ export const otpVerification = createAsyncThunk(
 );
 
 export const userLogin = createAsyncThunk(
-    'user/userLogin',
+    "user/userLogin",
     async (formData, thunkAPI) => {
         try {
-            const response = await axios.post('http://localhost:8080/User/login', formData);
+            const response = await axios.post(
+                "http://localhost:8080/User/login",
+                formData
+            );
             console.log(response);
             if (response.status === 200) {
-                Cookies.set('userData', JSON.stringify(response.data) , { expires: 7 });
+                Cookies.set("userData", JSON.stringify(response.data), {
+                    expires: 7,
+                });
                 console.log("cookie log set");
                 console.log(JSON.stringify(response.data));
             }
-            return {data: response.data, status:response.status};
+            return { data: response.data, status: response.status };
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
     }
 );
 
-
-
 const userSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
-        logout(state){
-            state.login.data=null;
-            Cookies.remove('userData');
+        logout(state) {
+            state.login.data = null;
+            Cookies.remove("userData");
         },
-        reattemptLogin(state){
-            const userCookie = Cookies.get('userData');
+        reattemptLogin(state) {
+            const userCookie = Cookies.get("userData");
             if (userCookie) {
-                state.login.data={data: JSON.parse(userCookie)};
-                console.log("reloggedin")
-                console.log({data: JSON.parse(userCookie)})
+                state.login.data = { data: JSON.parse(userCookie) };
+                console.log("reloggedin");
+                console.log({ data: JSON.parse(userCookie) });
             }
-        }
-
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -90,7 +99,7 @@ const userSlice = createSlice({
             })
             .addCase(userRegistration.rejected, (state, action) => {
                 state.register.loading = false;
-                state.register.data= null;
+                state.register.data = null;
                 state.register.error = action.payload; // Set error payload
             })
             .addCase(otpVerification.pending, (state) => {
@@ -120,8 +129,8 @@ const userSlice = createSlice({
                 state.login.loading = false;
                 state.login.data = null;
                 state.login.error = action.payload; // Set error payload
-            })
+            });
     },
 });
-export const {logout, reattemptLogin}=userSlice.actions
+export const { logout, reattemptLogin } = userSlice.actions;
 export default userSlice.reducer;

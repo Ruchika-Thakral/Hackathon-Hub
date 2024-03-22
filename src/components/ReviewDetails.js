@@ -132,47 +132,50 @@ const ReviewDetails = ({
                         </div>
                     </CardBody>
                 </Card>
-                <Card
-                    shadow={false}
-                    className="md:min-h-[52.2vh] md:max-h-[52.2vh] overflow-auto"
-                >
-                    <CardBody>
-                        <div className="w-full grid md:grid-cols-12">
-                            <div className="md:col-span-9 w-full rounded-2xl p-2 py-1 text-incedo-tertiary-900">
-                                <Typography variant="h3">
-                                    {selectedIdea?.ideaTitle || ""}
-                                </Typography>
-                                <Typography
-                                    variant="h5"
-                                    className=" text-gray-600"
-                                >
-                                    {selectedIdea?.ideaDomain || ""}
-                                </Typography>
-                            </div>
-                            <div className="md:col-span-3 px-2 flex items-center justify-end">
-                                <Rating
-                                    unratedColor="amber"
-                                    ratedColor="amber"
-                                    value={
-                                        // reviewData.rating ||
-                                        reviewedIdeas.find(
-                                            (idea) =>
-                                                idea.teamId ===
-                                                selectedIdea?.teamId
-                                        )?.rating
-                                    }
-                                    onChange={(value) => handleRating(value)}
-                                    readonly={
-                                        // reviewedIdeas.includes(selectedIdea?.teamId)
+                {IDEAS.length !== 0 ? (
+                    <Card
+                        shadow={false}
+                        className="md:min-h-[52.2vh] md:max-h-[52.2vh] overflow-auto"
+                    >
+                        <CardBody>
+                            <div className="w-full grid md:grid-cols-12">
+                                <div className="md:col-span-9 w-full rounded-2xl p-2 py-1 text-incedo-tertiary-900">
+                                    <Typography variant="h3">
+                                        {selectedIdea?.ideaTitle || ""}
+                                    </Typography>
+                                    <Typography
+                                        variant="h5"
+                                        className=" text-gray-600"
+                                    >
+                                        {selectedIdea?.ideaDomain || ""}
+                                    </Typography>
+                                </div>
+                                <div className="md:col-span-3 px-2 flex items-center justify-end">
+                                    <Rating
+                                        unratedColor="amber"
+                                        ratedColor="amber"
+                                        value={
+                                            // reviewData.rating ||
+                                            reviewedIdeas.find(
+                                                (idea) =>
+                                                    idea.teamId ===
+                                                    selectedIdea?.teamId
+                                            )?.rating
+                                        }
+                                        onChange={(value) =>
+                                            handleRating(value)
+                                        }
+                                        readonly={
+                                            // reviewedIdeas.includes(selectedIdea?.teamId)
 
-                                        reviewedIdeas?.filter(
-                                            (obj) =>
-                                                obj.teamId ===
-                                                selectedIdea?.teamId
-                                        ).length > 0
-                                    }
-                                />
-                                {/* <IconButton
+                                            reviewedIdeas?.filter(
+                                                (obj) =>
+                                                    obj.teamId ===
+                                                    selectedIdea?.teamId
+                                            ).length > 0
+                                        }
+                                    />
+                                    {/* <IconButton
                                     variant="text"
                                     onClick={() => {
                                         handleIdeaAccept(selectedIdea.teamId);
@@ -216,40 +219,41 @@ const ReviewDetails = ({
                                         />
                                     </svg>
                                 </IconButton> */}
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="w-full mt-1 rounded-2xl p-2">
-                            <Typography className="">
-                                {selectedIdea?.ideaBody || ""}
-                            </Typography>
-                        </div>
-                        <div className="w-full mt-1 rounded-2xl p-2 gap-1">
-                            <Link
-                                to={selectedIdea?.ideaRepo || "#"}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <Typography className="underline">
-                                    {selectedIdea?.ideaRepo
-                                        ? "Repo Link"
-                                        : null}
+                            <div className="w-full mt-1 rounded-2xl p-2">
+                                <Typography className="">
+                                    {selectedIdea?.ideaBody || ""}
                                 </Typography>
-                            </Link>
-                            <Link
-                                to={selectedIdea?.ideaFiles || "#"}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <Typography className="underline">
-                                    {selectedIdea?.ideaFiles
-                                        ? "Files Link"
-                                        : null}
-                                </Typography>
-                            </Link>
-                        </div>
-                    </CardBody>
-                </Card>
+                            </div>
+                            <div className="w-full mt-1 rounded-2xl p-2 gap-1">
+                                <Link
+                                    to={selectedIdea?.ideaRepo || "#"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <Typography className="underline">
+                                        {selectedIdea?.ideaRepo
+                                            ? "Repo Link"
+                                            : null}
+                                    </Typography>
+                                </Link>
+                                <Link
+                                    to={selectedIdea?.ideaFiles || "#"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <Typography className="underline">
+                                        {selectedIdea?.ideaFiles
+                                            ? "Files Link"
+                                            : null}
+                                    </Typography>
+                                </Link>
+                            </div>
+                        </CardBody>
+                    </Card>
+                ) : null}
                 <Dialog open={openRules} handler={handleOpenRules}>
                     <DialogHeader>
                         <Typography

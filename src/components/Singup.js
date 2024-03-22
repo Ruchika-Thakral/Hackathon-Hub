@@ -6,9 +6,15 @@ import {
     userLogin,
     userRegistration,
 } from "../features/user/userSlice";
-import { Typography, CardHeader, Card, Dialog, CardBody } from "@material-tailwind/react";
-import { Slide, ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {
+    Typography,
+    CardHeader,
+    Card,
+    Dialog,
+    CardBody,
+} from "@material-tailwind/react";
+import { Slide, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router";
 
 const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
@@ -18,7 +24,7 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
         password: "",
         otp: "",
     });
-    const [confirmPassword,setConfirmPassword]=useState("")
+    const [confirmPassword, setConfirmPassword] = useState("");
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevstate) => ({ ...prevstate, [name]: value }));
@@ -31,7 +37,6 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
     const loginData = { email: formData.email, password: formData.password };
     const [emailVerification, setEmailVerification] = useState(false);
 
-    
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -44,7 +49,7 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
             //     position: "top-center",
             //     transition:Slide
             // });
-            dispatch(userLogin(loginData));
+            // dispatch(userLogin(loginData));
             // navigate('/')
         }
     }, [status]);
@@ -63,38 +68,34 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
         if (!formData.password) {
             newErrors.password = "Password is Required!";
         }
-        if(formData.password !== confirmPassword){
-            newErrors.confirmPassword="Password Does not Match!"
+        if (formData.password !== confirmPassword) {
+            newErrors.confirmPassword = "Password Does not Match!";
         }
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            dispatch(userRegistration(formData))
+            dispatch(userRegistration(formData));
         }
         setErrors(newErrors);
-       
     };
-    const otpDetails={email:formData.email,otp:formData.otp}
-    const handleSubmit = async(e) => {
-        e.preventDefault()
-        dispatch(otpVerification(otpDetails))
+    const otpDetails = { email: formData.email, otp: formData.otp };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        dispatch(otpVerification(otpDetails));
     };
     const validateEmail = (email) => {
         // Regex pattern for email validation
-        const pattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/;
+        const pattern =
+            /^[_a-z0-9-]+(\.[_a-z0-9-]+)*(\+[a-z0-9-]+)?@[a-z0-9-]+(\.[a-z0-9-]+)*$/i;
         return pattern.test(email);
     };
-    const handler=()=>{
-        toggleModal()
-        setFormData({ name:'',
-        email:'',
-        password:'',
-        otp:''})
+    const handler = () => {
+        toggleModal();
+        setFormData({ name: "", email: "", password: "", otp: "" });
         setEmailVerification(false);
-        setConfirmPassword("")
-        setErrors({})
- 
-    }
+        setConfirmPassword("");
+        setErrors({});
+    };
 
     return (
         <Dialog
@@ -103,7 +104,6 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
             handler={handler}
             size={"xs"}
         >
-           
             {/* <span className="close" onClick={toggleModal} style={{ cursor: 'pointer' }}>&times;</span> */}
             <div className="container">
                 <Card className="mx-auto w-full px-16 py-4">
@@ -123,14 +123,14 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                             </div>
                         ) : (
                             <form
-                            className="account-form w-full mx-auto rounded-xl mt-2 p-2"
-                            onSubmit={handleSubmit}
-                        >
-                                <div
-                                className={
-                                    "account-form-fields sign-in flex flex-col gap-y-4 sign-up w-full mx-auto"
-                                }
+                                className="account-form w-full mx-auto rounded-xl mt-2 p-2"
+                                onSubmit={handleSubmit}
                             >
+                                <div
+                                    className={
+                                        "account-form-fields sign-in flex flex-col gap-y-4 sign-up w-full mx-auto"
+                                    }
+                                >
                                     <Input
                                         id="name"
                                         name="name"
@@ -142,10 +142,10 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                                         required
                                     />
                                     {errors.name && (
-                            <Typography className="text-red-500 text-xs w-fit">
-                                {errors.name}
-                            </Typography>
-                        )}
+                                        <Typography className="text-red-500 text-xs w-fit">
+                                            {errors.name}
+                                        </Typography>
+                                    )}
                                     <Input
                                         id="email"
                                         name="email"
@@ -156,11 +156,11 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                                         onChange={handleChange}
                                         required
                                     />
-                                     {errors.email && (
-                            <Typography className="text-red-500 text-xs w-fit">
-                                {errors.email}
-                            </Typography>
-                        )}
+                                    {errors.email && (
+                                        <Typography className="text-red-500 text-xs w-fit">
+                                            {errors.email}
+                                        </Typography>
+                                    )}
                                     <Input
                                         id="password"
                                         name="password"
@@ -172,25 +172,27 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                                         required
                                     />
                                     {errors.password && (
-                            <Typography className="text-red-500 text-xs w-fit">
-                                {errors.password}
-                            </Typography>
-                        )}
+                                        <Typography className="text-red-500 text-xs w-fit">
+                                            {errors.password}
+                                        </Typography>
+                                    )}
                                     <Input
                                         id="repeat-password"
                                         name="confirmPassword"
                                         type="password"
                                         label="Confirm password"
                                         placeholder="Label Password"
-                                        onChange={e=>setConfirmPassword(e.target.value)}
+                                        onChange={(e) =>
+                                            setConfirmPassword(e.target.value)
+                                        }
                                         value={confirmPassword}
                                         required
                                     />
                                     {errors.confirmPassword && (
-                            <Typography className="text-red-500 text-xs w-fit">
-                                {errors.confirmPassword}
-                            </Typography>
-                        )}
+                                        <Typography className="text-red-500 text-xs w-fit">
+                                            {errors.confirmPassword}
+                                        </Typography>
+                                    )}
                                     {!emailVerification && (
                                         <Button
                                             size="sm"
@@ -216,7 +218,11 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                                             />
                                         </>
                                     )}
-                                    {error && <Typography className="text-red-500 text-xs w-fit">{error.message}</Typography>}
+                                    {error && (
+                                        <Typography className="text-red-500 text-xs w-fit">
+                                            {error.message}
+                                        </Typography>
+                                    )}
                                 </div>
                                 <br />
                                 <div className="w-fit mx-auto">

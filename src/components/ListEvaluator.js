@@ -222,7 +222,7 @@ const ListEvaluator = ({ handleAddMembers, handleAssignMembers }) => {
         setTableData(TABLE_ROWS)
     },[TABLE_ROWS])
     const handleFilterClick = (keyword = "all") => {
-        console.log("hi" + keyword);
+        // console.log("hi" + keyword);
         if (keyword === "all") {
             setTableData(TABLE_ROWS);
             return;

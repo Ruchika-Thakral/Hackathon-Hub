@@ -6,18 +6,21 @@ import {
     Input,
     Typography,
 } from "@material-tailwind/react";
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { teamRegistration } from "../features/team/teamSlice";
-import { CreateContext } from "../App";
 
 const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
-    // const { details } = useContext(CreateContext);
     const login = useSelector((state) => state.user.login.data);
     const userId = login ? login.data.userId : null;
     const hackathonId = selectedHackathonId;
-    // const navigate = useNavigate();
+    const data = useSelector((state) => state.team.registration.data);
+    const status = data ? data.status : null;
+    const error = useSelector((state) => state.team.registration.error);
+    const [newerror, setNewError] = useState(false);
+    useEffect(() => {
+        setNewError(true);
+    }, [error]);
     const dispatch = useDispatch();
     const [formdata, setFormData] = useState({
         name: "",
@@ -25,15 +28,23 @@ const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
         email2: "",
         email3: "",
     });
-    const emails = [formdata.email1];
+    const emailsInput = [formdata.email1, formdata.email2, formdata.email3];
+    const emails = emailsInput.filter((email) => email.trim() !== "");
+    console.log(emails);
     const name = formdata.name;
     const team = { emails, name };
+    console.log(team);
     const [errors, setErrors] = useState({});
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formdata, [name]: value });
     };
+    useEffect(() => {
+        if (status === 201) {
+            handler();
+        }
+    }, [status]);
+
     const submitHandler = (e) => {
         e.preventDefault();
         const newErrors = {};
@@ -53,26 +64,32 @@ const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
             setErrors(newErrors);
         } else {
             dispatch(teamRegistration({ hackathonId, userId, team }));
-            setFormData({
-                name: "",
-                email1: "",
-                email2: "",
-                email3: "",
-            });
         }
         setErrors(newErrors);
     };
     const validateEmail = (email) => {
         // Regex pattern for email validation
-        const pattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/;
+        const pattern =
+            /^[_a-z0-9-]+(\.[_a-z0-9-]+)*(\+[a-z0-9-]+)?@[a-z0-9-]+(\.[a-z0-9-]+)*$/i;
         return pattern.test(email);
+    };
+    const handler = () => {
+        setOpen((cur) => !cur);
+        setErrors({});
+        setFormData({
+            name: "",
+            email1: "",
+            email2: "",
+            email3: "",
+        });
+        setNewError(false);
     };
     return (
         <div>
             <Dialog
                 size="xs"
                 open={open}
-                handler={() => setOpen((cur) => !cur)}
+                handler={handler}
                 className="bg-transparent shadow-none"
             >
                 <Card className="mx-auto w-full px-16 py-4">
@@ -142,6 +159,11 @@ const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
                         {errors.email3 && (
                             <Typography className="text-red-500 text-xs w-fit">
                                 {errors.email3}
+                            </Typography>
+                        )}
+                        {newerror && (
+                            <Typography className="text-red-500 text-xs w-fit">
+                                {error?.message}
                             </Typography>
                         )}
                         <div className="w-fit mx-auto">
