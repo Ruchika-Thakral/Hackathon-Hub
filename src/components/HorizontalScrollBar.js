@@ -244,7 +244,7 @@ const HorizontalScrollBar = () => {
                             key={item.hackathonId}
                             // onClick={() => clickHandler(item)}
                         >
-                            <Card className="h-24 md:h-48 w-56 md:w-72 shadow-md bg-incedo-secondary-100/50 px-4 py-2 flex align-middle justify-center">
+                            <Card className="h-24 md:h-48 w-56 md:w-72 shadow-md to-incedo-primary-100/50 px-4 py-2 flex align-middle justify-center">
                                 <Typography
                                     variant="h4"
                                     className="mb-2 font-semiboldflex justify-center text-center text-incedo-secondary-600"

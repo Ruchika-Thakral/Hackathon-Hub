@@ -60,6 +60,7 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
     const [selectedIdea, setSelectedIdea] = useState(
         IDEAS?.find((idea) => idea.teamId === selectedIdeaId)
     );
+    // console
     console.log(selectedIdea);
     console.log(IDEAS);
     console.log(selectedIdeaId);
@@ -79,11 +80,11 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
 
     const handleIdeaAccept = (teamId) => {
         console.log(teamId + "idea accepted");
-        dispatch(acceptTeam(teamId));
+        dispatch(acceptTeam({teamId, hackathonId: user.assignedHackathon, panelistid: user.userId}));
     };
     const handleIdeaReject = (teamId) => {
         console.log(teamId + "idea rejected");
-        dispatch(rejectTeam(teamId));
+        dispatch(rejectTeam({teamId, hackathonId: user.assignedHackathon, panelistid: user.userId}));
     };
 
     // console.log(selectedHackathon)

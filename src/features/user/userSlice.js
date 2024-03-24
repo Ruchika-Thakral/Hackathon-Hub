@@ -85,6 +85,14 @@ const userSlice = createSlice({
                 console.log({ data: JSON.parse(userCookie) });
             }
         },
+        successTeamRegistration(state, hackathonId) {
+            const userCookie = JSON.parse(Cookies.get("userData"));
+            state.login.data = { data: {...userCookie, available: 0, assignedHackathon: hackathonId}}
+            Cookies.set("userData", JSON.stringify({...userCookie, available: 0, assignedHackathon: hackathonId}), {
+                expires: 7,
+            });
+            state.login.data = { data: JSON.parse(userCookie) }
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -132,5 +140,5 @@ const userSlice = createSlice({
             });
     },
 });
-export const { logout, reattemptLogin } = userSlice.actions;
+export const { logout, reattemptLogin, successTeamRegistration } = userSlice.actions;
 export default userSlice.reducer;

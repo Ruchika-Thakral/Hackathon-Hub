@@ -9,6 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { teamRegistration } from "../features/team/teamSlice";
+import { successTeamRegistration } from "../features/user/userSlice";
 
 const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
     const login = useSelector((state) => state.user.login.data);
@@ -64,6 +65,7 @@ const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
             setErrors(newErrors);
         } else {
             dispatch(teamRegistration({ hackathonId, userId, team }));
+            // dispatch(successTeamRegistration(hackathonId));
         }
         setErrors(newErrors);
     };

@@ -53,6 +53,7 @@ const IdeaDetails = () => {
     const [repoData, setRepoData] = useState({});
     const [ideaData, setIdeaData] = useState({});
     const [isShortlisted, setIsShortlisted] = useState(false);
+    const [didSubmit, setDidSubmit] = useState(false)
     useEffect(() => {
         if (status === "selected") {
             setIsShortlisted(true); // Set isShortlisted to true when status is 'selected'
@@ -66,6 +67,7 @@ const IdeaDetails = () => {
     const handleSubmit = () => {
         console.log(ideaData);
         dispatch(ideaSubmission({ hackathonId, userId, ideaData }));
+        setDidSubmit(true)
     };
 
     const handleRepoChange = (e) => {
@@ -76,6 +78,7 @@ const IdeaDetails = () => {
     const handleRepoSubmit = () => {
         console.log(repoData);
         dispatch(repoSubmission({ hackathonId, userId, repoData }));
+        setDidSubmit(true)
     };
 
     return (
@@ -85,7 +88,7 @@ const IdeaDetails = () => {
             </CardHeader>
             <CardBody className="w-full lg:w-2/3">
                 <Input
-                    disabled={isShortlisted}
+                    disabled={isShortlisted||didSubmit}
                     label="Idea Title*"
                     value={ideaData?.ideaTitle || ""}
                     name="ideaTitle"
@@ -95,7 +98,7 @@ const IdeaDetails = () => {
                     <Menu placement="bottom-start">
                         <MenuHandler>
                             <Button
-                                disabled={isShortlisted}
+                                disabled={isShortlisted||didSubmit}
                                 ripple={false}
                                 variant="text"
                                 color="blue-gray"
@@ -135,7 +138,7 @@ const IdeaDetails = () => {
 
                 <div className="mt-3">
                     <Textarea
-                        disabled={isShortlisted}
+                        disabled={isShortlisted||didSubmit}
                         label="Idea Description*"
                         name="ideaBody"
                         value={ideaData?.ideaBody || ""}
@@ -161,6 +164,7 @@ const IdeaDetails = () => {
                             <Input
                                 label="Repository Link"
                                 value={repoData?.ideaRepo || ""}
+                                disabled={didSubmit}
                                 name="ideaRepo"
                                 onChange={handleRepoChange}
                                 icon={
@@ -184,6 +188,7 @@ const IdeaDetails = () => {
                         <div className="mt-3">
                             <Input
                                 label="Drive Link"
+                                disabled={didSubmit}
                                 value={repoData?.ideaFiles || ""}
                                 name="ideaFiles"
                                 onChange={handleRepoChange}

@@ -43,8 +43,11 @@ export const teamRegistration = createAsyncThunk(
                 `http://localhost:8080/Team/${hackathonId}/${userId}`,
                 team
             );
+            const response2 = await axios.get(
+                `http://localhost:8080/User/Teams/${userId}`
+            );
             console.log(response);
-            return response;
+            return {a:response, b:response2};
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
@@ -59,8 +62,11 @@ export const ideaSubmission = createAsyncThunk(
                 `http://localhost:8080/Team/idea/${hackathonId}/${userId}`,
                 ideaData
             );
+            const response2 = await axios.get(
+                `http://localhost:8080/User/Teams/${userId}`
+            );
             console.log(response);
-            return response;
+            return {a:response, b:response2};
         } catch (error) {
             console.log(error);
             return thunkAPI.rejectWithValue(error.response.data);
@@ -77,8 +83,11 @@ export const repoSubmission = createAsyncThunk(
                 `http://localhost:8080/Team/ideaFiles/${hackathonId}/${userId}`,
                 repoData
             );
+            const response2 = await axios.get(
+                `http://localhost:8080/User/Teams/${userId}`
+            );
             console.log(response);
-            return response;
+            return {a:response, b:response2};
         } catch (error) {
             console.log(error);
             return thunkAPI.rejectWithValue(error.response.data);
@@ -138,13 +147,16 @@ export const fetchPanelistTeamsByHackathonId = createAsyncThunk(
 
 export const rejectTeam = createAsyncThunk(
     "team/rejectTeam",
-    async (teamId, thunkAPI) => {
+    async ({teamId, hackathonId, panelistid}, thunkAPI) => {
         // Assuming hackathonId is already available in the state
         try {
             const response = await axios.post(
                 `http://localhost:8080/Team/rejected/${teamId}`
             );
-            return response.data;
+            const response2 = await axios.get(
+                `http://localhost:8080/panelist/${hackathonId}/${panelistid}`
+            );
+            return response2.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
@@ -153,13 +165,16 @@ export const rejectTeam = createAsyncThunk(
 
 export const acceptTeam = createAsyncThunk(
     "team/acceptTeam",
-    async (teamId, thunkAPI) => {
+    async ({teamId, hackathonId, panelistid}, thunkAPI) => {
         // Assuming hackathonId is already available in the state
         try {
             const response = await axios.put(
                 `http://localhost:8080/Team/selected/${teamId}`
             );
-            return response.data;
+            const response2 = await axios.get(
+                `http://localhost:8080/panelist/${hackathonId}/${panelistid}`
+            );
+            return response2.data
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
@@ -194,7 +209,8 @@ const teamSlice = createSlice({
             })
             .addCase(teamRegistration.fulfilled, (state, action) => {
                 state.registration.loading = false;
-                state.registration.data = action.payload; // Extract data from the response
+                state.registration.data = action.payload.a; // Extract data from the response
+                state.teamdetails.data = action.payload.b
                 state.registration.error = null;
             })
             .addCase(teamRegistration.rejected, (state, action) => {
@@ -208,7 +224,8 @@ const teamSlice = createSlice({
             })
             .addCase(ideaSubmission.fulfilled, (state, action) => {
                 state.idea.loading = false;
-                state.idea.data = action.payload; // Extract data from the response
+                state.idea.data = action.payload.a; // Extract data from the response
+                state.teamdetails.data = action.payload.b
                 state.idea.error = null;
             })
             .addCase(ideaSubmission.rejected, (state, action) => {
@@ -222,7 +239,8 @@ const teamSlice = createSlice({
             })
             .addCase(repoSubmission.fulfilled, (state, action) => {
                 state.repo.loading = false;
-                state.repo.data = action.payload; // Extract data from the response
+                state.repo.data = action.payload.a; // Extract data from the response
+                state.teamdetails.data = action.payload.b
                 state.repo.error = null;
             })
             .addCase(repoSubmission.rejected, (state, action) => {
@@ -289,6 +307,7 @@ const teamSlice = createSlice({
             .addCase(acceptTeam.fulfilled, (state, action) => {
                 state.panelistteams.loading = false;
                 state.panelistteams.data = action.payload;
+                // state.panelistteams.data = action.payload;
                 state.panelistteams.error = null;
             })
             .addCase(acceptTeam.rejected, (state, action) => {
