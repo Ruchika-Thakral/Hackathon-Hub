@@ -1,27 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { USER } from "../constants";
 import {
     Button,
     Card,
     CardBody,
-    Timeline,
-    TimelineBody,
-    TimelineConnector,
-    TimelineHeader,
-    TimelineIcon,
-    TimelineItem,
     Typography,
     Progress,
-    IconButton,
     Dialog,
     DialogBody,
     DialogHeader,
     DialogFooter,
     Rating,
 } from "@material-tailwind/react";
-import { useContext } from "react";
-import { CreateContext } from "../App";
-import TeamRegistration from "./TeamRegistration";
-import { UseDispatch, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
 import { rateTeam } from "../features/team/teamSlice";
@@ -48,8 +39,9 @@ const ReviewDetails = ({
     };
 
     const dispatch = useDispatch();
-    const user = useSelector((state) => state.user.login?.data?.data);
-    console.log(hackathons);
+    const user = USER;
+    // useSelector((state) => state.user.login?.data?.data);
+    // console.log(hackathons);
 
     //use hackathonSlice useSelector to fetch data of assigned hackthon here
     const [selectedHackathon, setSelectedHackathon] = useState(
@@ -77,7 +69,7 @@ const ReviewDetails = ({
     const [reviewData, setReviewData] = useState({ rating: 0 });
 
     const handleRating = (rate) => {
-        console.log(rate);
+        // console.log(rate);
         setReviewData({ rating: rate, teamId: selectedIdeaId });
         setReviewedIdeas([
             ...reviewedIdeas,
@@ -93,45 +85,48 @@ const ReviewDetails = ({
         <>
             {/* {!loading &&  */}
             <div className="md:px-2 w-full">
-                <Card shadow={false} className="mb-3">
-                    <CardBody>
-                        <div className="w-full grid md:grid-cols-6">
-                            <Typography
-                                className="md:col-span-5 mb-1 px-2 font-semibold flex text-incedo-secondary-600 text-left justify-start"
-                                variant="h2"
-                                // color="black"
-                            >
-                                {selectedHackathon?.name || ""}
-                            </Typography>
-                            <div className="md:col-span-1 py-1 flex items-center justify-end">
-                                <Button
-                                    variant="outlined"
-                                    size="sm"
-                                    className="m-1"
-                                    onClick={handleOpenRules}
+                {selectedHackathon ? (
+                    <Card shadow={false} className="mb-3">
+                        <CardBody>
+                            <div className="w-full grid md:grid-cols-6">
+                                <Typography
+                                    className="md:col-span-5 mb-1 px-2 font-semibold flex text-incedo-secondary-600 text-left justify-start"
+                                    variant="h2"
+                                    // color="black"
                                 >
-                                    Details
-                                </Button>
-                            </div>
-                        </div>
-                        <div className="mb-1 w-full rounded-2xl p-2 py-1 text-incedo-tertiary-900">
-                            <Typography variant="h4">
-                                Theme: {selectedHackathon?.theme || ""}
-                            </Typography>
-                        </div>
-                        <div className="w-full px-2">
-                            <div className="mb-2 flex items-center justify-between gap-4">
-                                <Typography color="blue-gray" variant="h6">
-                                    Shortlist Deadline
+                                    {selectedHackathon?.name || ""}
                                 </Typography>
-                                <Typography color="blue-gray" variant="h6">
-                                    50% Elapsed
+                                <div className="md:col-span-1 py-1 flex items-center justify-end">
+                                    <Button
+                                        variant="outlined"
+                                        size="sm"
+                                        className="m-1"
+                                        onClick={handleOpenRules}
+                                    >
+                                        Details
+                                    </Button>
+                                </div>
+                            </div>
+                            <div className="mb-1 w-full rounded-2xl p-2 py-1 text-incedo-tertiary-900">
+                                <Typography variant="h4">
+                                    Theme: {selectedHackathon?.theme || ""}
                                 </Typography>
                             </div>
-                            <Progress value={50} />
-                        </div>
-                    </CardBody>
-                </Card>
+                            <div className="w-full px-2">
+                                <div className="mb-2 flex items-center justify-between gap-4">
+                                    <Typography color="blue-gray" variant="h6">
+                                        Shortlist Deadline
+                                    </Typography>
+                                    <Typography color="blue-gray" variant="h6">
+                                        50% Elapsed
+                                    </Typography>
+                                </div>
+                                <Progress value={50} />
+                            </div>
+                        </CardBody>
+                    </Card>
+                ) : null}
+
                 {IDEAS.length !== 0 ? (
                     <Card
                         shadow={false}

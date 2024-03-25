@@ -109,7 +109,7 @@ const NavBar = ({ toggleSignInModal, toggleSignUpModal, openDrawer }) => {
         setUser(userData);
     }, userData);
 
-    console.log(userData);
+    // console.log(userData);
 
     // console.log(user);
 

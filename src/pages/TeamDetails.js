@@ -53,16 +53,16 @@ const TeamDetails = () => {
     //     console.log(ideaData);
     //     // dispatch(hackathonCreation(ideaData));
     // };
-    const data = useSelector((state) => state.user.login.data);
-    const userId = data ? data.data.userId : null;
+    // const data = useSelector((state) => state.user.login.data);
+    // const userId = data ? data.data.userId : null;
     // const teamData=useSelector(state=>state.team.teamdetails.data)
     // const teamDatas=teamData?teamData[0]:[]
 
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(fetchTeamDetails(userId));
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(fetchTeamDetails(userId));
+    // }, [dispatch]);
 
     return (
         <BaseLayout>

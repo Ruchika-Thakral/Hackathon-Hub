@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+
+
+import { HACKATHONS } from "../constants";
 // import VerticalBar from "../components/VerticalBar";
 import HackathonDetails from "../components/HackathonDetails";
 import BaseLayout from "../components/BaseLayout";
@@ -44,24 +47,25 @@ const TABS = [
         value: "banking",
     },
     {
-        label: "Tele",
+        label: "TL",
         value: "telecom",
     },
     {
-        label: "Product",
+        label: "PE",
         value: "product",
     },
 ];
 
 const Hackathons = () => {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(fetchHackathons());
-    }, []);
+    // useEffect(() => {
+    //     dispatch(fetchHackathons());
+    // }, []);
 
-    const hackathons =
-        useSelector((state) => state.hackathon.hackathons.data) || [];
+    const hackathons = HACKATHONS
+        // useSelector((state) => state.hackathon.hackathons.data) || [];
+
     let [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
 
@@ -131,6 +135,7 @@ const Hackathons = () => {
     const handleFilterClick = (keyword = "all") => {
         // console.log("hi" + keyword);
         if (keyword === "all") {
+            // console.log(hackathons)
             setFilteredHackathons(hackathons);
             return;
         }
@@ -148,14 +153,14 @@ const Hackathons = () => {
         <BaseLayout>
             <div className="py-4 px-4 md:px-8">
                 {/* <SearchFilter /> */}
-                {hackathons.length === 0 ? (
+                {/* {hackathons.length === 0 ? (
                     <Typography
                         variant="h4"
                         className="mb-2 px-2 font-semibold flex text-left justify-start"
                     >
                         No hackathons exist
                     </Typography>
-                ) : (
+                ) : ( */}
                     <div className="grid md:grid-cols-3 gap-x-4 gap-y-2">
                         <div className="col-span-3 md:col-span-1">
                             <Card shadow={false} className="md:h-[86vh]">
@@ -199,11 +204,11 @@ const Hackathons = () => {
                                         ) : null}
                                         {filteredHackathons.length > 6
                                             ? filteredHackathons
-                                                  .slice(5)
+                                                  .slice(0,5)
                                                   .map((hackathon) => {
-                                                      console.log(
-                                                          hackathon.name
-                                                      );
+                                                    //   console.log(
+                                                    //       hackathon.name
+                                                    //   );
                                                       return (
                                                           <ListItem
                                                               key={
@@ -307,7 +312,7 @@ const Hackathons = () => {
                             </div>
                         ) : null}
                     </div>
-                )}
+                {/* )} */}
                 {/* <VerticalBar /> */}
                 {/* <HackathonDetails /> */}
             </div>

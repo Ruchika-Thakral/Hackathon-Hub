@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
+
+import { USER, HACKATHONS } from "../constants";
 import {
     Button,
     Card,
     CardBody,
-    Timeline,
-    TimelineBody,
-    TimelineConnector,
-    TimelineHeader,
-    TimelineIcon,
-    TimelineItem,
     Typography,
     Progress,
     IconButton,
@@ -17,9 +13,6 @@ import {
     DialogHeader,
     DialogFooter,
 } from "@material-tailwind/react";
-import { useContext } from "react";
-import { CreateContext } from "../App";
-import TeamRegistration from "./TeamRegistration";
 import { useDispatch, useSelector } from "react-redux";
 import { acceptTeam, rejectTeam } from "../features/team/teamSlice";
 import { fetchHackathons } from "../features/hackathon/hackathonSlice";
@@ -43,7 +36,8 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
     const dispatch = useDispatch();
 
     // const hackathons = useSelector((state) => state.hackathon.hackathons.data);
-    const user = useSelector((state) => state.user.login?.data?.data);
+    const user = USER;
+    // useSelector((state) => state.user.login?.data?.data);
     console.log(hackathons);
 
     // useEffect(() => {
@@ -61,9 +55,9 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
         IDEAS?.find((idea) => idea.teamId === selectedIdeaId)
     );
     // console
-    console.log(selectedIdea);
-    console.log(IDEAS);
-    console.log(selectedIdeaId);
+    // console.log(selectedIdea);
+    // console.log(IDEAS);
+    // console.log(selectedIdeaId);
 
     useEffect(() => {
         // console.log(selectedIdeaId)
@@ -79,12 +73,24 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
     };
 
     const handleIdeaAccept = (teamId) => {
-        console.log(teamId + "idea accepted");
-        dispatch(acceptTeam({teamId, hackathonId: user.assignedHackathon, panelistid: user.userId}));
+        // console.log(teamId + "idea accepted");
+        dispatch(
+            acceptTeam({
+                teamId,
+                hackathonId: user.assignedHackathon,
+                panelistid: user.userId,
+            })
+        );
     };
     const handleIdeaReject = (teamId) => {
         console.log(teamId + "idea rejected");
-        dispatch(rejectTeam({teamId, hackathonId: user.assignedHackathon, panelistid: user.userId}));
+        dispatch(
+            rejectTeam({
+                teamId,
+                hackathonId: user.assignedHackathon,
+                panelistid: user.userId,
+            })
+        );
     };
 
     // console.log(selectedHackathon)
@@ -93,45 +99,48 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
         <>
             {/* {!loading &&  */}
             <div className="md:px-2 w-full">
-                <Card shadow={false} className="mb-3">
-                    <CardBody>
-                        <div className="w-full grid md:grid-cols-6">
-                            <Typography
-                                className="md:col-span-5 mb-1 px-2 font-semibold flex text-incedo-secondary-600 text-left justify-start"
-                                variant="h2"
-                                // color="black"
-                            >
-                                {selectedHackathon?.name || ""}
-                            </Typography>
-                            <div className="md:col-span-1 py-1 flex items-center justify-end">
-                                <Button
-                                    variant="outlined"
-                                    size="sm"
-                                    className="m-1"
-                                    onClick={handleOpenRules}
+                {selectedHackathon ? (
+                    <Card shadow={false} className="mb-3">
+                        <CardBody>
+                            <div className="w-full grid md:grid-cols-6">
+                                <Typography
+                                    className="md:col-span-5 mb-1 px-2 font-semibold flex text-incedo-secondary-600 text-left justify-start"
+                                    variant="h2"
+                                    // color="black"
                                 >
-                                    Details
-                                </Button>
-                            </div>
-                        </div>
-                        <div className="mb-1 w-full rounded-2xl p-2 py-1 text-incedo-tertiary-900">
-                            <Typography variant="h4">
-                                Theme: {selectedHackathon?.theme || ""}
-                            </Typography>
-                        </div>
-                        <div className="w-full px-2">
-                            <div className="mb-2 flex items-center justify-between gap-4">
-                                <Typography color="blue-gray" variant="h6">
-                                    Shortlist Deadline
+                                    {selectedHackathon?.name || ""}
                                 </Typography>
-                                <Typography color="blue-gray" variant="h6">
-                                    50% Elapsed
+                                <div className="md:col-span-1 py-1 flex items-center justify-end">
+                                    <Button
+                                        variant="outlined"
+                                        size="sm"
+                                        className="m-1"
+                                        onClick={handleOpenRules}
+                                    >
+                                        Details
+                                    </Button>
+                                </div>
+                            </div>
+                            <div className="mb-1 w-full rounded-2xl p-2 py-1 text-incedo-tertiary-900">
+                                <Typography variant="h4">
+                                    Theme: {selectedHackathon?.theme || ""}
                                 </Typography>
                             </div>
-                            <Progress value={50} />
-                        </div>
-                    </CardBody>
-                </Card>
+                            <div className="w-full px-2">
+                                <div className="mb-2 flex items-center justify-between gap-4">
+                                    <Typography color="blue-gray" variant="h6">
+                                        Shortlist Deadline
+                                    </Typography>
+                                    <Typography color="blue-gray" variant="h6">
+                                        50% Elapsed
+                                    </Typography>
+                                </div>
+                                <Progress value={50} />
+                            </div>
+                        </CardBody>
+                    </Card>
+                ) : null}
+
                 {IDEAS.length !== 0 ? (
                     <Card
                         shadow={false}

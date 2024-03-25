@@ -1,5 +1,5 @@
 import ShortlistDetails from "../components/ShortlistDetails";
-
+import {USER, HACKATHONS} from '../constants'
 import React, { useEffect, useState } from "react";
 // import VerticalBar from "../components/VerticalBar";
 import HackathonDetails from "../components/HackathonDetails";
@@ -40,25 +40,26 @@ const PanelistShortlist = () => {
     const IDEAS =
         useSelector((state) => state.team.panelistteams.data?.data) || [];
 
-    const user = useSelector((state) => state.user.login?.data?.data);
-
+    const user = USER
+    // useSelector((state) => state.user.login?.data?.data);
+    // console.log(USER);
     useEffect(() => {
         dispatch(fetchHackathons());
     }, [dispatch]);
 
-    const hackathons =
-        useSelector((state) => state.hackathon.hackathons.data) || [];
+    const hackathons = HACKATHONS
+        // useSelector((state) => state.hackathon.hackathons.data) || [];
     console.log(hackathons);
 
     useEffect(() => {
         console.log(teams);
     }, [teams]);
 
-    const [filteredHackathons, setFilteredHackathons] =
-        React.useState(hackathons);
+    // const [filteredHackathons, setFilteredHackathons] =
+    //     React.useState(hackathons);
 
     const [selectedHackathonId, setSelectedHackathonId] = React.useState(
-        filteredHackathons[0]?.hackathonId
+        null
     );
 
     const [selectedIdeaId, setSelectedIdeaId] = React.useState(
@@ -67,8 +68,8 @@ const PanelistShortlist = () => {
     console.log(IDEAS[0]);
 
     useEffect(() => {
-        setSelectedHackathonId(filteredHackathons[0]?.hackathonId);
-    }, [filteredHackathons]);
+        setSelectedHackathonId(user.assignedHackathon);
+    }, [hackathons]);
 
     const [activePage, setActivePage] = React.useState(1);
 

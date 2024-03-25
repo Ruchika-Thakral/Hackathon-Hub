@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import VerticalBar from "../components/VerticalBar";
+import {USER, HACKATHONS} from '../constants'
 import HackathonDetails from "../components/HackathonDetails";
 import BaseLayout from "../components/BaseLayout";
 import SearchFilter from "../components/SearchFilter";
@@ -39,35 +40,36 @@ const JudgeReview = ({ reviewedIdeas, setReviewedIdeas }) => {
     const IDEAS =
         useSelector((state) => state.team.judgeteams.data?.data) || [];
 
-    const user = useSelector((state) => state.user.login?.data?.data);
+    const user = USER
+    // useSelector((state) => state.user.login?.data?.data);
 
     useEffect(() => {
         dispatch(fetchHackathons());
     }, [dispatch]);
 
-    const hackathons =
-        useSelector((state) => state.hackathon.hackathons.data) || [];
-    console.log(hackathons);
+    const hackathons = HACKATHONS
+        // useSelector((state) => state.hackathon.hackathons.data) || [];
+    // console.log(hackathons);
 
-    useEffect(() => {
-        console.log(teams);
-    }, [teams]);
+    // useEffect(() => {
+    //     console.log(teams);
+    // }, [teams]);
 
-    const [filteredHackathons, setFilteredHackathons] =
-        React.useState(hackathons);
+    // const [filteredHackathons, setFilteredHackathons] =
+    //     React.useState(hackathons);
 
     const [selectedHackathonId, setSelectedHackathonId] = React.useState(
-        filteredHackathons[0]?.hackathonId
+        null
     );
 
     const [selectedIdeaId, setSelectedIdeaId] = React.useState(
         IDEAS[0]?.teamId
     );
-    console.log(IDEAS);
+    // console.log(IDEAS);
     // const user = useSelector((state) => state.user.login?.data?.data);
     useEffect(() => {
-        setSelectedHackathonId(filteredHackathons[0]?.hackathonId);
-    }, [filteredHackathons]);
+        setSelectedHackathonId(user.assignedHackathon);
+    }, [hackathons]);
 
     useEffect(() => {
         // if (user) {

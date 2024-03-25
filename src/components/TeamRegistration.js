@@ -31,10 +31,10 @@ const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
     });
     const emailsInput = [formdata.email1, formdata.email2, formdata.email3];
     const emails = emailsInput.filter((email) => email.trim() !== "");
-    console.log(emails);
+    // console.log(emails);
     const name = formdata.name;
     const team = { emails, name };
-    console.log(team);
+    // console.log(team);
     const [errors, setErrors] = useState({});
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -111,7 +111,7 @@ const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
                         <Input
                             type="text"
                             label="Team Name*"
-                            size="sm"
+                            size="md"
                             name="name"
                             value={formdata.teamname}
                             onChange={handleChange}
@@ -125,47 +125,47 @@ const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
                         <Input
                             type="email"
                             label="Member 1 Email"
-                            size="sm"
+                            size="md"
                             name="email1"
                             value={formdata.email1}
                             onChange={handleChange}
                         />
                         {errors.email1 && (
                             <Typography className="text-red-500 text-xs w-fit">
-                                {errors.email1}
+                                {errors.email1 || ""}
                             </Typography>
                         )}
 
                         <Input
                             type="email"
                             label="Member 2 Email"
-                            size="sm"
+                            size="md"
                             name="email2"
                             value={formdata.email2}
                             onChange={handleChange}
                         />
                         {errors.email2 && (
                             <Typography className="text-red-500 text-xs w-fit">
-                                {errors.email2}
+                                {errors.email2 || ""}
                             </Typography>
                         )}
 
                         <Input
                             type="email"
                             label="Member 3 Email"
-                            size="sm"
+                            size="md"
                             name="email3"
                             value={formdata.email3}
                             onChange={handleChange}
                         />
                         {errors.email3 && (
                             <Typography className="text-red-500 text-xs w-fit">
-                                {errors.email3}
+                                {errors.email3 || ""}
                             </Typography>
                         )}
                         {newerror && (
                             <Typography className="text-red-500 text-xs w-fit">
-                                {error?.message}
+                                {error?.message || ""}
                             </Typography>
                         )}
                         <div className="w-fit mx-auto">

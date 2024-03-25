@@ -40,13 +40,14 @@ const TeamMembers = () => {
     // const teamdetails=data.length>0?data[0].teamUserDetailsDTOs:[]
     const login = useSelector((state) => state.user.login.data);
     const userId = login ? login.data.userId : null;
-    const [teamdetails, setTeamdetails] = useState(
-        data.length > 0 ? data[0].teamUserDetailsDTOs : []
+    const [teamdetails, setTeamdetails] = useState([]
+        // data.length > 0 ? data[0].teamUserDetailsDTOs : []
     );
-    useEffect(() => {
-        console.log("hi");
-        dispatch(fetchTeamDetails(userId));
-    }, [dispatch]);
+    // useEffect(() => {
+    //     // console.log("hi");
+    //     dispatch(fetchTeamDetails(userId));
+    // }, [dispatch]);
+    
     useEffect(() => {
         if (data.length > 0) {
             setTeamdetails(data[0].teamUserDetailsDTOs);
@@ -60,7 +61,7 @@ const TeamMembers = () => {
             </CardHeader>
             <CardBody className="p-4 py-2">
                 {teamdetails.length === 0 ? (
-                    <Typography variant="body" color="gray">
+                    <Typography variant="paragraph" color="gray">
                         No team members found.
                     </Typography>
                 ) : (
