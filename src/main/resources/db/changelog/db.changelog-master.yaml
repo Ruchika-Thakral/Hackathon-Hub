@@ -1,0 +1,61 @@
+databaseChangeLog:
+  - changeSet:
+      id: "1"
+      author: sharath
+      changes:
+        - createTable:
+            tableName: user
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: email
+                  type: varchar(255)
+              - column:
+                  name: password
+                  type: varchar(255)
+              - column:
+                  name: role
+                  type: varchar(50)
+              - column:
+                  name: is_available
+                  type: boolean
+              - column:
+                  name: assigned_hackathon
+                  type: bigint
+      context: "deploy"
+      runOnChange: true
+  - changeSet:
+      id: "2"
+      author: Gokul
+      changes:
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: email
+                  value: singamsettigokul@gmail.com
+              - column:
+                  name: password
+                  value: $2a$10$GwQQpYBy9xSh.1D0xskhAucr8GI0UGbwWtwVetDermk2w7zeFr9xm
+              - column:
+                  name: role
+                  value: admin
+              - column:
+                  name: is_available
+                  valueBoolean: False
+              - column:
+                  name: name
+                  value: Gokul
+              - column:
+                  name: assigned_hackathon
+                  value: -1
+      context: "deploy"
+      runOnChange: true
