@@ -114,9 +114,9 @@ const CreateHackathon = () => {
             guidelines:"",
             prizes:"",
             judgingCriteria:"",})
-            toast.success("Hackathon Is Created!", {
-                position: "top-center",
-                transition:Slide})
+            // toast.success("Hackathon Is Created!", {
+            //     position: "top-center",
+            //     transition:Slide})
     }
     
     setErrors(newErrors);
@@ -124,7 +124,7 @@ const CreateHackathon = () => {
    
     return (
         <div className="container my-2 mx-auto px-2 lg:px-4 flex justify-center">
-            <ToastContainer/>
+            
             <Card
                 className="flex-intial w-full lg:mx-2 px-4 py-4"
                 color="white"

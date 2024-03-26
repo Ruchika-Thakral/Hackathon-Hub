@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { fetchTeamDetails } from "../features/team/teamSlice";
 import { TEAMS, USER } from "../constants";
+import { selectUserId } from "../features/user/userSlice";
 
 // import {
 //     Menu,
@@ -40,9 +41,10 @@ const TeamMembers = () => {
     const data = TEAMS
     // useSelector((state) => state.team.teamdetails.data) || [];
     // const teamdetails=data.length>0?data[0].teamUserDetailsDTOs:[]
-    const login = USER
+    // const login = USER
     // useSelector((state) => state.user.login.data);
-    const userId = login ? login.userId : null;
+    const userId = useSelector(selectUserId);
+    // login ? login?.userId : null;
     const [teamdetails, setTeamdetails] = useState([]
         // data.length > 0 ? data[0].teamUserDetailsDTOs : []
     );

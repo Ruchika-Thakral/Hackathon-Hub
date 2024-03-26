@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
 import { rateTeam } from "../features/team/teamSlice";
+import { selectUserDetails } from "../features/user/userSlice";
 const ReviewDetails = ({
     hackathons,
     selectedIdeaId,
@@ -39,14 +40,14 @@ const ReviewDetails = ({
     };
 
     const dispatch = useDispatch();
-    const user = USER;
+    const userData = useSelector(selectUserDetails);
     // useSelector((state) => state.user.login?.data?.data);
     // console.log(hackathons);
 
     //use hackathonSlice useSelector to fetch data of assigned hackthon here
     const [selectedHackathon, setSelectedHackathon] = useState(
         hackathons?.find(
-            (hackathon) => hackathon.hackathonId === user?.assignedHackathon
+            (hackathon) => hackathon.hackathonId === userData?.assignedHackathon
         )
     );
 

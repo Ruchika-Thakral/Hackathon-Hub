@@ -1,11 +1,12 @@
-const USER = {
-    userId: 9,
-    name: "Ankit Panelist 5",
-    email: "ankitbhanja99+panelis5@gmail.com",
-    role: "panelist",
-    assignedHackathon: 5,
-    available: false,
-};
+const USER = null
+// {
+//     userId: 9,
+//     name: "Ankit Panelist 5",
+//     email: "ankitbhanja99+panelis5@gmail.com",
+//     role: "panelist",
+//     assignedHackathon: 5,
+//     available: false,
+// };
 
 const HACKATHONS = [
     {

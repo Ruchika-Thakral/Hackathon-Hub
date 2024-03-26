@@ -59,7 +59,8 @@ export const userLogin = createAsyncThunk(
                 "http://localhost:8080/User/login",
                 formData
             );
-            console.log(response);
+            // console.log(response);
+            // console.log(response.headers.getAuthorization());
             // if (response.status === 200) {
             //     Cookies.set("userData", JSON.stringify(response.data), {
             //         expires: 7,
@@ -67,7 +68,7 @@ export const userLogin = createAsyncThunk(
             //     console.log("cookie log set");
             //     console.log(JSON.stringify(response.data));
             // }
-            return response.data
+            return response.data;
             // return { data: response.data, status: response.status };
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -80,7 +81,7 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         logout(state) {
-            state.login.data = null;
+            state.data = null;
             Cookies.remove("userData");
         },
         reattemptLogin(state) {
@@ -93,19 +94,32 @@ const userSlice = createSlice({
         },
         successTeamRegistration(state, hackathonId) {
             const userCookie = JSON.parse(Cookies.get("userData"));
-            state.login.data = { data: {...userCookie, available: 0, assignedHackathon: hackathonId}}
-            Cookies.set("userData", JSON.stringify({...userCookie, available: 0, assignedHackathon: hackathonId}), {
-                expires: 7,
-            });
-            state.login.data = { data: JSON.parse(userCookie) }
-        }
+            state.data = {
+                data: {
+                    ...userCookie,
+                    available: 0,
+                    assignedHackathon: hackathonId,
+                },
+            };
+            Cookies.set(
+                "userData",
+                JSON.stringify({
+                    ...userCookie,
+                    available: 0,
+                    assignedHackathon: hackathonId,
+                }),
+                {
+                    expires: 7,
+                }
+            );
+            state.login.data = { data: JSON.parse(userCookie) };
+        },
     },
     extraReducers: (builder) => {
         builder
             .addCase(userRegistration.pending, (state) => {
                 state.loading = true;
                 state.error = null;
-
 
                 // state.register.loading = true;
                 // state.register.error = null;
@@ -124,13 +138,11 @@ const userSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
 
-
                 // state.register.loading = false;
                 // state.register.data = null;
                 // state.register.error = action.payload; // Set error payload
             })
             .addCase(otpVerification.pending, (state) => {
-
                 state.loading = true;
                 state.error = null;
 
@@ -138,7 +150,6 @@ const userSlice = createSlice({
                 // state.register.error = null;
             })
             .addCase(otpVerification.fulfilled, (state, action) => {
-
                 // state.data = action.payload;
                 state.loading = false;
                 state.error = null;
@@ -148,10 +159,9 @@ const userSlice = createSlice({
                 // state.register.error = null;
             })
             .addCase(otpVerification.rejected, (state, action) => {
-
-                state.register.loading = false;
-                state.register.data = null;
-                state.register.error = action.payload; // Set error payload
+                state.loading = false;
+                state.data = null;
+                state.error = action.payload; // Set error payload
             })
             .addCase(userLogin.pending, (state) => {
                 // state.data = null;
@@ -162,7 +172,6 @@ const userSlice = createSlice({
                 // state.login.error = null;
             })
             .addCase(userLogin.fulfilled, (state, action) => {
-
                 state.data = action.payload;
                 state.loading = false;
                 state.error = null;
@@ -182,5 +191,12 @@ const userSlice = createSlice({
             });
     },
 });
-export const { logout, reattemptLogin, successTeamRegistration } = userSlice.actions;
+
+export const selectUserDetails = (state) => state.user.data;
+export const selectUserId = (state) => state.user.data?.userId;
+export const selectErrorUser = (state) => state.user.error;
+export const selectLoadingUser = (state) => state.user.loading;
+
+export const { logout, reattemptLogin, successTeamRegistration } =
+    userSlice.actions;
 export default userSlice.reducer;

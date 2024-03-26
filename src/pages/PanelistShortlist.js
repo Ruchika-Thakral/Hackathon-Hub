@@ -1,5 +1,5 @@
 import ShortlistDetails from "../components/ShortlistDetails";
-import {USER, HACKATHONS, TEAMS} from '../constants'
+import { USER, HACKATHONS, TEAMS } from "../constants";
 import React, { useEffect, useState } from "react";
 // import VerticalBar from "../components/VerticalBar";
 import HackathonDetails from "../components/HackathonDetails";
@@ -24,7 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { fetchPanelistTeamsByHackathonId } from "../features/team/teamSlice";
 import { fetchHackathons } from "../features/hackathon/hackathonSlice";
-
+import { selectUserDetails } from "../features/user/userSlice";
 
 const themes = [
     { name: "Life Sciences", value: "lifesciences" },
@@ -36,27 +36,25 @@ const themes = [
 const PanelistShortlist = () => {
     const dispatch = useDispatch();
 
-    const IDEAS = TEAMS
-        // useSelector((state) => state.team.panelistteams.data?.data) || [];
+    const IDEAS = TEAMS;
+    // useSelector((state) => state.team.panelistteams.data?.data) || [];
 
-    const user = USER
+    // const user = USER;
+    const userData = useSelector(selectUserDetails);
     // useSelector((state) => state.user.login?.data?.data);
     // console.log(USER);
     // useEffect(() => {
     //     dispatch(fetchHackathons());
     // }, [dispatch]);
 
-    const hackathons = HACKATHONS
-        // useSelector((state) => state.hackathon.hackathons.data) || [];
+    const hackathons = HACKATHONS;
+    // useSelector((state) => state.hackathon.hackathons.data) || [];
     // console.log(hackathons);
-
 
     // const [filteredHackathons, setFilteredHackathons] =
     //     React.useState(hackathons);
 
-    const [selectedHackathonId, setSelectedHackathonId] = React.useState(
-        null
-    );
+    const [selectedHackathonId, setSelectedHackathonId] = React.useState(null);
 
     const [selectedIdeaId, setSelectedIdeaId] = React.useState(
         IDEAS[0]?.teamId
@@ -64,7 +62,7 @@ const PanelistShortlist = () => {
     // console.log(IDEAS[0]);
 
     useEffect(() => {
-        setSelectedHackathonId(user.assignedHackathon);
+        setSelectedHackathonId(userData.assignedHackathon);
     }, [hackathons]);
 
     const [activePage, setActivePage] = React.useState(1);
@@ -87,21 +85,21 @@ const PanelistShortlist = () => {
     };
 
     useEffect(() => {
-        if (user) {
+        if (userData) {
             dispatch(
                 fetchPanelistTeamsByHackathonId({
-                    hackathonId: user.assignedHackathon,
-                    panelistid: user.userId,
+                    hackathonId: userData.assignedHackathon,
+                    panelistid: userData.userId,
                 })
             );
         }
-    }, [user]);
+    }, [userData]);
 
     return (
         <BaseLayout>
             <div className="py-4 px-4 md:px-8 justify-center">
                 {/* <SearchFilter /> */}
-                {!user || user?.available ? (
+                {!userData || userData?.available ? (
                     <div className="w-fit mx-auto justify-self-center">
                         <Alert
                             variant="ghost"

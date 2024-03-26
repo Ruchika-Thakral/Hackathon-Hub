@@ -9,13 +9,14 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { teamRegistration } from "../features/team/teamSlice";
-import { successTeamRegistration } from "../features/user/userSlice";
+import { selectUserId, successTeamRegistration } from "../features/user/userSlice";
 import { USER } from "../constants";
 
 const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
-    const login = USER
+    // const login = USER
     // useSelector((state) => state.user.login.data);
-    const userId = login ? login.userId : null;
+    const userId = useSelector(selectUserId);
+    // login ? login.userId : null;
     const hackathonId = selectedHackathonId;
     const data = null 
     // useSelector((state) => state.team.registration.data);

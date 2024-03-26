@@ -25,6 +25,7 @@ import { fetchJudgeTeamsByHackathonId } from "../features/team/teamSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 import { fetchHackathons } from "../features/hackathon/hackathonSlice";
+import { selectUserDetails } from "../features/user/userSlice";
 
 
 const themes = [
@@ -40,7 +41,7 @@ const JudgeReview = ({ reviewedIdeas, setReviewedIdeas }) => {
     const IDEAS = TEAMS
         // useSelector((state) => state.team.judgeteams.data?.data) || [];
 
-    const user = USER
+    const userData = useSelector(selectUserDetails)
     // useSelector((state) => state.user.login?.data?.data);
 
     // useEffect(() => {
@@ -68,7 +69,7 @@ const JudgeReview = ({ reviewedIdeas, setReviewedIdeas }) => {
     // console.log(IDEAS);
     // const user = useSelector((state) => state.user.login?.data?.data);
     useEffect(() => {
-        setSelectedHackathonId(user.assignedHackathon);
+        setSelectedHackathonId(userData.assignedHackathon);
     }, [hackathons]);
 
     useEffect(() => {
@@ -77,7 +78,7 @@ const JudgeReview = ({ reviewedIdeas, setReviewedIdeas }) => {
             fetchJudgeTeamsByHackathonId({
                 // hackathonId: user.assignedHackathon,
                 // panelistid: user.userId,
-                hackathonId: user?.assignedHackathon,
+                hackathonId: userData?.assignedHackathon,
                 // panelistid: 3,
             })
         );
@@ -108,7 +109,7 @@ const JudgeReview = ({ reviewedIdeas, setReviewedIdeas }) => {
         <BaseLayout>
             <div className="py-4 px-4 md:px-8">
                 {/* <SearchFilter /> */}
-                {!user || user?.available ? (
+                {!userData || userData?.available ? (
                     <div className="w-fit mx-auto justify-self-center">
                         <Alert
                             variant="ghost"

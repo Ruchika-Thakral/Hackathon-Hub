@@ -3,6 +3,7 @@ import { Input, Button, Spinner } from "@material-tailwind/react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     otpVerification,
+    selectUserDetails,
     userLogin,
     userRegistration,
 } from "../features/user/userSlice";
@@ -29,22 +30,25 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
         const { name, value } = e.target;
         setFormData((prevstate) => ({ ...prevstate, [name]: value }));
     };
-    const data = null
+    const data = null;
     // useSelector((state) => state.user.register.data);
     const status = data ? data.status : null;
     // const error = useSelector((state) => state.user.register.error);
     // const loading = useSelector((state) => state.user.register.loading);
 
-    
     const error = useSelector((state) => state.user.error);
+    const [showError, setShowError] = useState(false);
     const loading = useSelector((state) => state.user.loading);
-
 
     const dispatch = useDispatch();
     const loginData = { email: formData.email, password: formData.password };
     const [emailVerification, setEmailVerification] = useState(false);
 
     const navigate = useNavigate();
+
+    useEffect(()=>{
+        setShowError(false)
+    }, [showModal])
 
     useEffect(() => {
         if (status === 200) {
@@ -60,8 +64,8 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
             // navigate('/')
         }
     }, [status]);
-    const [errors, setErrors] = useState({});
-    const handleEmailVerification = () => {
+    const [validationErrors, setValidationErrors] = useState({});
+    const handleEmailVerification = async () => {
         const newErrors = {};
         if (!formData.name) {
             newErrors.name = "Name is Required!";
@@ -79,16 +83,31 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
             newErrors.confirmPassword = "Password Does not Match!";
         }
         if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
+            setValidationErrors(newErrors);
         } else {
-            dispatch(userRegistration(formData));
+            try {
+                await dispatch(userRegistration(formData)).unwrap();
+                setEmailVerification(true);
+                setShowError(false);
+            } catch (error) {
+                setShowError(true);
+            }
         }
-        setErrors(newErrors);
+        setValidationErrors(newErrors);
     };
     const otpDetails = { email: formData.email, otp: formData.otp };
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        dispatch(otpVerification(otpDetails));
+        try {
+            e.preventDefault();
+            await dispatch(otpVerification(otpDetails)).unwrap();
+            // await dispatch(userLogin(loginData)).unwrap();
+            handler();
+            toast.success("Registration Successful!");
+            // setShowSignUpModal(false);
+            setShowError(false);
+        } catch (error) {
+            setShowError(true)
+        }
     };
     const validateEmail = (email) => {
         // Regex pattern for email validation
@@ -101,7 +120,7 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
         setFormData({ name: "", email: "", password: "", otp: "" });
         setEmailVerification(false);
         setConfirmPassword("");
-        setErrors({});
+        setValidationErrors({});
     };
 
     return (
@@ -144,13 +163,14 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                                         type="text"
                                         label="Name"
                                         placeholder="Name"
+                                        disabled={emailVerification}
                                         value={formData.name}
                                         onChange={handleChange}
-                                        required
+                                        required={!emailVerification}
                                     />
-                                    {errors.name && (
+                                    {validationErrors.name && (
                                         <Typography className="text-red-500 text-xs w-fit">
-                                            {errors.name}
+                                            {validationErrors.name}
                                         </Typography>
                                     )}
                                     <Input
@@ -159,13 +179,16 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                                         type="email"
                                         label="E-mail"
                                         placeholder="Email"
+                                        
+                                        disabled={emailVerification}
                                         value={formData.email}
                                         onChange={handleChange}
-                                        required
+                                        
+                                        required={!emailVerification}
                                     />
-                                    {errors.email && (
+                                    {validationErrors.email && (
                                         <Typography className="text-red-500 text-xs w-fit">
-                                            {errors.email}
+                                            {validationErrors.email}
                                         </Typography>
                                     )}
                                     <Input
@@ -174,13 +197,14 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                                         type="password"
                                         label="Password"
                                         placeholder="Password"
+                                        disabled={emailVerification}
                                         value={formData.password}
                                         onChange={handleChange}
-                                        required
+                                        required={!emailVerification}
                                     />
-                                    {errors.password && (
+                                    {validationErrors.password && (
                                         <Typography className="text-red-500 text-xs w-fit">
-                                            {errors.password}
+                                            {validationErrors.password}
                                         </Typography>
                                     )}
                                     <Input
@@ -189,15 +213,16 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                                         type="password"
                                         label="Confirm password"
                                         placeholder="Label Password"
+                                        disabled={emailVerification}
                                         onChange={(e) =>
                                             setConfirmPassword(e.target.value)
                                         }
                                         value={confirmPassword}
-                                        required
+                                        required={!emailVerification}
                                     />
-                                    {errors.confirmPassword && (
+                                    {validationErrors.confirmPassword && (
                                         <Typography className="text-red-500 text-xs w-fit">
-                                            {errors.confirmPassword}
+                                            {validationErrors.confirmPassword}
                                         </Typography>
                                     )}
                                     {!emailVerification && (
@@ -221,13 +246,13 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
                                                 label="Enter OTP"
                                                 value={formData.otp}
                                                 onChange={handleChange}
-                                                required
+                                                required={emailVerification}
                                             />
                                         </>
                                     )}
-                                    {error && (
+                                    {showError && error && (
                                         <Typography className="text-red-500 text-xs w-fit">
-                                            {error.message}
+                                            {error?.message || "empty error"}
                                         </Typography>
                                     )}
                                 </div>

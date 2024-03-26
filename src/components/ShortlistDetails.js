@@ -16,6 +16,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { acceptTeam, rejectTeam } from "../features/team/teamSlice";
 import { fetchHackathons } from "../features/hackathon/hackathonSlice";
+import { selectUserDetails } from "../features/user/userSlice";
 
 const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
     const dateConverter = (date) => {
@@ -36,7 +37,8 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
     const dispatch = useDispatch();
 
     // const hackathons = useSelector((state) => state.hackathon.hackathons.data);
-    const user = USER;
+    // const user = USER;
+    const userData = useSelector(selectUserDetails)
     // useSelector((state) => state.user.login?.data?.data);
     // console.log(hackathons);
 
@@ -47,7 +49,7 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
     //use hackathonSlice useSelector to fetch data of assigned hackthon here
     const [selectedHackathon, setSelectedHackathon] = useState(
         hackathons?.find(
-            (hackathon) => hackathon.hackathonId === user?.assignedHackathon
+            (hackathon) => hackathon.hackathonId === userData?.assignedHackathon
         )
     );
 
@@ -77,8 +79,8 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
         dispatch(
             acceptTeam({
                 teamId,
-                hackathonId: user.assignedHackathon,
-                panelistid: user.userId,
+                hackathonId: userData.assignedHackathon,
+                panelistid: userData.userId,
             })
         );
     };
@@ -87,8 +89,8 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
         dispatch(
             rejectTeam({
                 teamId,
-                hackathonId: user.assignedHackathon,
-                panelistid: user.userId,
+                hackathonId: userData.assignedHackathon,
+                panelistid: userData.userId,
             })
         );
     };

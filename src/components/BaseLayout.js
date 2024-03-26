@@ -8,10 +8,14 @@ import Footer from "./Footer";
 import ProfileDrawer from "./ProfileDrawer";
 import { useSelector } from "react-redux";
 import { USER } from "../constants";
+import { selectUserDetails } from "../features/user/userSlice";
+import { Slide, ToastContainer, toast } from 'react-toastify';
+// import { Notification } from "./Notification";
  
 const BaseLayout = ({ children }) => {
     const [showSignInModal, setShowSignInModal] = useState(false);
     const [showSignUpModal, setShowSignUpModal] = useState(false);
+    
     const toggleSignInModal = () => {
         setShowSignInModal(!showSignInModal);
     };
@@ -21,7 +25,7 @@ const BaseLayout = ({ children }) => {
         setShowSignUpModal(!showSignUpModal);
     };
  
-    const data = USER
+    const userData = useSelector(selectUserDetails)
     // useSelector((state) => state.user.login?.data?.data);
     const [showProile, setShowProfile] = useState(false);
     const openDrawer = () => setShowProfile(true);
@@ -34,10 +38,12 @@ const BaseLayout = ({ children }) => {
                 toggleSignUpModal={toggleSignUpModal}
                 openDrawer={openDrawer}
             />
+            {/* <Notification /> */}
+            {/* <ToastContainer /> */}
             <ProfileDrawer
                 opens={showProile}
                 onClose={closeDrawer}
-                user={data}
+                user={userData}
             />
             <Signup
                 showModal={showSignUpModal}
