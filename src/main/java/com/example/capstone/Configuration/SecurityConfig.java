@@ -30,7 +30,7 @@ import com.example.capstone.filter.JwtAuthFilter;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(securedEnabled = true,prePostEnabled = true)
+@EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig {
 //	@Autowired
 //	@Qualifier("HandlerExceptionResolver")
@@ -42,7 +42,7 @@ public class SecurityConfig {
 
 	@Autowired
 	private TokenService tokenService;
-  
+
 	@Bean
 	// authentication
 	public UserDetailsService userDetailsService() {
@@ -62,25 +62,28 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http.csrf().disable().authorizeHttpRequests()
-				.requestMatchers("/User/logins", "/User/login", "/User/register", "/User/verifyOtp","User/forgotPassword/{userId}","User/changePassword","User/logout")
-				   .permitAll()
-			    .requestMatchers("/Admin/**").hasAuthority("ROLE_admin")
-			    .requestMatchers("Judge/review/{teamid}","Judge/selectedTeams/{hackathonId}").hasAuthority("ROLE_judge")
-			    .requestMatchers("panelist/{hackathonId}/{userId}","Team/rejected/{teamId}","Team/selected/{teamId}").hasAuthority("ROLE_panelist")
-			    .requestMatchers("Team/{hackathonId}/{userId}","Team/idea/{hackathonId}/{userId}","Team/ideaFiles/{hackathonId}/{userId}","User/Teams/{userId}").hasAuthority("ROLE_participant")
-			        .anyRequest()
-			        .authenticated()
-				.and()
-				.sessionManagement()
+				.requestMatchers(
+						"/User/login", 
+						"/User/register", 
+						"/User/verifyOtp",
+						"/User/forgotPassword",
+						"/User/changePassword",
+						"/User/logout")
+				.permitAll()
+				.requestMatchers("/Admin/**").hasAuthority("ROLE_admin")
+				.requestMatchers("Judge/review/{teamid}", "Judge/selectedTeams/{hackathonId}")
+				.hasAuthority("ROLE_judge")
+				.requestMatchers("panelist/{hackathonId}/{userId}", "Team/rejected/{teamId}", "Team/selected/{teamId}")
+				.hasAuthority("ROLE_panelist")
+				.requestMatchers("Team/{hackathonId}/{userId}", "Team/idea/{hackathonId}/{userId}",
+						"Team/ideaFiles/{hackathonId}/{userId}", "User/Teams/{userId}")
+				.hasAuthority("ROLE_participant").anyRequest().authenticated().and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authenticationProvider(authenticationProvider())
-				.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
-				.exceptionHandling()
+				.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class).exceptionHandling()
 //				.authenticationEntryPoint(authenticationEntryPoint())
-				.accessDeniedHandler(accessDeniedHandler())
-				.and()
-				.logout()
-				.logoutUrl("/User/logout").logoutSuccessHandler((request, response, authentication) -> {
+				.accessDeniedHandler(accessDeniedHandler()).and().logout().logoutUrl("/User/logout")
+				.logoutSuccessHandler((request, response, authentication) -> {
 					String authHeader = request.getHeader("Authorization");
 					String token = null;
 					String username = null;

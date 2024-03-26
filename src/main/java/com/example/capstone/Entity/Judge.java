@@ -16,7 +16,7 @@ public class Judge {
 	private User user;
 	@ManyToOne
 	private Hackathon hackathon;
-	
+
 	public Integer getJudgeId() {
 		return judgeId;
 	}

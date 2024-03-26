@@ -8,15 +8,15 @@ import com.example.capstone.Repository.TokenRepository;
 
 @Service
 public class TokenService {
-  @Autowired
-  private TokenRepository tokenRepository;
-  public boolean checkToken(String token)
-  {
-	return tokenRepository.findByToken(token).isPresent();  
-  }
-  public void blackListToken(String token)
-  {
-	  Token t=new Token(token);
-	  tokenRepository.save(t);
-  }
+	@Autowired
+	private TokenRepository tokenRepository;
+
+	public boolean checkToken(String token) {
+		return tokenRepository.findByToken(token).isPresent();
+	}
+
+	public void blackListToken(String token) {
+		Token t = new Token(token);
+		tokenRepository.save(t);
+	}
 }

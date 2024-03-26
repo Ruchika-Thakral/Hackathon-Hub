@@ -18,8 +18,6 @@ import jakarta.persistence.Tuple;
 public interface UserRepository extends JpaRepository<User, Integer> {
 	// Method to find a user by email address
 	public Optional<User> findByEmail(String email);
-	
-	
 
 	// Custom query to find user details by user ID
 	@Query("SELECT u.userId,u.name,u.email,u.role FROM User  u WHERE u.userId=?1")

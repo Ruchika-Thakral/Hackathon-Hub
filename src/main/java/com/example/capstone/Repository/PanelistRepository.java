@@ -9,9 +9,9 @@ import com.example.capstone.Entity.Panelist;
 
 //Repository for panelists
 @Repository
-public interface PanelistRepository extends JpaRepository<Panelist,Integer>{
-	
+public interface PanelistRepository extends JpaRepository<Panelist, Integer> {
+
 	// Find assigned hackathon for a panelist
 	@Query("SELECT NEW com.example.capstone.DTO.PanelistHackathonDTO(p.hackathon.hackathonId,p.hackathon.name,p.hackathon.ideaSubmissionDeadline,p.hackathon.shortListDeadLine) FROM Panelist p WHERE p.panelistId=:panelistId AND p.hackathon.isCompleted=false")
-	 PanelistHackathonDTO findAssignedHackathon(int panelistId);
+	PanelistHackathonDTO findAssignedHackathon(int panelistId);
 }

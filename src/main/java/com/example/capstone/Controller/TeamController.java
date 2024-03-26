@@ -45,7 +45,7 @@ public class TeamController {
 		teamService.updateTeamDetails(teamUpdateDTO, userId, hackathonId);
 		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Idea submitted successfully"));
 	}
-	
+
 	@PostMapping("rejected/{teamId}")
 	public ResponseEntity<MessageResponse> updateTeamStatus(@PathVariable int teamId) {
 		teamService.rejectTeam(teamId);
@@ -63,9 +63,9 @@ public class TeamController {
 
 	// Update the team details with the provided idea details, including files.
 	@PostMapping("ideaFiles/{hackathonId}/{userId}")
-	public ResponseEntity<String> updateIdeaDetails(@PathVariable Integer hackathonId, @PathVariable Integer userId,
-			@RequestBody IdeaDetailsRequestDTO requestBody) {
+	public ResponseEntity<MessageResponse> updateIdeaDetails(@PathVariable Integer hackathonId,
+			@PathVariable Integer userId, @RequestBody IdeaDetailsRequestDTO requestBody) {
 		String message = teamService.FileSubmission(hackathonId, userId, requestBody);
-		return ResponseEntity.ok(message);
+		return ResponseEntity.ok(new MessageResponse(message));
 	}
 }

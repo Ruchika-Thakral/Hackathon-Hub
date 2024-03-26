@@ -22,7 +22,6 @@ import com.example.capstone.DTO.HackathonDTO;
 import com.example.capstone.DTO.MessageResponse;
 import com.example.capstone.Service.AdminService;
 
-
 //Controller for admin related API endpoints
 @RestController
 @RequestMapping("Admin")
@@ -31,15 +30,14 @@ public class AdminController {
 	// Injecting the AdminService dependency
 	@Autowired
 	private AdminService adminService;
-    
+
 	// Endpoint to create a new hackathon
 	@PostMapping("hackathon")
 	public ResponseEntity<MessageResponse> createHackathon(@RequestBody CreateHackathonDTO createHackathonDTO) {
 		adminService.createHackathon(createHackathonDTO);
 		return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Hackathon created successfully"));
 	}
-     
-	
+
 	// Endpoint to register a new evaluator
 	@PostMapping("Evaluator")
 	public ResponseEntity<MessageResponse> addEvaluator(@RequestBody RegisterEvaluatorDTO addEvaluatorDTO) {
@@ -47,29 +45,25 @@ public class AdminController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Evaluator added successfully"));
 	}
 
-	
 	// Endpoint to assign evaluators to a hackathon
 	@PostMapping("assign")
-	public ResponseEntity<String> assignEvaluators(@RequestBody AddEvaluatorsDTO addEvaluatorsDTO) {
+	public ResponseEntity<MessageResponse> assignEvaluators(@RequestBody AddEvaluatorsDTO addEvaluatorsDTO) {
 		adminService.assignEvaluators(addEvaluatorsDTO);
-		return ResponseEntity.status(HttpStatus.OK).body("Evaluators assigned successfully");
+		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Evaluators assigned successfully"));
 	}
-     
-	
+
 	// Endpoint to retrieve all hackathons
 	@GetMapping("hackathon")
 	public ResponseEntity<List<HackathonDTO>> getHackathons() {
 		return ResponseEntity.status(HttpStatus.OK).body(adminService.getAllHackathons());
 	}
-    
-	
+
 	// Endpoint to retrieve all evaluators
 	@GetMapping("Evaluator")
 	public ResponseEntity<List<GetEvaluatorsDTO>> getEvaluators() {
 		return ResponseEntity.status(HttpStatus.OK).body(adminService.getEvaluators());
 	}
-    
-	
+
 	// Endpoint to mark a hackathon as ended
 	@PutMapping("hackathon/end/{hackathonid}")
 	public ResponseEntity<MessageResponse> endHackathon(@PathVariable int hackathonid) {

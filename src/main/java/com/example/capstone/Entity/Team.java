@@ -22,44 +22,45 @@ import jakarta.persistence.OneToMany;
 @Entity
 public class Team {
 //The team's primary key is the teamId field, which is generated automatically.
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer teamId;
-    @Column(nullable = true) 
-    private String name;
-    @Column(nullable = true) 
-    private String ideaTitle;
-    @Column(nullable = true) 
-    private String ideaBody;
-    @Column(nullable = true) 
-    private String ideaRepo;
-    @Column(nullable = true) 
-    private String ideaFiles;
-    @Column(nullable = true) 
-    private String ideaDomain;
-    @Column(nullable = true) 
-    private Float consolidatedRating;
-    @Enumerated(EnumType.STRING)
-    private Status status;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer teamId;
+	@Column(nullable = true)
+	private String name;
+	@Column(nullable = true)
+	private String ideaTitle;
+	@Column(nullable = true)
+	private String ideaBody;
+	@Column(nullable = true)
+	private String ideaRepo;
+	@Column(nullable = true)
+	private String ideaFiles;
+	@Column(nullable = true)
+	private String ideaDomain;
+	@Column(nullable = true)
+	private Float consolidatedRating;
+	@Enumerated(EnumType.STRING)
+	private Status status;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @Column
-    private List<Review> reviews;
+	@OneToMany(cascade = CascadeType.ALL)
+	@Column
+	private List<Review> reviews;
 
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Participant> participants;
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Participant> participants;
 
-    @ManyToOne
-    private Panelist panelist;
+	@ManyToOne
+	private Panelist panelist;
 
-    @ManyToOne
-    private Hackathon hackathon;
-  public Team()
-  {
-	  reviews=new ArrayList<>();
-	  participants=new ArrayList<>();
-	  
-	  }
+	@ManyToOne
+	private Hackathon hackathon;
+
+	public Team() {
+		reviews = new ArrayList<>();
+		participants = new ArrayList<>();
+
+	}
+
 	public Integer getTeamId() {
 		return teamId;
 	}

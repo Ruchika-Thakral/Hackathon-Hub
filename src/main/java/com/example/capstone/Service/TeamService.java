@@ -42,10 +42,12 @@ public class TeamService {
 
 	@Value("${custom.feature.isDevelopment}")
     private boolean isDevelopment;
+	
 	// Create a new team for a hackathon
 	// This method creates a new team with the given name and assigns the given user
 	// as the team leader.
 	// It also adds the team to the given hackathon and sets the team's panelist.
+	
 	@Transactional
 	public void CreateTeam(int hackathonid, int userid, TeamCreationDTO teamCreationDTO) {
 		if (isDevelopment || checkTimeBound(hackathonid)) {

@@ -23,7 +23,7 @@ public class Panelist {
 	private User user;
 
 	@OneToMany
-	private List<Team> teams=new ArrayList<>();
+	private List<Team> teams = new ArrayList<>();
 
 	public Integer getPanelistId() {
 		return panelistId;

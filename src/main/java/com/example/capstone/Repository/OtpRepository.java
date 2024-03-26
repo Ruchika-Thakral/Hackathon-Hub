@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.example.capstone.Entity.OtpEntity;
 
 @Repository
-public interface OtpRepository extends JpaRepository<OtpEntity,String> {
+public interface OtpRepository extends JpaRepository<OtpEntity, String> {
 
 }

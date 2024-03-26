@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.capstone.DTO.TeamDetailsToPanelistDTO;
 import com.example.capstone.Service.PanelistService;
 
-
 //Controller to handle requests related to panelists
 @RestController
 @RequestMapping("panelist")

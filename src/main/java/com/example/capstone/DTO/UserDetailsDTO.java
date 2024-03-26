@@ -14,6 +14,7 @@ public class UserDetailsDTO {
 	private Role role;
 	private boolean isAvailable;
 	private Integer assignedHackathon;
+
 	public boolean isAvailable() {
 		return isAvailable;
 	}
@@ -65,5 +66,5 @@ public class UserDetailsDTO {
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-    
+
 }

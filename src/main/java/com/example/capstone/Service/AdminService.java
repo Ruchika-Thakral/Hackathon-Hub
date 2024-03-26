@@ -17,7 +17,8 @@ import com.example.capstone.DTO.HackathonDTO;
 @Service
 public class AdminService {
 
-	// Autowired repositories and services to interact with the database and other services
+	// Autowired repositories and services to interact with the database and other
+	// services
 	@Autowired
 	private HackathonService hackathonService;
 
@@ -26,7 +27,9 @@ public class AdminService {
 
 	/**
 	 * Create a new hackathon with the provided details.
-	 * @param createHackathonDTO Data transfer object containing hackathon creation details.
+	 * 
+	 * @param createHackathonDTO Data transfer object containing hackathon creation
+	 *                           details.
 	 */
 	public void createHackathon(CreateHackathonDTO createHackathonDTO) {
 		hackathonService.CreateHackathon(createHackathonDTO);
@@ -34,7 +37,9 @@ public class AdminService {
 
 	/**
 	 * Register a new evaluator.
-	 * @param addEvaluatorDTO Data transfer object containing evaluator registration details.
+	 * 
+	 * @param addEvaluatorDTO Data transfer object containing evaluator registration
+	 *                        details.
 	 */
 	public void addEvaluator(RegisterEvaluatorDTO addEvaluatorDTO) {
 		userService.addEvaluator(addEvaluatorDTO);
@@ -42,7 +47,9 @@ public class AdminService {
 
 	/**
 	 * Assign evaluators to a hackathon.
-	 * @param addEvaluatorsDTO Data transfer object containing evaluator assignment details.
+	 * 
+	 * @param addEvaluatorsDTO Data transfer object containing evaluator assignment
+	 *                         details.
 	 */
 	public void assignEvaluators(AddEvaluatorsDTO addEvaluatorsDTO) {
 		hackathonService.addEvaluators(addEvaluatorsDTO);
@@ -50,6 +57,7 @@ public class AdminService {
 
 	/**
 	 * Retrieve a list of all hackathons.
+	 * 
 	 * @return List of HackathonDTO containing hackathon data.
 	 */
 	public List<HackathonDTO> getAllHackathons() {
@@ -58,6 +66,7 @@ public class AdminService {
 
 	/**
 	 * Get a list of available evaluators.
+	 * 
 	 * @return List of GetEvaluatorsDTO containing evaluator data.
 	 */
 	public List<GetEvaluatorsDTO> getEvaluators() {
@@ -67,6 +76,7 @@ public class AdminService {
 
 	/**
 	 * End the hackathon with the given ID.
+	 * 
 	 * @param hackathonId The ID of the hackathon to end.
 	 */
 	public void endHackathon(int hackathonId) {

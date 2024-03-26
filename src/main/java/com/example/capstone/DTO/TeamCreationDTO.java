@@ -5,8 +5,8 @@ import java.util.List;
 
 public class TeamCreationDTO {
 	private String name;
-	private List<String> emails=new ArrayList<>();
-   
+	private List<String> emails = new ArrayList<>();
+
 	public List<String> getEmails() {
 		return emails;
 	}

@@ -26,6 +26,7 @@ import com.example.capstone.Entity.User;
 import com.example.capstone.Exceptions.FailedToSendEmailException;
 import com.example.capstone.Exceptions.InvalidEmailException;
 import com.example.capstone.Exceptions.InvalidUserException;
+import com.example.capstone.Exceptions.ResourceNotFoundException;
 import com.example.capstone.Exceptions.UnauthorizedException;
 import com.example.capstone.Exceptions.UserAlreadyExistsException;
 import com.example.capstone.Exceptions.UserNotFoundException;
@@ -205,7 +206,28 @@ public class UserService {
 		List<User> users = new ArrayList<>();
 		for (EvaluatorDTO e : evaluators) {
 			Optional<User> user = userRepository.findById(e.getUserId());
-			users.add(check(user));
+			if(user.isPresent())
+			{
+				if(user.get().isAvailable())
+				{
+				    if(user.get().getRole().equals(Role.panelist) || user.get().getRole().equals(Role.judge))
+				    {
+				    	users.add(user.get());
+				    }
+				    else
+				    {
+				    	throw new UnauthorizedException(user.get().getName()+" is not panelist or judge to serve");
+				    }    	
+				}
+				else
+				{
+					throw new ResourceNotFoundException(user.get().getName()+" is not available to serve");
+				}
+			}
+			else
+			{
+				throw new UserNotFoundException("User is not found");
+			}
 		}
 		return users;
 	}
@@ -352,9 +374,9 @@ public class UserService {
 		userRepository.save(user);
 	}
 
-	public void generateOTP(int userId, String email) {
+	public void generateOTP(String email) {
 		String otp = otpService.generateOTP();
-		Optional<User> user = userRepository.findById(userId);
+		Optional<User> user = userRepository.findByEmail(email);
 		if (user.isPresent()) {
 			if (email.equals(user.get().getEmail())) {
 				String subject = "Otp verification";

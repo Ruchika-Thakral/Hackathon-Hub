@@ -26,14 +26,13 @@ public class JudgeController {
 	@Autowired
 	private JudgeService judgeService;
 
-	
-	 /**
-     * Endpoint to add a review for a team.
-     *
-     * @param teamId    the ID of the team to review.
-     * @param reviewDTO the DTO containing the review data.
-     * @return a ResponseEntity indicating the result of the operation.
-     */
+	/**
+	 * Endpoint to add a review for a team.
+	 *
+	 * @param teamId    the ID of the team to review.
+	 * @param reviewDTO the DTO containing the review data.
+	 * @return a ResponseEntity indicating the result of the operation.
+	 */
 	@PostMapping("review/{teamId}")
 	public ResponseEntity<MessageResponse> addReview(@PathVariable int teamId, @RequestBody ReviewDTO reviewDTO) {
 		judgeService.addReview(teamId, reviewDTO);
@@ -41,11 +40,12 @@ public class JudgeController {
 	}
 
 	/**
-     * Endpoint to retrieve details of selected teams for a given hackathon.
-     *
-     * @param hackathonId the ID of the hackathon.
-     * @return a ResponseEntity containing a list of selected teams or a NOT_FOUND status.
-     */
+	 * Endpoint to retrieve details of selected teams for a given hackathon.
+	 *
+	 * @param hackathonId the ID of the hackathon.
+	 * @return a ResponseEntity containing a list of selected teams or a NOT_FOUND
+	 *         status.
+	 */
 	@GetMapping("selectedTeams/{hackathonId}")
 	public ResponseEntity<List<TeamDetailsToJudgeDTO>> getSelectedTeamsDetails(@PathVariable int hackathonId) {
 		List<TeamDetailsToJudgeDTO> selectedTeams = judgeService.getSelectedTeamsDetails(hackathonId);

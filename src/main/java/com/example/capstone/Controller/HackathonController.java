@@ -16,7 +16,7 @@ import com.example.capstone.Service.HackathonService;
 @RestController
 @RequestMapping("Hackathon")
 public class HackathonController {
-	
+
 	// Injecting the HackathonService dependency
 	@Autowired
 	private HackathonService hackathonService;

@@ -17,7 +17,6 @@ public class CreateHackathonDTO {
 	private String guidelines;
 	private String prizes;
 	private String judgingCriteria;
-	
 
 	public String getDescription() {
 		return description;

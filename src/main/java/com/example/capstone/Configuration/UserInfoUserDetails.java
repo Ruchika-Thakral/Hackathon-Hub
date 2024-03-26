@@ -9,30 +9,30 @@ import com.example.capstone.Entity.User;
 
 public class UserInfoUserDetails implements UserDetails {
 
-    private String name;
-    private String password;
-    private GrantedAuthority authority;
+	private String name;
+	private String password;
+	private GrantedAuthority authority;
 
-    public UserInfoUserDetails(User user) {
-        this.name = user.getEmail();
-        this.password = user.getPassword();
-        this.authority = new SimpleGrantedAuthority("ROLE_" + user.getRole().name());
-    }
+	public UserInfoUserDetails(User user) {
+		this.name = user.getEmail();
+		this.password = user.getPassword();
+		this.authority = new SimpleGrantedAuthority("ROLE_" + user.getRole().name());
+	}
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(authority);
-    }
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return Collections.singletonList(authority);
+	}
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
+	@Override
+	public String getPassword() {
+		return password;
+	}
 
-    @Override
-    public String getUsername() {
-        return name;
-    }
+	@Override
+	public String getUsername() {
+		return name;
+	}
 
 	@Override
 	public boolean isAccountNonExpired() {
@@ -58,6 +58,7 @@ public class UserInfoUserDetails implements UserDetails {
 		return true;
 	}
 
-    // Other methods such as isAccountNonExpired(), isAccountNonLocked(), isCredentialsNonExpired(), isEnabled()
-    // remain the same
+	// Other methods such as isAccountNonExpired(), isAccountNonLocked(),
+	// isCredentialsNonExpired(), isEnabled()
+	// remain the same
 }

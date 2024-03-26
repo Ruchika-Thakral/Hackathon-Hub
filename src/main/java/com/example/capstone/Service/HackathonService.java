@@ -29,7 +29,8 @@ import com.example.capstone.Repository.HackathonRepository;
 @Service
 public class HackathonService {
 
-	// Autowired repositories and services to interact with the database and other services
+	// Autowired repositories and services to interact with the database and other
+	// services
 	@Autowired
 	private HackathonRepository hackathonRepository;
 	@Autowired
@@ -125,14 +126,15 @@ public class HackathonService {
 						Panelist panelist = panelistService.createPanelist(user, hackathon.get());
 						hackathon.get().getPanelists().add(panelist);
 						user.getPanelists().add(panelist);
-						body=String.format(body,
+						body = String.format(body,
 								"shortlisting start time:" + formatDate(hackathon.get().getIdeaSubmissionDeadline()),
 								"shortlisting end time:" + formatDate(hackathon.get().getShortListDeadLine()));
-					} else if (user.getRole().equals(Role.judge)) {  
+					} else if (user.getRole().equals(Role.judge)) {
 						Judge judge = judgeService.createJudge(user, hackathon.get());
 						hackathon.get().getJudges().add(judge);
 						user.getJudges().add(judge);
-						body=String.format(body, "reviewing start time:" + formatDate(hackathon.get().getReviewStartTime()),
+						body = String.format(body,
+								"reviewing start time:" + formatDate(hackathon.get().getReviewStartTime()),
 								"review end time:" + formatDate(hackathon.get().getReviewEndTime()));
 					}
 					mailService.sendEmail(reciever, body, subject);

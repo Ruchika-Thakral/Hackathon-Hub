@@ -40,7 +40,7 @@ public class HackathonDTO {
 	public HackathonDTO() {
 
 	}
-	
+
 	public HackathonDTO(int hackathonId, String name, String theme, LocalDateTime startDate,
 			LocalDateTime ideaSubmissionDeadline, LocalDateTime shortListDeadline,
 			LocalDateTime implementationSubmissionDeadline, LocalDateTime reviewStartTime, LocalDateTime reviewEndTime,

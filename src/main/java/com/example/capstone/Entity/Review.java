@@ -47,5 +47,5 @@ public class Review {
 	public void setFeedBack(String feedBack) {
 		this.feedBack = feedBack;
 	}
-    
+
 }

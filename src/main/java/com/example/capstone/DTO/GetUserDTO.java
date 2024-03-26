@@ -7,9 +7,9 @@ public class GetUserDTO {
 	private String name;
 	private String email;
 	private Role role;
-    private boolean isAvailable;
-    private Integer assignedHackathon;
-    
+	private boolean isAvailable;
+	private Integer assignedHackathon;
+
 	public boolean isAvailable() {
 		return isAvailable;
 	}

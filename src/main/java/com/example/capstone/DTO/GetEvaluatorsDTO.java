@@ -8,8 +8,9 @@ public class GetEvaluatorsDTO {
 	private String name;
 	private String email;
 	private Enum<Role> role;
-    private boolean isAvailable;
-    private Integer assignedHackathon;
+	private boolean isAvailable;
+	private Integer assignedHackathon;
+
 	public GetEvaluatorsDTO(int userId, String name, String email, Enum<Role> role, boolean isAvailable,
 			Integer assignedHackathon) {
 		super();

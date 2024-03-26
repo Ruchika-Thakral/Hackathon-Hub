@@ -8,7 +8,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
 import com.example.capstone.DTO.UserDTO;
 import com.example.capstone.Entity.OtpEntity;
 import com.example.capstone.Exceptions.InvalidOtpException;
@@ -20,7 +19,8 @@ import com.example.capstone.Repository.OtpRepository;
 public class OtpService {
 	@Autowired
 	private OtpRepository otpRepository;
-	PasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
+	PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
 	public String generateOTP() {
 		int max = 999999;
 		int min = 100000;
@@ -32,10 +32,11 @@ public class OtpService {
 	public void saveOtp(String email, String name, String password, String otp) {
 		otpRepository.save(new OtpEntity(email, name, password, otp));
 	}
+
 	public UserDTO verifyOtp(String email, String otp) throws InvalidOtpException, InvalidUserException {
 		Optional<OtpEntity> otpEntity = otpRepository.findById(email);
 		if (otpEntity.isPresent()) {
-			if (passwordEncoder.matches(otp,otpEntity.get().getOtp())) {
+			if (passwordEncoder.matches(otp, otpEntity.get().getOtp())) {
 				otpRepository.deleteById(email);
 				return new UserDTO(otpEntity.get().getEmail(), otpEntity.get().getName(),
 						otpEntity.get().getPassword());
@@ -45,21 +46,18 @@ public class OtpService {
 		} else {
 			throw new InvalidUserException("User is not valid");
 		}
-}
-	public String getOTP(String email)
-	{
-		Optional<OtpEntity> otpEntity=otpRepository.findById(email);
-		if(otpEntity.isPresent())
-		{
+	}
+
+	public String getOTP(String email) {
+		Optional<OtpEntity> otpEntity = otpRepository.findById(email);
+		if (otpEntity.isPresent()) {
 			return otpEntity.get().getOtp();
-		}
-		else
-		{
+		} else {
 			throw new UnauthorizedException("Invalid email");
 		}
 	}
-	public void deleteById(String email)
-	{
+
+	public void deleteById(String email) {
 		otpRepository.deleteById(email);
 	}
 }

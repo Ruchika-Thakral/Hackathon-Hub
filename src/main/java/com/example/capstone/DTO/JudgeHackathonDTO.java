@@ -12,7 +12,7 @@ public class JudgeHackathonDTO {
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime reviewEndTime;
-	
+
 	private String judgingCriteria;
 
 	public int getHackathonId() {
@@ -64,5 +64,5 @@ public class JudgeHackathonDTO {
 		this.reviewEndTime = reviewEndTime;
 		this.judgingCriteria = judgingCriteria;
 	}
-	
+
 }

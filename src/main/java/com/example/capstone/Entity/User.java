@@ -2,8 +2,6 @@ package com.example.capstone.Entity;
 
 import java.util.List;
 
-
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,12 +20,11 @@ public class User {
 	private Integer userId;
 
 	private String name;
-	
+
 	@Column(unique = true)
 	private String email;
 
 	private String password;
-
 
 	@Enumerated(EnumType.STRING)
 	private Role role;
@@ -35,11 +32,9 @@ public class User {
 	private boolean isAvailable;
 
 	private Integer assignedHackathon;
-	
 
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Participant> participants;
-
 
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Panelist> panelists;

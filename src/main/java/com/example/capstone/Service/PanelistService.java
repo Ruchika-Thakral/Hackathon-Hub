@@ -27,7 +27,8 @@ public class PanelistService {
 	@Autowired
 	private UserService userService;
 	@Value("${custom.feature.isDevelopment}")
-    private boolean isDevelopment;
+	private boolean isDevelopment;
+
 	// Create a new panelist
 	public Panelist createPanelist(User user, Hackathon hackathon) {
 		Panelist panelist = new Panelist();

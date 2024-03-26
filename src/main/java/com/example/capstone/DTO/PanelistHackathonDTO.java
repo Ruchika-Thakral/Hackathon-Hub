@@ -4,9 +4,8 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-
 //Data Transfer Object (DTO) representing hackathon details relevant to a panelist
-public class PanelistHackathonDTO{
+public class PanelistHackathonDTO {
 	private int hackathonId;
 	private String name;
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -55,6 +54,5 @@ public class PanelistHackathonDTO{
 	public void setShortListEndTime(LocalDateTime shortListEndTime) {
 		this.shortListEndTime = shortListEndTime;
 	}
-	
-	
+
 }

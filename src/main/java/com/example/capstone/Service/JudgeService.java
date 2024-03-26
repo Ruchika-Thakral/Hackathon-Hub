@@ -20,24 +20,26 @@ import com.example.capstone.Repository.JudgeRepository;
 @Service
 public class JudgeService {
 
-	// Autowired repositories and services to interact with the database and other services
+	// Autowired repositories and services to interact with the database and other
+	// services
 	@Autowired
 	private ReviewService reviewService;
 	@Autowired
-    private HackathonService hackathonService;
+	private HackathonService hackathonService;
 
 	@Autowired
 	private JudgeRepository judgeRepository;
-	
+
 	@Value("${custom.feature.isDevelopment}")
-    private boolean isDevelopment;
+	private boolean isDevelopment;
+
 	/**
-     * Creates a new Judge entity for a given User and Hackathon.
-     * 
-     * @param user      The User who will be assigned as a Judge.
-     * @param hackathon The Hackathon for which the User will be judging.
-     * @return Judge    The newly created Judge entity.
-     */
+	 * Creates a new Judge entity for a given User and Hackathon.
+	 * 
+	 * @param user      The User who will be assigned as a Judge.
+	 * @param hackathon The Hackathon for which the User will be judging.
+	 * @return Judge The newly created Judge entity.
+	 */
 	public Judge createJudge(User user, Hackathon hackathon) {
 		Judge judge = new Judge();
 		judge.setHackthon(hackathon);
@@ -45,46 +47,45 @@ public class JudgeService {
 		return judge;
 	}
 
-
-    /**
-     * Delegates to the ReviewService to add a review for a specific team.
-     * 
-     * @param teamId     The id of the team being reviewed.
-     * @param reviewDTO  The data transfer object containing review details.
-     */
+	/**
+	 * Delegates to the ReviewService to add a review for a specific team.
+	 * 
+	 * @param teamId    The id of the team being reviewed.
+	 * @param reviewDTO The data transfer object containing review details.
+	 */
 	public void addReview(int teamId, ReviewDTO reviewDTO) {
 		reviewService.addReview(teamId, reviewDTO);
 	}
 
 	/**
-     * Retrieves a JudgeHackathonDTO which includes hackathon details assigned to a judge.
-     * 
-     * @param judgeId  The identifier of the Judge.
-     * @return JudgeHackathonDTO The transfer object containing assigned hackathon details for a judge.
-     */
+	 * Retrieves a JudgeHackathonDTO which includes hackathon details assigned to a
+	 * judge.
+	 * 
+	 * @param judgeId The identifier of the Judge.
+	 * @return JudgeHackathonDTO The transfer object containing assigned hackathon
+	 *         details for a judge.
+	 */
 	public JudgeHackathonDTO getJudgeHackathonDTO(int judgeId) {
 		return judgeRepository.findAssignedHackathon(judgeId);
 	}
 
-	 /**
-     * Fetches a list of teams selected for a particular hackathon for judging purposes.
-     * 
-     * @param hackathonId  The identifier of the Hackathon.
-     * @return List<TeamDetailsToJudgeDTO> A list of data transfer objects containing team details.
-     */
+	/**
+	 * Fetches a list of teams selected for a particular hackathon for judging
+	 * purposes.
+	 * 
+	 * @param hackathonId The identifier of the Hackathon.
+	 * @return List<TeamDetailsToJudgeDTO> A list of data transfer objects
+	 *         containing team details.
+	 */
 	public List<TeamDetailsToJudgeDTO> getSelectedTeamsDetails(int hackathonId) {
-		Hackathon hackathon=hackathonService.findHackathon(hackathonId);
-		LocalDateTime currentTime=LocalDateTime.now();
-		if(isDevelopment || currentTime.isAfter(hackathon.getReviewStartTime()) && currentTime.isBefore(hackathon.getReviewEndTime()))
-		{
-		return judgeRepository.findSelectedTeamsDetailsByHackathonId(hackathonId);
-		}
-		else if(currentTime.isAfter(hackathon.getReviewEndTime()))
-		{
+		Hackathon hackathon = hackathonService.findHackathon(hackathonId);
+		LocalDateTime currentTime = LocalDateTime.now();
+		if (isDevelopment || currentTime.isAfter(hackathon.getReviewStartTime())
+				&& currentTime.isBefore(hackathon.getReviewEndTime())) {
+			return judgeRepository.findSelectedTeamsDetailsByHackathonId(hackathonId);
+		} else if (currentTime.isAfter(hackathon.getReviewEndTime())) {
 			throw new UnauthorizedException("Reviewing has been ended");
-		}
-		else 
-		{
+		} else {
 			throw new UnauthorizedException("Review not started");
 		}
 	}
