@@ -1,8 +1,10 @@
 package com.example.capstone.filter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,9 +14,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import com.example.capstone.Configuration.UserInfoUserDetailsService;
+import com.example.capstone.Exceptions.ErrorMapper;
 import com.example.capstone.Exceptions.UnauthorizedException;
 import com.example.capstone.Service.JwtService;
 import com.example.capstone.Service.TokenService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -31,7 +35,7 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 	
 	@Autowired
 	private UserInfoUserDetailsService userDetailsService;
-    
+	private final ObjectMapper objectMapper = new ObjectMapper();
 	@Autowired
 	public JwtAuthFilter(HandlerExceptionResolver handlerExceptionResolver) {
 		this.handlerExceptionResolver = handlerExceptionResolver;
@@ -44,6 +48,16 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 		String authHeader = request.getHeader("Authorization");
 		String token = null;
 		String username = null;
+		if(authHeader==null)
+		{
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+	        ErrorMapper error = new ErrorMapper(HttpStatus.FORBIDDEN.value(), request.getRequestURI().toString(), "Authentication required, login to proceed ");
+	        response.setContentType("application/json");
+	        PrintWriter writer = response.getWriter();
+	        String jsonResponse = objectMapper.writeValueAsString(error);
+	        writer.write(jsonResponse);
+	        writer.flush();	 
+		}
 		try
 		{
 		if (authHeader != null && authHeader.startsWith("Bearer ")) {
