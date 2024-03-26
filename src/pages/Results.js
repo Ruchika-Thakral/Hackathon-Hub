@@ -5,12 +5,12 @@ import { useSelector } from "react-redux";
 import { Alert, Typography } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import BaseLayout from "../components/BaseLayout";
-import { HACKATHONS } from "../constants";
+import { HACKATHONS, TEAMS } from "../constants";
 
 const Results = () => {
     let { hackathonId } = useParams();
 
-    const data = useSelector((state) => state.hackathon.hackathons.data) || [];
+    // const data = useSelector((state) => state.hackathon.hackathons.data) || [];
     const [hackathons, setHackathons] = useState(
         HACKATHONS
         // data
@@ -24,7 +24,8 @@ const Results = () => {
         hackathons?.find((hack) => hack.hackathonId === Number(hackathonId)) ||
         null;
 
-    const data2 = useSelector((state) => state.team.teamdetails.data) || [];
+    const data2 = TEAMS[0].teamUserDetailsDTOs
+    // useSelector((state) => state.team.teamdetails.data) || [];
     // const teamdetails=data.length>0?data[0].teamUserDetailsDTOs:[]
     const [teams, setTeams] = useState(data2);
 

@@ -19,126 +19,32 @@ import {
 } from "../features/evaluator/evaluatorSlice";
 import { fetchHackathons } from "../features/hackathon/hackathonSlice";
 import { useDispatch, useSelector } from "react-redux";
-
-// const HACKATHONS = [
-//     {
-//         hackathonId: 163627,
-//         name: "Hackathon1",
-//     },
-//     {
-//         hackathonId: 987654,
-//         name: "Hackathon2",
-//     },
-//     {
-//         hackathonId: 345678,
-//         name: "Hackathon3",
-//     },
-//     {
-//         hackathonId: 876543,
-//         name: "Hackathon4",
-//     },
-//     {
-//         hackathonId: 234567,
-//         name: "Hackathon5",
-//     },
-//     {
-//         hackathonId: 765432,
-//         name: "Hackathon6",
-//     },
-// ];
-
-// const PANELISTS = [
-//     {
-//         name: "John Doe",
-//         email: "john.doe@example.com",
-//         isAvailable: true,
-//         role: "panelist",
-//     },
-//     {
-//         name: "Jane Smith",
-//         email: "jane.smith@example.com",
-//         isAvailable: false,
-//         role: "panelist",
-//     },
-//     {
-//         name: "Alice Johnson",
-//         email: "alice.johnson@example.com",
-//         isAvailable: true,
-//         role: "panelist",
-//     },
-//     {
-//         name: "Michael Brown",
-//         email: "michael.brown@example.com",
-//         isAvailable: false,
-//         role: "panelist",
-//     },
-//     {
-//         name: "Emily Williams",
-//         email: "emily.williams@example.com",
-//         isAvailable: true,
-//         role: "panelist",
-//     },
-// ];
-
-// const JUDGES = [
-//     {
-//         name: "David Johnson",
-//         email: "david.johnson@example.com",
-//         isAvailable: true,
-//         role: "judge",
-//     },
-//     {
-//         name: "Sarah Miller",
-//         email: "sarah.miller@example.com",
-//         isAvailable: false,
-//         role: "judge",
-//     },
-//     {
-//         name: "James Anderson",
-//         email: "james.anderson@example.com",
-//         isAvailable: true,
-//         role: "judge",
-//     },
-//     {
-//         name: "Sophia Martinez",
-//         email: "sophia.martinez@example.com",
-//         isAvailable: false,
-//         role: "judge",
-//     },
-//     {
-//         name: "Ethan Wilson",
-//         email: "ethan.wilson@example.com",
-//         isAvailable: true,
-//         role: "judge",
-//     },
-// ];
+import { EVALUATORS, HACKATHONS } from "../constants";
 
 const EvaluatorAssign = () => {
-    const HACKATHONS =
-        useSelector((state) => state.hackathon.hackathons?.data) || [];
-    const EVALUATORS =
-        useSelector((state) => state.evaluator.evaluators?.data) || [];
+    const hackathons = HACKATHONS;
+    // useSelector((state) => state.hackathon.hackathons?.data) || [];
+    const evaluators = EVALUATORS;
+    // useSelector((state) => state.evaluator.evaluators?.data) || [];
 
-    console.log(HACKATHONS);
-    console.log(EVALUATORS);
     const [JUDGES, setJUDGES] = useState(
-        EVALUATORS.filter((evaluator) => evaluator.role === "judge")
+        evaluators.filter((evaluator) => evaluator.role === "judge")
     );
 
     const [PANELISTS, setPANELISTS] = useState(
-        EVALUATORS.filter((evaluator) => evaluator.role === "panelist")
+        evaluators.filter((evaluator) => evaluator.role === "panelist")
     );
 
     // console.log(JUDGES);
     // console.log(PANELISTS);
 
     useEffect(() => {
-        setJUDGES(EVALUATORS.filter((evaluator) => evaluator.role === "judge"));
+        setJUDGES(evaluators.filter((evaluator) => evaluator.role === "judge"));
         setPANELISTS(
-            EVALUATORS.filter((evaluator) => evaluator.role === "panelist")
+            evaluators.filter((evaluator) => evaluator.role === "panelist")
         );
-        console.log("hi")
-    }, [EVALUATORS]);
+        // console.log("hi")
+    }, [evaluators]);
 
     const dispatch = useDispatch();
     const roles = [
@@ -178,10 +84,10 @@ const EvaluatorAssign = () => {
     //     setEvaluatorData((prevstate) => ({ ...prevstate, [name]: value }));
     // };
 
-    useEffect(() => {
-        dispatch(fetchEvaluators());
-        dispatch(fetchHackathons());
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(fetchEvaluators());
+    //     dispatch(fetchHackathons());
+    // }, [dispatch]);
 
     const handleSubmit = () => {
         const data = {
@@ -202,7 +108,7 @@ const EvaluatorAssign = () => {
             hackathonId: 0,
             name: "",
         });
-        console.log(data)
+        console.log(data);
         dispatch(assignEvaluator(data));
     };
 
@@ -242,22 +148,41 @@ const EvaluatorAssign = () => {
                                     </Button>
                                 </MenuHandler>
                                 <MenuList className="max-h-[20rem] max-w-[18rem]">
-                                    {HACKATHONS.map(({ name }, index) => {
-                                        return (
-                                            <MenuItem
-                                                key={index}
-                                                value={name}
-                                                className="flex items-center gap-2"
-                                                onClick={() =>
-                                                    setSelectedHackathon(
-                                                        HACKATHONS[index]
-                                                    )
-                                                }
-                                            >
-                                                {name}
-                                            </MenuItem>
-                                        );
-                                    })}
+                                    {hackathons.length === 0 ||
+                                    hackathons.every(
+                                        (hackathon) =>
+                                            hackathon.isCompleted === true
+                                    ) ? (
+                                        <MenuItem
+                                            className="flex items-center gap-2"
+                                            disabled={true}
+                                        >
+                                            No available hackathons.
+                                        </MenuItem>
+                                    ) : (
+                                        hackathons.map((hackathon, index) => {
+                                            if (!hackathon.isCompleted) {
+                                                return (
+                                                    <MenuItem
+                                                        key={index}
+                                                        value={hackathon.name}
+                                                        className="flex items-center gap-2"
+                                                        onClick={() =>
+                                                            setSelectedHackathon(
+                                                                hackathons[
+                                                                    index
+                                                                ]
+                                                            )
+                                                        }
+                                                    >
+                                                        {hackathon.name}
+                                                    </MenuItem>
+                                                );
+                                            } else {
+                                                return null;
+                                            }
+                                        })
+                                    )}
                                 </MenuList>
                             </Menu>
                         </div>
@@ -334,45 +259,82 @@ const EvaluatorAssign = () => {
                                     </Button>
                                 </MenuHandler>
                                 <MenuList className="max-h-[20rem] max-w-[18rem]">
-                                    {selectedRole.name === "Panelist"
-                                        ? PANELISTS.map((evaluator, index) => {
-                                              //   if (evaluator.isAvailable) {
-                                              return evaluator.available ? (
-                                                  <MenuItem
-                                                      key={index}
-                                                      value={evaluator.name}
-                                                      className="flex items-center gap-2"
-                                                      onClick={() =>
-                                                          setSelectedEvaluator(
-                                                              evaluator
-                                                          )
-                                                      }
-                                                  >
-                                                      {evaluator.name}
-                                                  </MenuItem>
-                                              ) : null;
-                                              //   }
-                                          })
-                                        : selectedRole.name === "Judge"
-                                        ? JUDGES.map((evaluator, index) => {
-                                              //   if (evaluator.isAvailable) {
-                                              return evaluator.available ? (
-                                                  <MenuItem
-                                                      key={index}
-                                                      value={evaluator.name}
-                                                      className="flex items-center gap-2"
-                                                      onClick={() =>
-                                                          setSelectedEvaluator(
-                                                              evaluator
-                                                          )
-                                                      }
-                                                  >
-                                                      {evaluator.name}
-                                                  </MenuItem>
-                                              ) : null;
-                                              //   }
-                                          })
-                                        : null}
+                                    {selectedRole.name === "Panelist" ? (
+                                        PANELISTS.length === 0 ||
+                                        PANELISTS.every(
+                                            (evaluator) =>
+                                                evaluator.available === false
+                                        ) ? (
+                                            <MenuItem
+                                                className="flex items-center gap-2"
+                                                disabled={true}
+                                            >
+                                                No available panelist.
+                                            </MenuItem>
+                                        ) : (
+                                            PANELISTS.map(
+                                                (evaluator, index) => {
+                                                    //   if (evaluator.isAvailable) {
+                                                    return evaluator.available ? (
+                                                        <MenuItem
+                                                            key={index}
+                                                            value={
+                                                                evaluator.name
+                                                            }
+                                                            className="flex items-center gap-2"
+                                                            onClick={() =>
+                                                                setSelectedEvaluator(
+                                                                    evaluator
+                                                                )
+                                                            }
+                                                        >
+                                                            {evaluator.name}
+                                                        </MenuItem>
+                                                    ) : null;
+                                                    //   }
+                                                }
+                                            )
+                                        )
+                                    ) : selectedRole.name === "Judge" ? (
+                                        JUDGES.length === 0 ||
+                                        JUDGES.every(
+                                            (evaluator) =>
+                                                evaluator.available === false
+                                        ) ? (
+                                            <MenuItem
+                                                className="flex items-center gap-2"
+                                                disabled={true}
+                                            >
+                                                No available judge.
+                                            </MenuItem>
+                                        ) : (
+                                            JUDGES.map((evaluator, index) => {
+                                                //   if (evaluator.isAvailable) {
+                                                return evaluator.available ? (
+                                                    <MenuItem
+                                                        key={index}
+                                                        value={evaluator.name}
+                                                        className="flex items-center gap-2"
+                                                        onClick={() =>
+                                                            setSelectedEvaluator(
+                                                                evaluator
+                                                            )
+                                                        }
+                                                    >
+                                                        {evaluator.name}
+                                                    </MenuItem>
+                                                ) : null;
+                                                //   }
+                                            })
+                                        )
+                                    ) : (
+                                        <MenuItem
+                                            className="flex items-center gap-2"
+                                            disabled={true}
+                                        >
+                                            Select a role.
+                                        </MenuItem>
+                                    )}
                                 </MenuList>
                             </Menu>
                         </div>

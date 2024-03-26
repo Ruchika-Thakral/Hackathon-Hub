@@ -11,6 +11,7 @@ import {
     Avatar,
 } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
+import { USER } from "../constants";
 
 // const user = null;
 // const user = { role: "admin" };
@@ -101,13 +102,14 @@ const NavBar = ({ toggleSignInModal, toggleSignUpModal, openDrawer }) => {
     //     </Navbar>
     // );
 
-    const userData = useSelector((state) => state.user.login?.data?.data);
+    const userData = USER
+    // useSelector((state) => state.user.login?.data?.data);
 
     const [user, setUser] = useState(userData);
 
     useEffect(() => {
         setUser(userData);
-    }, userData);
+    }, [userData]);
 
     // console.log(userData);
 

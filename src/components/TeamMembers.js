@@ -17,6 +17,7 @@ import {
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { fetchTeamDetails } from "../features/team/teamSlice";
+import { TEAMS, USER } from "../constants";
 
 // import {
 //     Menu,
@@ -36,10 +37,12 @@ import { fetchTeamDetails } from "../features/team/teamSlice";
 
 const TeamMembers = () => {
     const dispatch = useDispatch();
-    const data = useSelector((state) => state.team.teamdetails.data) || [];
+    const data = TEAMS
+    // useSelector((state) => state.team.teamdetails.data) || [];
     // const teamdetails=data.length>0?data[0].teamUserDetailsDTOs:[]
-    const login = useSelector((state) => state.user.login.data);
-    const userId = login ? login.data.userId : null;
+    const login = USER
+    // useSelector((state) => state.user.login.data);
+    const userId = login ? login.userId : null;
     const [teamdetails, setTeamdetails] = useState([]
         // data.length > 0 ? data[0].teamUserDetailsDTOs : []
     );
@@ -68,7 +71,7 @@ const TeamMembers = () => {
                     <List className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {teamdetails.map((member) => {
                             return (
-                                <ListItem>
+                                <ListItem key={member.userId}>
                                     <ListItemPrefix>
                                         <Avatar
                                             variant="circular"

@@ -14,6 +14,7 @@ import {
 import TeamRegistration from "./TeamRegistration";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { USER } from "../constants";
 const HackathonDetails = ({ hackathons, selectedHackathonId }) => {
     // const { details } = useContext(CreateContext);
     const [open, setOpen] = useState(false);
@@ -34,7 +35,8 @@ const HackathonDetails = ({ hackathons, selectedHackathonId }) => {
         return `${shortdate}, ${time}`;
     };
 
-    const user = useSelector((state) => state.user.login?.data?.data);
+    const user = USER
+    // useSelector((state) => state.user.login?.data?.data);
 
     // useEffect(()=>{
     //     if(details){

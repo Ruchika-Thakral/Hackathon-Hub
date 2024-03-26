@@ -3,11 +3,11 @@ import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
-    evaluators: {
+    // evaluators: {
         data: [],
         loading: false,
         error: null,
-    },
+    // },
 };
 
 export const fetchEvaluators = createAsyncThunk(
@@ -35,7 +35,7 @@ export const registerEvaluator = createAsyncThunk(
             const response2 = await axios.get(
                 "http://localhost:8080/Admin/Evaluator"
             );
-            return response2.data;
+            return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
@@ -53,7 +53,7 @@ export const assignEvaluator = createAsyncThunk(
             const response2 = await axios.get(
                 "http://localhost:8080/Admin/Evaluator"
             );
-            return response2.data;
+            return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
@@ -67,46 +67,46 @@ const evaluatorSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchEvaluators.pending, (state) => {
-                state.evaluators.loading = true;
-                state.evaluators.error = null;
+                state.loading = true;
+                state.error = null;
             })
             .addCase(fetchEvaluators.fulfilled, (state, action) => {
-                state.evaluators.loading = false;
-                state.evaluators.data = action.payload; // Extract data from the response
-                state.evaluators.error = null;
+                state.loading = false;
+                state.data = action.payload; // Extract data from the response
+                state.error = null;
             })
             .addCase(fetchEvaluators.rejected, (state, action) => {
-                state.evaluators.loading = false;
-                state.evaluators.data = null;
-                state.evaluators.error = action.payload; // Set error payload
+                state.loading = false;
+                state.data = null;
+                state.error = action.payload; // Set error payload
             })
             .addCase(registerEvaluator.pending, (state) => {
-                state.evaluators.loading = true;
-                state.evaluators.error = null;
+                state.loading = true;
+                state.error = null;
             })
             .addCase(registerEvaluator.fulfilled, (state, action) => {
-                state.evaluators.loading = false;
-                state.evaluators.data = action.payload; // Refetch and set evalautor list   
-                state.evaluators.error = null;
+                state.loading = false;
+                // state.data = action.payload; // Refetch and set evalautor list   
+                state.error = null;
             })
             .addCase(registerEvaluator.rejected, (state, action) => {
-                state.evaluators.loading = false;
-                state.evaluators.data = null;
-                state.evaluators.error = action.payload; // Set error payload
+                state.loading = false;
+                state.data = null;
+                state.error = action.payload; // Set error payload
             })
             .addCase(assignEvaluator.pending, (state) => {
-                state.evaluators.loading = true;
-                state.evaluators.error = null;
+                state.loading = true;
+                state.error = null;
             })
             .addCase(assignEvaluator.fulfilled, (state, action) => {
-                state.evaluators.loading = false;
-                state.evaluators.data = action.payload; // Refetch and set evalautor list   
-                state.evaluators.error = null;
+                state.loading = false;
+                // state.data = action.payload; // Refetch and set evalautor list   
+                state.error = null;
             })
             .addCase(assignEvaluator.rejected, (state, action) => {
-                state.evaluators.loading = false;
-                state.evaluators.data = null;
-                state.evaluators.error = action.payload; // Set error payload
+                state.loading = false;
+                state.data = null;
+                state.error = action.payload; // Set error payload
             });
     },
 });

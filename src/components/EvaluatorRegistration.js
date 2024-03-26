@@ -38,10 +38,10 @@ const EvaluatorRegistration = () => {
         setEvaluatorData((prevstate) => ({ ...prevstate, [name]: value }));
     };
 
-    useEffect(()=>{
-        dispatch(fetchEvaluators())
-        dispatch(fetchHackathons())
-    },[dispatch])
+    // useEffect(()=>{
+    //     dispatch(fetchEvaluators())
+    //     dispatch(fetchHackathons())
+    // },[dispatch])
 
     const handleSubmit = () => {
         console.log(evaluatorData);

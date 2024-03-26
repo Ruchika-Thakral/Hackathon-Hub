@@ -1,10 +1,10 @@
 const USER = {
-    userId: 1,
-    name: "Gokul",
-    email: "singamsettigokul@gmail.com",
-    role: "admin",
-    assignedHackathon: -1,
-    available: true,
+    userId: 9,
+    name: "Ankit Panelist 5",
+    email: "ankitbhanja99+panelis5@gmail.com",
+    role: "panelist",
+    assignedHackathon: 5,
+    available: false,
 };
 
 const HACKATHONS = [
@@ -143,5 +143,116 @@ const HACKATHONS = [
     },
 ];
 
+const EVALUATORS = [
+    {
+        userId: 2,
+        name: "Ankit Panelist",
+        email: "panelist+ankitbhanja99@gmail.com",
+        role: "panelist",
+        assignedHackathon: -1,
+        available: true,
+    },
+    {
+        userId: 3,
+        name: "Ankit Panelist 2",
+        email: "panelist2+ankitbhanja99@gmail.com",
+        role: "panelist",
+        assignedHackathon: -1,
+        available: true,
+    },
+    {
+        userId: 4,
+        name: "Ankit Panelist 3",
+        email: "panelist3+ankitbhanja99@gmail.com",
+        role: "panelist",
+        assignedHackathon: -1,
+        available: true,
+    },
+    {
+        userId: 5,
+        name: "Ankit Judge",
+        email: "judge+ankitbhanja99@gmail.com",
+        role: "judge",
+        assignedHackathon: 4,
+        available: false,
+    },
+    {
+        userId: 6,
+        name: "Ankit Judge 2",
+        email: "judge2+ankitbhanja99@gmail.com",
+        role: "panelist",
+        assignedHackathon: -1,
+        available: true,
+    },
+    {
+        userId: 7,
+        name: "Ankit Panelist 4",
+        email: "ankitbhanja99+panelist4@gmail.com",
+        role: "panelist",
+        assignedHackathon: 4,
+        available: false,
+    },
+    {
+        userId: 9,
+        name: "Ankit Panelist 5",
+        email: "ankitbhanja99+panelis5@gmail.com",
+        role: "panelist",
+        assignedHackathon: 5,
+        available: false,
+    },
+    {
+        userId: 10,
+        name: "Ankit Judge 5",
+        email: "ankitbhanja99+judge5@gmail.com",
+        role: "judge",
+        assignedHackathon: 5,
+        available: false,
+    },
+    {
+        userId: 16,
+        name: "Panelist 8",
+        email: "ankitbhanja99+panelist8@gmail.com",
+        role: "panelist",
+        assignedHackathon: 6,
+        available: false,
+    },
+    {
+        userId: 17,
+        name: "Judge 8",
+        email: "ankitbhanja99+judge8@gmail.com",
+        role: "judge",
+        assignedHackathon: 6,
+        available: false,
+    },
+];
 
-export {HACKATHONS, USER}
+const TEAMS = [
+    {
+        teamId: 2,
+        name: "Team1",
+        ideaTitle: "Idea 55",
+        ideaBody: "Idea 58 Description",
+        ideaRepo: "https://thehub.incedoinc.com/SitePages/Incedo.aspx",
+        ideaFiles: "https://www.google.co.in/",
+        status: "implemented",
+        ideaDomain: "Cloud and Digital",
+        consolidatedRating: null,
+        hackathonId: 5,
+        teamUserDetailsDTOs: [
+            {
+                userId: 12,
+                name: "Ankit Participant 55",
+                email: "ankitbhanja99+participant55@gmail.com",
+                leader: true,
+            },
+            {
+                userId: 11,
+                name: "Ankit Participant 5",
+                email: "ankitbhanja99+participant5@gmail.com",
+                leader: false,
+            },
+        ],
+    },
+];
+
+export { HACKATHONS, USER, EVALUATORS, TEAMS };

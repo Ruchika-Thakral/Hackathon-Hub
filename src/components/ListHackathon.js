@@ -6,6 +6,7 @@ import {
     fetchHackathons,
     hackathonEnd,
 } from "../features/hackathon/hackathonSlice";
+import { HACKATHONS } from "../constants";
 
 const TABLE_HEAD = [
     "Hackathon",
@@ -17,8 +18,9 @@ const TABLE_HEAD = [
 ];
 
 const ListHackathon = () => {
-    const data = useSelector((state) => state.hackathon.hackathons.data);
-    let HACKATHONS = data ? data : [];
+    const data = HACKATHONS;
+    // useSelector((state) => state.hackathon.hackathons.data);
+    let hackathons = data ? data : [];
     const dispatch = useDispatch();
     const handleHackathonEnd = (id) => {
         dispatch(hackathonEnd(id));
@@ -54,8 +56,8 @@ const ListHackathon = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {HACKATHONS.map((hackathon, index) => {
-                            const isLast = index === HACKATHONS.length - 1;
+                        {hackathons.map((hackathon, index) => {
+                            const isLast = index === hackathons.length - 1;
                             const classes = isLast
                                 ? "p-4"
                                 : "p-4 border-b border-blue-gray-50";

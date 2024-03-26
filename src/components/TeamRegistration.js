@@ -10,14 +10,21 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { teamRegistration } from "../features/team/teamSlice";
 import { successTeamRegistration } from "../features/user/userSlice";
+import { USER } from "../constants";
 
 const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
-    const login = useSelector((state) => state.user.login.data);
-    const userId = login ? login.data.userId : null;
+    const login = USER
+    // useSelector((state) => state.user.login.data);
+    const userId = login ? login.userId : null;
     const hackathonId = selectedHackathonId;
-    const data = useSelector((state) => state.team.registration.data);
+    const data = null 
+    // useSelector((state) => state.team.registration.data);
     const status = data ? data.status : null;
-    const error = useSelector((state) => state.team.registration.error);
+    // const error = useSelector((state) => state.team.registration.error);
+
+    
+    const error = useSelector((state) => state.team.error);
+    const loading = useSelector((state) => state.team.loading);
     const [newerror, setNewError] = useState(false);
     useEffect(() => {
         setNewError(true);

@@ -39,22 +39,22 @@ const AdminEvaluators = () => {
     const [selectedTab, setSelectedTab] = useState("create");
 
     const handleAddMembers = () => {
-        console.log("add");
+        // console.log("add");
         // setSelectedTab("create");
         toggleEvaluatorCollapseOpen();
     };
 
     const handleAssignMembers = () => {
-        console.log("assign");
+        // console.log("assign");
         // setSelectedTab("assign");
         toggleEvaluatorCollapseOpen();
     };
 
 
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(fetchEvaluators);
-    }, []);
+    // const dispatch = useDispatch();
+    // useEffect(() => {
+    //     dispatch(fetchEvaluators);
+    // }, []);
 
     return (
         <BaseLayout>

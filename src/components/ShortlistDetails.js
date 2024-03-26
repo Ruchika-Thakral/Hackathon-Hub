@@ -38,7 +38,7 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
     // const hackathons = useSelector((state) => state.hackathon.hackathons.data);
     const user = USER;
     // useSelector((state) => state.user.login?.data?.data);
-    console.log(hackathons);
+    // console.log(hackathons);
 
     // useEffect(() => {
     //     dispatch(fetchHackathons());
@@ -83,7 +83,7 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
         );
     };
     const handleIdeaReject = (teamId) => {
-        console.log(teamId + "idea rejected");
+        // console.log(teamId + "idea rejected");
         dispatch(
             rejectTeam({
                 teamId,

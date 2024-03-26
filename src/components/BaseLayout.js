@@ -7,6 +7,7 @@ import Signup from "./Singup";
 import Footer from "./Footer";
 import ProfileDrawer from "./ProfileDrawer";
 import { useSelector } from "react-redux";
+import { USER } from "../constants";
  
 const BaseLayout = ({ children }) => {
     const [showSignInModal, setShowSignInModal] = useState(false);
@@ -20,7 +21,8 @@ const BaseLayout = ({ children }) => {
         setShowSignUpModal(!showSignUpModal);
     };
  
-    const data = useSelector((state) => state.user.login?.data?.data);
+    const data = USER
+    // useSelector((state) => state.user.login?.data?.data);
     const [showProile, setShowProfile] = useState(false);
     const openDrawer = () => setShowProfile(true);
     const closeDrawer = () => setShowProfile(false);

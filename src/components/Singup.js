@@ -29,10 +29,17 @@ const Signup = ({ showModal, toggleModal, setShowSignUpModal }) => {
         const { name, value } = e.target;
         setFormData((prevstate) => ({ ...prevstate, [name]: value }));
     };
-    const data = useSelector((state) => state.user.register.data);
+    const data = null
+    // useSelector((state) => state.user.register.data);
     const status = data ? data.status : null;
-    const error = useSelector((state) => state.user.register.error);
-    const loading = useSelector((state) => state.user.register.loading);
+    // const error = useSelector((state) => state.user.register.error);
+    // const loading = useSelector((state) => state.user.register.loading);
+
+    
+    const error = useSelector((state) => state.user.error);
+    const loading = useSelector((state) => state.user.loading);
+
+
     const dispatch = useDispatch();
     const loginData = { email: formData.email, password: formData.password };
     const [emailVerification, setEmailVerification] = useState(false);

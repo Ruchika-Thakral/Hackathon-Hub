@@ -16,11 +16,13 @@ import TeamDetails from "./pages/TeamDetails";
 import PanelistShortlist from "./pages/PanelistShortlist";
 import JudgeReview from "./pages/JudgeReview";
 import { fetchTeamDetails } from "./features/team/teamSlice";
+import { HACKATHONS, USER } from "./constants";
 function App() {
     const dispatch = useDispatch();
 
     //change to this for redux integration
-    const hackathons = useSelector((state) => state.hackathon.hackathons.data);
+    const hackathons = HACKATHONS
+    // useSelector((state) => state.hackathon.hackathons.data);
 
     useEffect(() => {
         dispatch(fetchHackathons());
@@ -30,8 +32,9 @@ function App() {
         dispatch(reattemptLogin());
     }, []);
 
-    const data = useSelector((state) => state.user.login.data);
-    const userId = data ? data.data.userId : null;
+    const userId = USER.userId
+    // const data = useSelector((state) => state.user.login.data);
+    // const userId = data ? data.data.userId : null;
     useEffect(() => {
         dispatch(fetchTeamDetails(userId));
     }, [dispatch]);

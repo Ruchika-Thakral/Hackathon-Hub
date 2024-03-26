@@ -33,10 +33,15 @@ const Login = ({ showModal, toggleModal, setShowSignInModal }) => {
         // For example, you can use the Google Sign-In API
     };
     const dispatch = useDispatch();
-    const data = useSelector((state) => state.user.login.data);
+    const data = null
+    // useSelector((state) => state.user.login.data);
     const status = data ? data.status : null;
-    const error = useSelector((state) => state.user.login.error);
-    const loading = useSelector((state) => state.user.login.loading);
+    // const error = useSelector((state) => state.user.login.error);
+    // const loading = useSelector((state) => state.user.login.loading);
+
+    const error = useSelector((state) => state.user.error);
+    const loading = useSelector((state) => state.user.loading);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         dispatch(userLogin(formData1));

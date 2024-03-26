@@ -25,9 +25,9 @@ const CreateHackathon = () => {
         { name: "Product Engineering" },
     ];
     const dispatch = useDispatch();
-    useEffect(()=>{
-        dispatch(fetchHackathons())
-    },[dispatch])
+    // useEffect(()=>{
+    //     dispatch(fetchHackathons())
+    // },[dispatch])
     const [formData, setFormData] = useState({name:"",
         theme:"",
         startDate:"",

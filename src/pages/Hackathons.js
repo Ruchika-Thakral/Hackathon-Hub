@@ -175,9 +175,9 @@ const Hackathons = () => {
                                         value={
                                             searchParamsObject?.theme || "all"
                                         }
-                                        className="w-full md:w-max"
+                                        className="w-full"
                                     >
-                                        <TabsHeader>
+                                        <TabsHeader className="w-full">
                                             {TABS.map(({ label, value }) => (
                                                 <Tab
                                                     key={value}

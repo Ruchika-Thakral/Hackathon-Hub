@@ -3,11 +3,11 @@ import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
-    hackathons:{
+    // hackathons:{
         data:null,
         loading:false,
         error:null
-    }
+    // }
 };
 export const fetchHackathons=createAsyncThunk(
     'hackathon/fetchHackathons',
@@ -27,7 +27,7 @@ export const hackathonCreation=createAsyncThunk(
             const response = await axios.post('http://localhost:8080/Admin/hackathon',hackathonData);
             console.log(response)
             const response2 = await axios.get('http://localhost:8080/Hackathon');
-            return response2.data;
+            return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
@@ -41,7 +41,7 @@ export const hackathonEnd=createAsyncThunk(
             const response = await axios.put(`http://localhost:8080/Admin/hackathon/end/${hackathonId}`);
             console.log(response)
             const response2 = await axios.get('http://localhost:8080/Hackathon');
-            return response2.data;
+            return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
@@ -55,32 +55,46 @@ const hackathonSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchHackathons.pending, (state) => {
-                state.hackathons.loading = true;
-                state.hackathons.error = null;
+                state.loading = true;
+                state.error = null;
             })
             .addCase(fetchHackathons.fulfilled, (state, action) => {
-                state.hackathons.loading = false;
-                state.hackathons.data = action.payload; // Extract data from the response
-                state.hackathons.error = null;
+                state.loading = false;
+                state.data = action.payload; // Extract data from the response
+                state.error = null;
             })
             .addCase(fetchHackathons.rejected, (state, action) => {
-                state.hackathons.loading = false;
-                state.hackathons.data= null;
-                state.hackathons.error = action.payload; // Set error payload
+                state.loading = false;
+                state.data= null;
+                state.error = action.payload; // Set error payload
             })
             .addCase(hackathonCreation.pending, (state) => {
-                state.hackathons.loading = true;
-                state.hackathons.error = null;
+                state.loading = true;
+                state.error = null;
             })
             .addCase(hackathonCreation.fulfilled, (state, action) => {
-                state.hackathons.loading = false;
-                state.hackathons.data = action.payload; // Extract data from the response
-                state.hackathons.error = null;
+                state.loading = false;
+                // state.data = action.payload; // Extract data from the response
+                state.error = null;
             })
             .addCase(hackathonCreation.rejected, (state, action) => {
-                state.hackathons.loading = false;
-                state.hackathons.data= null;
-                state.hackathons.error = action.payload; // Set error payload
+                state.loading = false;
+                state.data= null;
+                state.error = action.payload; // Set error payload
+            })
+            .addCase(hackathonEnd.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(hackathonEnd.fulfilled, (state, action) => {
+                state.loading = false;
+                // state.data = action.payload; // Extract data from the response
+                state.error = null;
+            })
+            .addCase(hackathonEnd.rejected, (state, action) => {
+                state.loading = false;
+                state.data= null;
+                state.error = action.payload; // Set error payload
             })
         }
 });

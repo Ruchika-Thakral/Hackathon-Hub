@@ -26,6 +26,7 @@ import {
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { ideaSubmission } from "../features/team/teamSlice";
 import { repoSubmission } from "../features/team/teamSlice";
+import { TEAMS, USER } from "../constants";
 
 const DOMAINS = [
     { name: "Data and AI", value: "data" },
@@ -36,12 +37,14 @@ const DOMAINS = [
 
 const IdeaDetails = () => {
     const dispatch = useDispatch();
-    const data = useSelector((state) => state.user.login.data);
-    const hackathonId = data ? data.data.assignedHackathon : null;
-    const userId = data ? data.data.userId : null;
+    const data = USER
+    // useSelector((state) => state.user.login.data);
+    const hackathonId = data ? data.assignedHackathon : null;
+    const userId = data ? data.userId : null;
 
     // const teamData=useSelector(state=>state.team.teamdetails.data)
-    const data2 = useSelector((state) => state.team.teamdetails.data);
+    const data2 = TEAMS
+    // useSelector((state) => state.team.teamdetails.data);
 
     const [teamData, setTeamData] = useState({});
     useEffect(() => {

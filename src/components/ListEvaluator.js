@@ -21,6 +21,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEvaluators } from "../features/evaluator/evaluatorSlice";
 import { fetchHackathons } from "../features/hackathon/hackathonSlice";
+import { EVALUATORS, HACKATHONS } from "../constants";
 
 const TABS = [
     {
@@ -206,14 +207,16 @@ const TABLE_ROWS = [
 
 const ListEvaluator = ({ handleAddMembers, handleAssignMembers }) => {
     const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(fetchEvaluators());
-        dispatch(fetchHackathons())
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(fetchEvaluators());
+    //     dispatch(fetchHackathons())
+    // }, [dispatch]);
 
-    const data = useSelector((state) => state.hackathon.hackathons.data);
-    let HACKATHONS = data ? data : [];
-    const data2 = useSelector((state) => state.evaluator.evaluators.data);
+    const data = HACKATHONS
+    // useSelector((state) => state.hackathon.hackathons.data);
+    let hackathons = data ? data : [];
+    const data2 = EVALUATORS
+    // useSelector((state) => state.evaluator.evaluators.data);
     const TABLE_ROWS = data2 ? data2 : [];;
 
     // console.log(TABLE_ROWS)
@@ -378,7 +381,7 @@ const ListEvaluator = ({ handleAddMembers, handleAssignMembers }) => {
                                                         className="font-normal opacity-70"
                                                     >
                                                         {
-                                                            HACKATHONS.find(hackathon=> hackathon?.hackathonId === evaluator?.assignedHackathon).name
+                                                            hackathons.find(hackathon=> hackathon?.hackathonId === evaluator?.assignedHackathon).name
                                                         }
                                                     </Typography>
                                                 )}

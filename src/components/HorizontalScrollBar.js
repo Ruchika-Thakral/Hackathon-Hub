@@ -23,9 +23,9 @@ const HorizontalScrollBar = () => {
     // const arr = hackathons ? hackathons.data : [];
     // const [details, setDetails] = useState(arr[0]);
 
-    useEffect(() => {
-        dispatch(fetchHackathons());
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(fetchHackathons());
+    // }, [dispatch]);
     return (
         <div className="w-full h-96 bg-white py-8 px-8">
             <Typography

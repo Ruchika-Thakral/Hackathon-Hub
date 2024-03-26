@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import VerticalBar from "../components/VerticalBar";
-import {USER, HACKATHONS} from '../constants'
+import {USER, HACKATHONS, TEAMS} from '../constants'
 import HackathonDetails from "../components/HackathonDetails";
 import BaseLayout from "../components/BaseLayout";
 import SearchFilter from "../components/SearchFilter";
@@ -35,17 +35,17 @@ const themes = [
 ];
 const JudgeReview = ({ reviewedIdeas, setReviewedIdeas }) => {
     const dispatch = useDispatch();
-    const teams = useSelector((state) => state.team.panelistteams);
+    // const teams = useSelector((state) => state.team.panelistteams);
 
-    const IDEAS =
-        useSelector((state) => state.team.judgeteams.data?.data) || [];
+    const IDEAS = TEAMS
+        // useSelector((state) => state.team.judgeteams.data?.data) || [];
 
     const user = USER
     // useSelector((state) => state.user.login?.data?.data);
 
-    useEffect(() => {
-        dispatch(fetchHackathons());
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(fetchHackathons());
+    // }, [dispatch]);
 
     const hackathons = HACKATHONS
         // useSelector((state) => state.hackathon.hackathons.data) || [];
