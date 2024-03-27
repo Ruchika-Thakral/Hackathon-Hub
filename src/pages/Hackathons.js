@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-
 import { HACKATHONS } from "../constants";
 // import VerticalBar from "../components/VerticalBar";
 import HackathonDetails from "../components/HackathonDetails";
@@ -24,7 +23,10 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { IconButton, ButtonGroup } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchHackathons } from "../features/hackathon/hackathonSlice";
+import {
+    fetchHackathons,
+    selectHackathons,
+} from "../features/hackathon/hackathonSlice";
 
 const themes = [
     { name: "Life Sciences", value: "lifesciences" },
@@ -63,8 +65,9 @@ const Hackathons = () => {
     //     dispatch(fetchHackathons());
     // }, []);
 
-    const hackathons = HACKATHONS
-        // useSelector((state) => state.hackathon.hackathons.data) || [];
+    const hackathons = useSelector(selectHackathons);
+    // HACKATHONS
+    // useSelector((state) => state.hackathon.hackathons.data) || [];
 
     let [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -80,9 +83,11 @@ const Hackathons = () => {
         setSearchParamsObject(Object.fromEntries([...searchParams]));
     }, [searchParams]);
 
-    const [selectedHackathonId, setSelectedHackathonId] = React.useState(
-        filteredHackathons[0]?.hackathonId
-    );
+    const [selectedHackathonId, setSelectedHackathonId] = React.useState(null);
+
+    // console.log(hackathons)
+
+    // useEffect(() => {}, [filteredHackathons]);
 
     useEffect(() => {
         if (searchParamsObject?.theme) {
@@ -161,93 +166,89 @@ const Hackathons = () => {
                         No hackathons exist
                     </Typography>
                 ) : ( */}
-                    <div className="grid md:grid-cols-3 gap-x-4 gap-y-2">
-                        <div className="col-span-3 md:col-span-1">
-                            <Card shadow={false} className="md:h-[86vh]">
-                                <CardHeader floated={false} shadow={false}>
-                                    <Typography
-                                        variant="h4"
-                                        className="mb-2 px-2 font-semibold flex text-left justify-start"
-                                    >
-                                        Hackathons List
-                                    </Typography>
-                                    <Tabs
-                                        value={
-                                            searchParamsObject?.theme || "all"
-                                        }
-                                        className="w-full"
-                                    >
-                                        <TabsHeader className="w-full">
-                                            {TABS.map(({ label, value }) => (
-                                                <Tab
-                                                    key={value}
-                                                    value={value}
-                                                    onClick={() => {
-                                                        handleFilterClick(
-                                                            value
-                                                        );
-                                                    }}
-                                                >
-                                                    &nbsp;&nbsp;{label}
-                                                    &nbsp;&nbsp;
-                                                </Tab>
-                                            ))}
-                                        </TabsHeader>
-                                    </Tabs>
-                                </CardHeader>
-                                <CardBody className="h-[68%] py-2">
-                                    <List>
-                                        {filteredHackathons.length === 0 ? (
-                                            <ListItem disabled={true}>
-                                                No hackthons available.
-                                            </ListItem>
-                                        ) : null}
-                                        {filteredHackathons.length > 6
-                                            ? filteredHackathons
-                                                  .slice(0,5)
-                                                  .map((hackathon) => {
-                                                    //   console.log(
-                                                    //       hackathon.name
-                                                    //   );
-                                                      return (
-                                                          <ListItem
-                                                              key={
+                <div className="grid md:grid-cols-3 gap-x-4 gap-y-2">
+                    <div className="col-span-3 md:col-span-1">
+                        <Card shadow={false} className="md:h-[86vh]">
+                            <CardHeader floated={false} shadow={false}>
+                                <Typography
+                                    variant="h4"
+                                    className="mb-2 px-2 font-semibold flex text-left justify-start"
+                                >
+                                    Hackathons List
+                                </Typography>
+                                <Tabs
+                                    value={searchParamsObject?.theme || "all"}
+                                    className="w-full"
+                                >
+                                    <TabsHeader className="w-full">
+                                        {TABS.map(({ label, value }) => (
+                                            <Tab
+                                                key={value}
+                                                value={value}
+                                                onClick={() => {
+                                                    handleFilterClick(value);
+                                                }}
+                                            >
+                                                &nbsp;&nbsp;{label}
+                                                &nbsp;&nbsp;
+                                            </Tab>
+                                        ))}
+                                    </TabsHeader>
+                                </Tabs>
+                            </CardHeader>
+                            <CardBody className="h-[68%] py-2">
+                                <List>
+                                    {filteredHackathons.length === 0 ? (
+                                        <ListItem disabled={true}>
+                                            No hackthons available.
+                                        </ListItem>
+                                    ) : null}
+                                    {filteredHackathons.length > 6
+                                        ? filteredHackathons
+                                              .slice(0, 5)
+                                              .map((hackathon) => {
+                                                  //   console.log(
+                                                  //       hackathon.name
+                                                  //   );
+                                                  return (
+                                                      <ListItem
+                                                          key={
+                                                              hackathon.hackathonId
+                                                          }
+                                                          onClick={() => {
+                                                              setSelectedHackathonId(
                                                                   hackathon.hackathonId
-                                                              }
-                                                              onClick={() => {
-                                                                  setSelectedHackathonId(
-                                                                      hackathon.hackathonId
-                                                                  );
-                                                              }}
-                                                          >
-                                                              {hackathon.name}
-                                                          </ListItem>
-                                                      );
-                                                  })
-                                            : filteredHackathons.map(
-                                                  (hackathon) => {
-                                                      return (
-                                                          <ListItem
-                                                              selected={
-                                                                  selectedHackathonId ===
+                                                              );
+                                                          }}
+                                                      >
+                                                          {hackathon.name}
+                                                      </ListItem>
+                                                  );
+                                              })
+                                        : filteredHackathons.map(
+                                              (hackathon) => {
+                                                  return (
+                                                      <ListItem
+                                                          selected={
+                                                              selectedHackathonId ===
+                                                              hackathon.hackathonId
+                                                          }
+                                                          key={
+                                                              hackathon.hackathonId
+                                                          }
+                                                          onClick={() => {
+                                                              setSelectedHackathonId(
                                                                   hackathon.hackathonId
-                                                              }
-                                                              key={
-                                                                  hackathon.hackathonId
-                                                              }
-                                                              onClick={() => {
-                                                                  setSelectedHackathonId(
-                                                                      hackathon.hackathonId
-                                                                  );
-                                                              }}
-                                                              className="border border-gray-200"
-                                                          >
-                                                              {hackathon.name}
-                                                          </ListItem>
-                                                      );
-                                                  }
-                                              )}
-                                        {/* <ListItem>Hello</ListItem>
+                                                              );
+                                                          }}
+                                                          className="border border-gray-200"
+                                                      >
+                                                          {hackathon.name}
+                                                      </ListItem>
+                                                  );
+                                              }
+                                          )}
+                                    {/* <ListItem>Hello</ListItem>
                                     <ListItem>Hello</ListItem>
                                     <ListItem>Hello</ListItem>
                                     <ListItem>Hello</ListItem>
@@ -256,62 +257,52 @@ const Hackathons = () => {
 
                                     <ListItem>Hello</ListItem>
                                     <ListItem>Hello</ListItem> */}
-                                    </List>
-                                    {/* <VerticalBar /> */}
-                                </CardBody>
-                                <CardFooter className="flex justify-center pt-2 pb-4">
-                                    <ButtonGroup variant="outlined" size="sm">
-                                        <IconButton onClick={prevPage}>
-                                            <ArrowLeftIcon
-                                                strokeWidth={2}
-                                                className="h-4 w-4"
-                                            />
-                                        </IconButton>
-                                        <IconButton
-                                            {...getPaginationItemProps(1)}
-                                        >
-                                            1
-                                        </IconButton>
-                                        <IconButton
-                                            {...getPaginationItemProps(2)}
-                                        >
-                                            2
-                                        </IconButton>
-                                        <IconButton
-                                            {...getPaginationItemProps(3)}
-                                        >
-                                            3
-                                        </IconButton>
-                                        <IconButton
-                                            {...getPaginationItemProps(4)}
-                                        >
-                                            4
-                                        </IconButton>
-                                        <IconButton
-                                            {...getPaginationItemProps(5)}
-                                        >
-                                            5
-                                        </IconButton>
-                                        <IconButton onClick={nextPage}>
-                                            <ArrowRightIcon
-                                                strokeWidth={2}
-                                                className="h-4 w-4"
-                                            />
-                                        </IconButton>
-                                    </ButtonGroup>
-                                </CardFooter>
-                            </Card>
-                            {/* <VerticalBar /> */}
-                        </div>
-                        {filteredHackathons.length !== 0 ? (
-                            <div className="col-span-3 md:col-span-2">
-                                <HackathonDetails
-                                    hackathons={hackathons}
-                                    selectedHackathonId={selectedHackathonId}
-                                />
-                            </div>
-                        ) : null}
+                                </List>
+                                {/* <VerticalBar /> */}
+                            </CardBody>
+                            <CardFooter className="flex justify-center pt-2 pb-4">
+                                <ButtonGroup variant="outlined" size="sm">
+                                    <IconButton onClick={prevPage}>
+                                        <ArrowLeftIcon
+                                            strokeWidth={2}
+                                            className="h-4 w-4"
+                                        />
+                                    </IconButton>
+                                    <IconButton {...getPaginationItemProps(1)}>
+                                        1
+                                    </IconButton>
+                                    <IconButton {...getPaginationItemProps(2)}>
+                                        2
+                                    </IconButton>
+                                    <IconButton {...getPaginationItemProps(3)}>
+                                        3
+                                    </IconButton>
+                                    <IconButton {...getPaginationItemProps(4)}>
+                                        4
+                                    </IconButton>
+                                    <IconButton {...getPaginationItemProps(5)}>
+                                        5
+                                    </IconButton>
+                                    <IconButton onClick={nextPage}>
+                                        <ArrowRightIcon
+                                            strokeWidth={2}
+                                            className="h-4 w-4"
+                                        />
+                                    </IconButton>
+                                </ButtonGroup>
+                            </CardFooter>
+                        </Card>
+                        {/* <VerticalBar /> */}
                     </div>
+                    {filteredHackathons.length !== 0 ? (
+                        <div className="col-span-3 md:col-span-2">
+                            <HackathonDetails
+                                hackathons={hackathons}
+                                selectedHackathonId={selectedHackathonId}
+                            />
+                        </div>
+                    ) : null}
+                </div>
                 {/* )} */}
                 {/* <VerticalBar /> */}
                 {/* <HackathonDetails /> */}

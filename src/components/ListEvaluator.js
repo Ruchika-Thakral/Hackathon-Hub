@@ -20,7 +20,7 @@ import {
 } from "@material-tailwind/react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEvaluators } from "../features/evaluator/evaluatorSlice";
-import { fetchHackathons } from "../features/hackathon/hackathonSlice";
+import { fetchHackathons, selectHackathons } from "../features/hackathon/hackathonSlice";
 import { EVALUATORS, HACKATHONS } from "../constants";
 
 const TABS = [
@@ -212,9 +212,11 @@ const ListEvaluator = ({ handleAddMembers, handleAssignMembers }) => {
     //     dispatch(fetchHackathons())
     // }, [dispatch]);
 
-    const data = HACKATHONS
+    // const data =
+    // HACKATHONS
     // useSelector((state) => state.hackathon.hackathons.data);
-    let hackathons = data ? data : [];
+    let hackathons = useSelector(selectHackathons);
+    // data ? data : [];
     const data2 = EVALUATORS
     // useSelector((state) => state.evaluator.evaluators.data);
     const TABLE_ROWS = data2 ? data2 : [];;

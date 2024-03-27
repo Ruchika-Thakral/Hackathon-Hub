@@ -5,7 +5,7 @@ import styles from "./HorizontalScrollBar.module.css";
 import { useContext } from "react";
 import { CreateContext } from "../App";
 import { useDispatch } from "react-redux";
-import { fetchHackathons } from "../features/hackathon/hackathonSlice";
+import { fetchHackathons, selectHackathons } from "../features/hackathon/hackathonSlice";
 import { useSelector } from "react-redux";
 
 import { HACKATHONS } from "../constants";
@@ -17,7 +17,8 @@ const HorizontalScrollBar = () => {
     //     setDetails(item);
     // };
     const dispatch = useDispatch();
-    const hackathons = HACKATHONS
+    const hackathons = useSelector(selectHackathons)
+    // HACKATHONS
     // useSelector((state) => state.hackathon.hackathons.data);
     console.log(hackathons);
     // const arr = hackathons ? hackathons.data : [];
@@ -102,7 +103,7 @@ const HorizontalScrollBar = () => {
                             </Typography>
                             <Typography
                                 variant="h6"
-                                color=" text-incedo-secondary-600"
+                                className=" text-incedo-secondary-600"
                             ></Typography>
                         </>
                     </div>

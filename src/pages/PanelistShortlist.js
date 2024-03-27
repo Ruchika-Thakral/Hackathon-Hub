@@ -23,7 +23,7 @@ import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 
 import { fetchPanelistTeamsByHackathonId } from "../features/team/teamSlice";
-import { fetchHackathons } from "../features/hackathon/hackathonSlice";
+import { fetchHackathons, selectHackathons } from "../features/hackathon/hackathonSlice";
 import { selectUserDetails } from "../features/user/userSlice";
 
 const themes = [
@@ -47,7 +47,8 @@ const PanelistShortlist = () => {
     //     dispatch(fetchHackathons());
     // }, [dispatch]);
 
-    const hackathons = HACKATHONS;
+    const hackathons = useSelector(selectHackathons)
+    // HACKATHONS;
     // useSelector((state) => state.hackathon.hackathons.data) || [];
     // console.log(hackathons);
 

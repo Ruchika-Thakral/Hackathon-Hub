@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Card, Typography, Chip, Button } from "@material-tailwind/react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     fetchHackathons,
     hackathonEnd,
+    selectHackathons,
 } from "../features/hackathon/hackathonSlice";
 import { HACKATHONS } from "../constants";
+import { toast } from "react-toastify";
 
 const TABLE_HEAD = [
     "Hackathon",
@@ -18,12 +20,34 @@ const TABLE_HEAD = [
 ];
 
 const ListHackathon = () => {
-    const data = HACKATHONS;
+    // const data = HACKATHONS;
     // useSelector((state) => state.hackathon.hackathons.data);
-    let hackathons = data ? data : [];
+    const hackathonsData = useSelector(selectHackathons);
+    const [hackathons, setHackathons] = useState(hackathonsData);
+
+    useEffect(() => {
+        setHackathons(hackathonsData);
+        console.log(hackathonsData);
+    }, [hackathonsData]);
+    // data ? data : [];
     const dispatch = useDispatch();
-    const handleHackathonEnd = (id) => {
-        dispatch(hackathonEnd(id));
+    const handleHackathonEnd = async (id) => {
+        try {
+            await dispatch(hackathonEnd(id)).unwrap();
+            toast.success(
+                `${
+                    hackathons.find((hackathon) => hackathon.hackathonId === id)
+                        .name
+                } ended succesfully!`
+            );
+            // try {
+                await dispatch(fetchHackathons()).unwrap();
+            // } catch (error) {
+            //     toast.error(`Error: ${error?.message}`);
+            // }
+        } catch (error) {
+            toast.error(`Error: ${error?.message}`);
+        }
     };
 
     return (

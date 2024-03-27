@@ -17,12 +17,17 @@ import {
     assignEvaluator,
     fetchEvaluators,
 } from "../features/evaluator/evaluatorSlice";
-import { fetchHackathons } from "../features/hackathon/hackathonSlice";
+import {
+    fetchHackathons,
+    selectHackathons,
+} from "../features/hackathon/hackathonSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { EVALUATORS, HACKATHONS } from "../constants";
+import { toast } from "react-toastify";
 
 const EvaluatorAssign = () => {
-    const hackathons = HACKATHONS;
+    const hackathons = useSelector(selectHackathons);
+    // HACKATHONS;
     // useSelector((state) => state.hackathon.hackathons?.data) || [];
     const evaluators = EVALUATORS;
     // useSelector((state) => state.evaluator.evaluators?.data) || [];
@@ -89,27 +94,32 @@ const EvaluatorAssign = () => {
     //     dispatch(fetchHackathons());
     // }, [dispatch]);
 
-    const handleSubmit = () => {
-        const data = {
-            hackathonId: selectedHackathon.hackathonId,
-            evaluators: [{ userId: selectedEvaluator.userId }],
-        };
-        console.log({ data });
-        setSelectedEvaluator({
-            name: "",
-            email: "",
-            role: "",
-            isAvailable: true,
-        });
-        setSelectedRole({
-            name: "",
-        });
-        setSelectedHackathon({
-            hackathonId: 0,
-            name: "",
-        });
-        console.log(data);
-        dispatch(assignEvaluator(data));
+    const handleSubmit = async () => {
+        try {
+            const data = {
+                hackathonId: selectedHackathon.hackathonId,
+                evaluators: [{ userId: selectedEvaluator.userId }],
+            };
+
+            // console.log(data);
+            await dispatch(assignEvaluator(data)).unwrap();
+            toast.success(`${selectedRole.name} assigned to ${selectedHackathon.name} successfully!`)
+            setSelectedEvaluator({
+                name: "",
+                email: "",
+                role: "",
+                isAvailable: true,
+            });
+            setSelectedRole({
+                name: "",
+            });
+            setSelectedHackathon({
+                hackathonId: 0,
+                name: "",
+            });
+        } catch (error) {
+            toast.error(`Error: ${error?.message}`)
+        }
     };
 
     return (

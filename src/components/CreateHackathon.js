@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import {
     Card,
     Input,
@@ -11,12 +11,15 @@ import {
     MenuItem,
     Textarea,
 } from "@material-tailwind/react";
- 
+
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { fetchHackathons, hackathonCreation } from "../features/hackathon/hackathonSlice";
-import { Slide, ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
- 
+import {
+    fetchHackathons,
+    hackathonCreation,
+} from "../features/hackathon/hackathonSlice";
+import { Slide, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const CreateHackathon = () => {
     const themes = [
         { name: "Life Sciences" },
@@ -28,103 +31,100 @@ const CreateHackathon = () => {
     // useEffect(()=>{
     //     dispatch(fetchHackathons())
     // },[dispatch])
-    const [formData, setFormData] = useState({name:"",
-        theme:"",
-        startDate:"",
-        ideaSubmissionDeadLine:"",
-        shortListDeadLine:"",
-        implementationDeadLine:"",
-        reviewStartTime:"",
-        reviewEndTime:"",
-        description:"",
-        guidelines:"",
-        prizes:"",
-        judgingCriteria:"",});
+    const [formData, setFormData] = useState({
+        name: "",
+        theme: "",
+        startDate: "",
+        ideaSubmissionDeadLine: "",
+        shortListDeadLine: "",
+        implementationDeadLine: "",
+        reviewStartTime: "",
+        reviewEndTime: "",
+        description: "",
+        guidelines: "",
+        prizes: "",
+        judgingCriteria: "",
+    });
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevstate) => ({ ...prevstate, [name]: value }));
     };
     const [errors, setErrors] = useState({});
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const newErrors = {};
-        if(!formData.name)
-        {
-            newErrors.name="Hackathon Name is Required!"
+        if (!formData.name) {
+            newErrors.name = "Hackathon Name is Required!";
         }
-        if(!formData.theme)
-        {
-            newErrors.theme="Theme Is Required"
+        if (!formData.theme) {
+            newErrors.theme = "Theme Is Required";
         }
-        if(!formData.startDate)
-        {
-            newErrors.startDate="Start Date is Required!"
+        if (!formData.startDate) {
+            newErrors.startDate = "Start Date is Required!";
         }
-        if(!formData.ideaSubmissionDeadLine)
-        {
-            newErrors.ideaSubmissionDeadLine="Idea Submission Dead Line is Required!"
+        if (!formData.ideaSubmissionDeadLine) {
+            newErrors.ideaSubmissionDeadLine =
+                "Idea Submission Dead Line is Required!";
         }
-        if(!formData.shortListDeadLine)
-        {
-            newErrors.shortListDeadLine="short List Dead Line is Required!"
+        if (!formData.shortListDeadLine) {
+            newErrors.shortListDeadLine = "short List Dead Line is Required!";
         }
-        if(!formData.implementationDeadLine)
-        {
-            newErrors.implementationDeadLine="Implementation Dead Line is Required!"
+        if (!formData.implementationDeadLine) {
+            newErrors.implementationDeadLine =
+                "Implementation Dead Line is Required!";
         }
-        if(!formData.reviewStartTime)
-        {
-            newErrors.reviewStartTime="Review Start Time is Required!"
+        if (!formData.reviewStartTime) {
+            newErrors.reviewStartTime = "Review Start Time is Required!";
         }
-        if(!formData.reviewEndTime)
-        {
-            newErrors.reviewEndTime="Review End Time is Required!"
+        if (!formData.reviewEndTime) {
+            newErrors.reviewEndTime = "Review End Time is Required!";
         }
-        if(!formData.description)
-        {
-            newErrors.description="Description is Required!"
+        if (!formData.description) {
+            newErrors.description = "Description is Required!";
         }
-        if(!formData.guidelines)
-        {
-            newErrors.guidelines="GuideLines Are Required!"
+        if (!formData.guidelines) {
+            newErrors.guidelines = "GuideLines Are Required!";
         }
-        if(!formData.prizes)
-        {
-            newErrors.prizes="Prizes Are Required!"
+        if (!formData.prizes) {
+            newErrors.prizes = "Prizes Are Required!";
         }
-        if(!formData.judgingCriteria)
-        {
-            newErrors.judgingCriteria="Judging Criteria Is Required"
+        if (!formData.judgingCriteria) {
+            newErrors.judgingCriteria = "Judging Criteria Is Required";
         }
-        if(Object.keys(newErrors).length > 0)
-        {
+        if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
+        } else {
+            try {
+                await dispatch(hackathonCreation(formData)).unwrap();
+                setFormData({
+                    name: "",
+                    theme: "",
+                    startDate: "",
+                    ideaSubmissionDeadLine: "",
+                    shortListDeadLine: "",
+                    implementationDeadLine: "",
+                    reviewStartTime: "",
+                    reviewEndTime: "",
+                    description: "",
+                    guidelines: "",
+                    prizes: "",
+                    judgingCriteria: "",
+                });
+                toast.success("Hackathon successfully created!");
+                // try {
+                    await dispatch(fetchHackathons()).unwrap();
+                // } catch (error) {
+                //     toast.error(`Error: ${error?.message}`);
+                // }
+            } catch (error) {
+                toast.error(`Error: ${error?.message}`);
+            }
         }
-        else{
-        dispatch(hackathonCreation(formData));
-        setFormData({
-            name:"",
-            theme:"",
-            startDate:"",
-            ideaSubmissionDeadLine:"",
-            shortListDeadLine:"",
-            implementationDeadLine:"",
-            reviewStartTime:"",
-            reviewEndTime:"",
-            description:"",
-            guidelines:"",
-            prizes:"",
-            judgingCriteria:"",})
-            // toast.success("Hackathon Is Created!", {
-            //     position: "top-center",
-            //     transition:Slide})
-    }
-    
-    setErrors(newErrors);
-}
-   
+
+        setErrors(newErrors);
+    };
+
     return (
         <div className="container my-2 mx-auto px-2 lg:px-4 flex justify-center">
-            
             <Card
                 className="flex-intial w-full lg:mx-2 px-4 py-4"
                 color="white"
@@ -168,10 +168,10 @@ const CreateHackathon = () => {
                                 onChange={handleChange}
                             />
                             {errors.name && (
-                            <Typography className="text-red-500 text-xs w-fit">
-                                {errors.name}
-                            </Typography>
-                        )}
+                                <Typography className="text-red-500 text-xs w-fit">
+                                    {errors.name}
+                                </Typography>
+                            )}
                         </div>
                         <div className="flex flex-col gap-4">
                             <Typography
@@ -220,10 +220,10 @@ const CreateHackathon = () => {
                                 </Menu>
                             </div>
                             {errors.theme && (
-                            <Typography className="text-red-500 text-xs w-fit">
-                                {errors.theme}
-                            </Typography>
-                        )}
+                                <Typography className="text-red-500 text-xs w-fit">
+                                    {errors.theme}
+                                </Typography>
+                            )}
                         </div>
                         <div className="flex flex-col gap-4">
                             <Typography
@@ -249,12 +249,12 @@ const CreateHackathon = () => {
                                 onChange={handleChange}
                             />
                             {errors.startDate && (
-                            <Typography className="text-red-500 text-xs w-fit">
-                                {errors.startDate}
-                            </Typography>
-                        )}
+                                <Typography className="text-red-500 text-xs w-fit">
+                                    {errors.startDate}
+                                </Typography>
+                            )}
                         </div>
- 
+
                         <div className="flex flex-col gap-4">
                             <Typography
                                 variant="h6"
@@ -273,17 +273,16 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
-                               
                                 step={1}
                                 value={formData.ideaSubmissionDeadLine}
                                 name="ideaSubmissionDeadLine"
                                 onChange={handleChange}
                             />
                             {errors.ideaSubmissionDeadLine && (
-                            <Typography className="text-red-500 text-xs w-fit">
-                                {errors.ideaSubmissionDeadLine}
-                            </Typography>
-                        )}
+                                <Typography className="text-red-500 text-xs w-fit">
+                                    {errors.ideaSubmissionDeadLine}
+                                </Typography>
+                            )}
                         </div>
                         <div className="flex flex-col gap-4">
                             <Typography
@@ -303,17 +302,16 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
-                               
                                 step={1}
                                 name="shortListDeadLine"
                                 value={formData.shortListDeadLine}
                                 onChange={handleChange}
                             />
                             {errors.shortListDeadLine && (
-                            <Typography className="text-red-500 text-xs w-fit">
-                                {errors.shortListDeadLine}
-                            </Typography>
-                        )}
+                                <Typography className="text-red-500 text-xs w-fit">
+                                    {errors.shortListDeadLine}
+                                </Typography>
+                            )}
                         </div>
                         <div className="flex flex-col gap-4">
                             <Typography
@@ -333,17 +331,16 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
-                               
                                 step={1}
                                 value={formData.implementationDeadLine}
                                 name="implementationDeadLine"
                                 onChange={handleChange}
                             />
-                             {errors.implementationDeadLine && (
-                            <Typography className="text-red-500 text-xs w-fit">
-                                {errors.implementationDeadLine}
-                            </Typography>
-                        )}
+                            {errors.implementationDeadLine && (
+                                <Typography className="text-red-500 text-xs w-fit">
+                                    {errors.implementationDeadLine}
+                                </Typography>
+                            )}
                         </div>
                         <div className="flex flex-col gap-4">
                             <Typography
@@ -363,17 +360,16 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
-                               
                                 step={1}
                                 value={formData.reviewStartTime}
                                 name="reviewStartTime"
                                 onChange={handleChange}
                             />
                             {errors.reviewStartTime && (
-                            <Typography className="text-red-500 text-xs w-fit">
-                                {errors.reviewStartTime}
-                            </Typography>
-                        )}
+                                <Typography className="text-red-500 text-xs w-fit">
+                                    {errors.reviewStartTime}
+                                </Typography>
+                            )}
                         </div>
                         <div className="flex flex-col gap-4">
                             <Typography
@@ -393,17 +389,16 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
-                               
                                 step={1}
                                 value={formData.reviewEndTime}
                                 name="reviewEndTime"
                                 onChange={handleChange}
                             />
                             {errors.reviewEndTime && (
-                            <Typography className="text-red-500 text-xs w-fit">
-                                {errors.reviewEndTime}
-                            </Typography>
-                        )}
+                                <Typography className="text-red-500 text-xs w-fit">
+                                    {errors.reviewEndTime}
+                                </Typography>
+                            )}
                         </div>
                         <div className="flex flex-col gap-4 md:col-span-2">
                             <Typography
@@ -422,16 +417,15 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
-                               
                                 name="description"
                                 value={formData?.description}
                                 onChange={handleChange}
                             />
                             {errors.description && (
-                            <Typography className="text-red-500 text-xs w-fit">
-                                {errors.description}
-                            </Typography>
-                        )}
+                                <Typography className="text-red-500 text-xs w-fit">
+                                    {errors.description}
+                                </Typography>
+                            )}
                         </div>
                         <div className="flex flex-col gap-4 md:col-span-2">
                             <Typography
@@ -456,10 +450,10 @@ const CreateHackathon = () => {
                                 onChange={handleChange}
                             />
                             {errors.guidelines && (
-                            <Typography className="text-red-500 text-xs w-fit">
-                                {errors.guidelines}
-                            </Typography>
-                        )}
+                                <Typography className="text-red-500 text-xs w-fit">
+                                    {errors.guidelines}
+                                </Typography>
+                            )}
                         </div>
                         <div className="flex flex-col gap-4 md:col-span-2">
                             <Typography
@@ -484,10 +478,10 @@ const CreateHackathon = () => {
                                 onChange={handleChange}
                             />
                             {errors.prizes && (
-                            <Typography className="text-red-500 text-xs w-fit">
-                                {errors.prizes}
-                            </Typography>
-                        )}
+                                <Typography className="text-red-500 text-xs w-fit">
+                                    {errors.prizes}
+                                </Typography>
+                            )}
                         </div>
                         <div className="flex flex-col gap-4 md:col-span-2">
                             <Typography
@@ -512,10 +506,10 @@ const CreateHackathon = () => {
                                 onChange={handleChange}
                             />
                             {errors.judgingCriteria && (
-                            <Typography className="text-red-500 text-xs w-fit">
-                                {errors.judgingCriteria}
-                            </Typography>
-                        )}
+                                <Typography className="text-red-500 text-xs w-fit">
+                                    {errors.judgingCriteria}
+                                </Typography>
+                            )}
                         </div>
                     </div>
                     <Button className="mt-6" onClick={handleSubmit} fullWidth>
@@ -524,8 +518,7 @@ const CreateHackathon = () => {
                 </form>
             </Card>
         </div>
-
     );
 };
- 
+
 export default CreateHackathon;

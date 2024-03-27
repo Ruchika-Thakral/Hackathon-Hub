@@ -9,7 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import Hackathons from "./pages/Hackathons";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchHackathons } from "./features/hackathon/hackathonSlice";
+import { fetchHackathons, selectHackathons } from "./features/hackathon/hackathonSlice";
 import { reattemptLogin, selectUserId } from "./features/user/userSlice";
 import BaseLayout from "./components/BaseLayout";
 import TeamDetails from "./pages/TeamDetails";
@@ -22,7 +22,8 @@ function App() {
     const dispatch = useDispatch();
 
     //change to this for redux integration
-    const hackathons = HACKATHONS;
+    const hackathons = useSelector(selectHackathons);
+    // HACKATHONS;
     // useSelector((state) => state.hackathon.hackathons.data);
 
     useEffect(() => {
@@ -48,7 +49,7 @@ function App() {
         <div className="App">
             <ToastContainer
                 position="top-left"
-                autoClose={800}
+                autoClose={3800}
                 hideProgressBar={false}
                 newestOnTop={false}
                 closeOnClick

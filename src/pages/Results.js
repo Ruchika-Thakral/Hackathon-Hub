@@ -6,25 +6,28 @@ import { Alert, Typography } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import BaseLayout from "../components/BaseLayout";
 import { HACKATHONS, TEAMS } from "../constants";
+import { selectHackathonById } from "../features/hackathon/hackathonSlice";
 
 const Results = () => {
     let { hackathonId } = useParams();
 
     // const data = useSelector((state) => state.hackathon.hackathons.data) || [];
-    const [hackathons, setHackathons] = useState(
-        HACKATHONS
-        // data
-        );
+    // const [hackathons, setHackathons] = useState(
+    //     HACKATHONS
+    //     // data
+    //     );
 
     // useEffect(() => {
     //     setHackathons(data);
     // }, []);
 
-    const hackathon =
-        hackathons?.find((hack) => hack.hackathonId === Number(hackathonId)) ||
-        null;
+    const hackathon = useSelector((state) =>
+        selectHackathonById(state, hackathonId)
+    );
+    // hackathons?.find((hack) => hack.hackathonId === Number(hackathonId)) ||
+    // null;
 
-    const data2 = TEAMS[0].teamUserDetailsDTOs
+    const data2 = TEAMS[0].teamUserDetailsDTOs;
     // useSelector((state) => state.team.teamdetails.data) || [];
     // const teamdetails=data.length>0?data[0].teamUserDetailsDTOs:[]
     const [teams, setTeams] = useState(data2);

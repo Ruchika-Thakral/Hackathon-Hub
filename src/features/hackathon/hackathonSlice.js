@@ -4,29 +4,34 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
     // hackathons:{
-        data:null,
-        loading:false,
-        error:null
+    data: [],
+    loading: false,
+    error: null,
     // }
 };
-export const fetchHackathons=createAsyncThunk(
-    'hackathon/fetchHackathons',
+export const fetchHackathons = createAsyncThunk(
+    "hackathon/fetchHackathons",
     async (thunkAPI) => {
         try {
-            const response = await axios.get('http://localhost:8080/Hackathon');
+            const response = await axios.get("http://localhost:8080/Hackathon");
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
     }
 );
-export const hackathonCreation=createAsyncThunk(
-    'hackathon/hackathonCreation',
-    async (hackathonData,thunkAPI) => {
+export const hackathonCreation = createAsyncThunk(
+    "hackathon/hackathonCreation",
+    async (hackathonData, thunkAPI) => {
         try {
-            const response = await axios.post('http://localhost:8080/Admin/hackathon',hackathonData);
-            console.log(response)
-            const response2 = await axios.get('http://localhost:8080/Hackathon');
+            const response = await axios.post(
+                "http://localhost:8080/Admin/hackathon",
+                hackathonData
+            );
+            // console.log(response);
+            // const response2 = await axios.get(
+            //     "http://localhost:8080/Hackathon"
+            // );
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -34,13 +39,17 @@ export const hackathonCreation=createAsyncThunk(
     }
 );
 
-export const hackathonEnd=createAsyncThunk(
-    'hackathon/hackathonEnd',
-    async (hackathonId,thunkAPI) => {
+export const hackathonEnd = createAsyncThunk(
+    "hackathon/hackathonEnd",
+    async (hackathonId, thunkAPI) => {
         try {
-            const response = await axios.put(`http://localhost:8080/Admin/hackathon/end/${hackathonId}`);
-            console.log(response)
-            const response2 = await axios.get('http://localhost:8080/Hackathon');
+            const response = await axios.put(
+                `http://localhost:8080/Admin/hackathon/end/${hackathonId}`
+            );
+            // console.log(response);
+            // const response2 = await axios.get(
+            //     "http://localhost:8080/Hackathon"
+            // );
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -65,7 +74,7 @@ const hackathonSlice = createSlice({
             })
             .addCase(fetchHackathons.rejected, (state, action) => {
                 state.loading = false;
-                state.data= null;
+                state.data = [];
                 state.error = action.payload; // Set error payload
             })
             .addCase(hackathonCreation.pending, (state) => {
@@ -79,7 +88,7 @@ const hackathonSlice = createSlice({
             })
             .addCase(hackathonCreation.rejected, (state, action) => {
                 state.loading = false;
-                state.data= null;
+                // state.data = null;
                 state.error = action.payload; // Set error payload
             })
             .addCase(hackathonEnd.pending, (state) => {
@@ -93,12 +102,18 @@ const hackathonSlice = createSlice({
             })
             .addCase(hackathonEnd.rejected, (state, action) => {
                 state.loading = false;
-                state.data= null;
+                // state.data = null;
                 state.error = action.payload; // Set error payload
-            })
-        }
+            });
+    },
 });
 
-
+export const selectHackathons = (state) => state.hackathon.data;
+export const selectHackathonById = (state, hackathonId) =>
+    state.hackathon.data?.find(
+        (hackathon) => hackathon.hackathonId === hackathonId
+    );
+export const selectErrorHackathon = (state) => state.hackathon.error;
+export const selectLoadingHackathon = (state) => state.hackathon.loading;
 
 export default hackathonSlice.reducer;

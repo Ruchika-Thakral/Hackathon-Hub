@@ -32,9 +32,9 @@ export const registerEvaluator = createAsyncThunk(
                 "http://localhost:8080/Admin/Evaluator",
                 evaluatorData
             );
-            const response2 = await axios.get(
-                "http://localhost:8080/Admin/Evaluator"
-            );
+            // const response2 = await axios.get(
+            //     "http://localhost:8080/Admin/Evaluator"
+            // );
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -50,9 +50,9 @@ export const assignEvaluator = createAsyncThunk(
                 "http://localhost:8080/Admin/assign",
                 evaluatorData
             );
-            const response2 = await axios.get(
-                "http://localhost:8080/Admin/Evaluator"
-            );
+            // const response2 = await axios.get(
+            //     "http://localhost:8080/Admin/Evaluator"
+            // );
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
