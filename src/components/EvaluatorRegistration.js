@@ -74,14 +74,25 @@ const EvaluatorRegistration = () => {
                     {
                         pending: "Registering...",
                         success: `${registerData.name} registered successfully!`,
-                        error: "A problem occured while registering. Please try again",
+                        error: {
+                            render({ data }) {
+                                return `Error: ${data?.message}`;
+                            },
+                            // other options
+                            // icon: "🟢",
+                        },
                     }
+                    // {
+                    //     pending: "Registering...",
+                    //     success: `${registerData.name} registered successfully!`,
+                    //     error: "A problem occured while registering. Please try again",
+                    // }
                 );
                 setRegisterData({ role: roles[selectedRoleIndex].value });
                 await dispatch(fetchEvaluators()).unwrap();
             } catch (error) {
                 console.log(error);
-                toast.error(`Error: ${error?.message}`);
+                // toast.error(`Error: ${error?.message}`);
             }
         }
         setValidationErrors(newErrors);

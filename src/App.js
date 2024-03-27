@@ -9,13 +9,24 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import Hackathons from "./pages/Hackathons";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchHackathons, selectHackathons } from "./features/hackathon/hackathonSlice";
-import { reattemptLogin, selectUserId } from "./features/user/userSlice";
+import {
+    fetchHackathons,
+    selectHackathons,
+} from "./features/hackathon/hackathonSlice";
+import {
+    reattemptLogin,
+    selectUserDetails,
+    selectUserId,
+} from "./features/user/userSlice";
 import BaseLayout from "./components/BaseLayout";
 import TeamDetails from "./pages/TeamDetails";
 import PanelistShortlist from "./pages/PanelistShortlist";
 import JudgeReview from "./pages/JudgeReview";
-import { fetchTeamDetails } from "./features/team/teamSlice";
+import {
+    fetchJudgeTeamsByHackathonId,
+    fetchPanelistTeamsByHackathonId,
+    fetchTeamDetails,
+} from "./features/team/teamSlice";
 import { HACKATHONS, USER } from "./constants";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import { fetchEvaluators } from "./features/evaluator/evaluatorSlice";
@@ -26,11 +37,31 @@ function App() {
     const hackathons = useSelector(selectHackathons);
     // HACKATHONS;
     // useSelector((state) => state.hackathon.hackathons.data);
-
+    const userData = useSelector(selectUserDetails);
     useEffect(() => {
         dispatch(fetchHackathons());
-        dispatch(fetchEvaluators())
-    }, [dispatch]);
+        if (userData?.role === "admin") {
+            dispatch(fetchEvaluators());
+        }
+        if (userData?.role === "participant") {
+            dispatch(fetchTeamDetails(userId));
+        }
+        if (userData?.role === "judge") {
+            dispatch(
+                fetchJudgeTeamsByHackathonId({
+                    hackathonId: userData?.assignedHackathon,
+                })
+            );
+        }
+        if (userData?.role === "panelist") {
+            dispatch(
+                fetchPanelistTeamsByHackathonId({
+                    hackathonId: userData?.assignedHackathon,
+                    panelistid: userId,
+                })
+            );
+        }
+    }, [userData]);
 
     useEffect(() => {
         dispatch(reattemptLogin());
@@ -41,11 +72,10 @@ function App() {
     // const userId = USER?.userId
     // const data = useSelector((state) => state.user.login.data);
     // const userId = data ? data.data.userId : null;
-    useEffect(() => {
-        dispatch(fetchTeamDetails(userId));
-    }, [dispatch]);
+    // useEffect(() => {
+    // }, []);
 
-    const [reviewedIdeas, setReviewedIdeas] = useState([]);
+    // const [reviewedIdeas, setReviewedIdeas] = useState([]);
 
     return (
         <div className="App">
@@ -86,8 +116,8 @@ function App() {
                         path="judge/review"
                         element={
                             <JudgeReview
-                                reviewedIdeas={reviewedIdeas}
-                                setReviewedIdeas={setReviewedIdeas}
+                                // reviewedIdeas={reviewedIdeas}
+                                // setReviewedIdeas={setReviewedIdeas}
                             />
                         }
                     />

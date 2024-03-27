@@ -14,9 +14,14 @@ import {
     DialogFooter,
 } from "@material-tailwind/react";
 import { useDispatch, useSelector } from "react-redux";
-import { acceptTeam, rejectTeam } from "../features/team/teamSlice";
+import {
+    acceptTeam,
+    fetchPanelistTeamsByHackathonId,
+    rejectTeam,
+} from "../features/team/teamSlice";
 import { fetchHackathons } from "../features/hackathon/hackathonSlice";
 import { selectUserDetails } from "../features/user/userSlice";
+import { toast } from "react-toastify";
 
 const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
     const dateConverter = (date) => {
@@ -38,7 +43,7 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
 
     // const hackathons = useSelector((state) => state.hackathon.hackathons.data);
     // const user = USER;
-    const userData = useSelector(selectUserDetails)
+    const userData = useSelector(selectUserDetails);
     // useSelector((state) => state.user.login?.data?.data);
     // console.log(hackathons);
 
@@ -74,28 +79,78 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
         setOpenRules(!openRules);
     };
 
-    const handleIdeaAccept = (teamId) => {
+    const handleIdeaAccept = async (teamId) => {
         // console.log(teamId + "idea accepted");
-        dispatch(
-            acceptTeam({
-                teamId,
-                hackathonId: userData.assignedHackathon,
-                panelistid: userData.userId,
-            })
-        );
+        try {
+            await toast.promise(
+                dispatch(
+                    acceptTeam({
+                        teamId,
+                        hackathonId: userData.assignedHackathon,
+                        panelistid: userData.userId,
+                    })
+                ).unwrap(),
+                {
+                    pending: "Accepting idea...",
+                    success: "Idea accepted successfully!",
+                    error: {
+                        render({ data }) {
+                            return `Error: ${data?.message}`;
+                        },
+                        // other options
+                        // icon: "🟢",
+                    },
+                }
+            );
+            // toast.success("Idea accepted successfully!");
+            await dispatch(
+                fetchPanelistTeamsByHackathonId({
+                    hackathonId: userData?.assignedHackathon,
+                    panelistid: userData?.userId,
+                })
+            ).unwrap();
+        } catch (error) {
+            console.log(error?.message);
+            // toast.error(`Error: ${error?.message}`);
+        }
     };
-    const handleIdeaReject = (teamId) => {
+    const handleIdeaReject = async (teamId) => {
         // console.log(teamId + "idea rejected");
-        dispatch(
-            rejectTeam({
-                teamId,
-                hackathonId: userData.assignedHackathon,
-                panelistid: userData.userId,
-            })
-        );
+        try {
+            await toast.promise(
+                dispatch(
+                    rejectTeam({
+                        teamId,
+                        hackathonId: userData.assignedHackathon,
+                        panelistid: userData.userId,
+                    })
+                ).unwrap(),
+                {
+                    pending: "Rejecting idea...",
+                    success: "Idea rejected successfully!",
+                    error: {
+                        render({ data }) {
+                            return `Error: ${data?.message}`;
+                        },
+                        // other options
+                        // icon: "🟢",
+                    },
+                }
+            );
+            toast.warn("Idea rejected successfully!");
+            await dispatch(
+                fetchPanelistTeamsByHackathonId({
+                    hackathonId: userData?.assignedHackathon,
+                    panelistid: userData?.userId,
+                })
+            ).unwrap();
+        } catch (error) {
+            console.log(error?.message)
+            // toast.error(`Error: ${error?.message}`);
+        }
     };
 
-    // console.log(selectedHackathon)
+    console.log(selectedIdea);
 
     return (
         <>
@@ -169,9 +224,9 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
                                                 selectedIdea?.teamId || ""
                                             );
                                         }}
-                                        disabled={
-                                            selectedIdea?.status !== "submitted"
-                                        }
+                                        // disabled={
+                                        //     selectedIdea?.status !== "submitted"
+                                        // }
                                     >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -193,9 +248,9 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
                                                 selectedIdea?.teamId || ""
                                             );
                                         }}
-                                        disabled={
-                                            selectedIdea?.status !== "submitted"
-                                        }
+                                        // disabled={
+                                        //     selectedIdea?.status !== "submitted"
+                                        // }
                                     >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"

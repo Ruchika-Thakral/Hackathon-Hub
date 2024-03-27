@@ -21,8 +21,8 @@ const ReviewDetails = ({
     hackathons,
     selectedIdeaId,
     IDEAS,
-    reviewedIdeas,
-    setReviewedIdeas,
+    // reviewedIdeas,
+    // setReviewedIdeas,
 }) => {
     const dateConverter = (date) => {
         const shortdate = new Date(date).toLocaleString("en-GB", {
@@ -72,10 +72,10 @@ const ReviewDetails = ({
     const handleRating = (rate) => {
         // console.log(rate);
         setReviewData({ rating: rate, teamId: selectedIdeaId });
-        setReviewedIdeas([
-            ...reviewedIdeas,
-            { rating: rate, teamId: selectedIdeaId },
-        ]);
+        // setReviewedIdeas([
+        //     ...reviewedIdeas,
+        //     { rating: rate, teamId: selectedIdeaId },
+        // ]);
     };
 
     useEffect(() => {
@@ -151,25 +151,25 @@ const ReviewDetails = ({
                                         unratedColor="amber"
                                         ratedColor="amber"
                                         value={
-                                            // reviewData.rating ||
-                                            reviewedIdeas.find(
-                                                (idea) =>
-                                                    idea.teamId ===
-                                                    selectedIdea?.teamId
-                                            )?.rating
+                                            reviewData?.rating
+                                            // reviewedIdeas.find(
+                                            //     (idea) =>
+                                            //         idea.teamId ===
+                                            //         selectedIdea?.teamId
+                                            // )?.rating
                                         }
                                         onChange={(value) =>
                                             handleRating(value)
                                         }
-                                        readonly={
-                                            // reviewedIdeas.includes(selectedIdea?.teamId)
+                                        // readonly={
+                                        //     // reviewedIdeas.includes(selectedIdea?.teamId)
 
-                                            reviewedIdeas?.filter(
-                                                (obj) =>
-                                                    obj.teamId ===
-                                                    selectedIdea?.teamId
-                                            ).length > 0
-                                        }
+                                        //     reviewedIdeas?.filter(
+                                        //         (obj) =>
+                                        //             obj.teamId ===
+                                        //             selectedIdea?.teamId
+                                        //     ).length > 0
+                                        // }
                                     />
                                     {/* <IconButton
                                     variant="text"
@@ -230,9 +230,7 @@ const ReviewDetails = ({
                                     rel="noopener noreferrer"
                                 >
                                     <Typography className="underline">
-                                        {selectedIdea?.ideaRepo
-                                            ? "Repo Link"
-                                            : null}
+                                        Repo Link
                                     </Typography>
                                 </Link>
                                 <Link
@@ -241,9 +239,7 @@ const ReviewDetails = ({
                                     rel="noopener noreferrer"
                                 >
                                     <Typography className="underline">
-                                        {selectedIdea?.ideaFiles
-                                            ? "Files Link"
-                                            : null}
+                                            Files Link
                                     </Typography>
                                 </Link>
                             </div>

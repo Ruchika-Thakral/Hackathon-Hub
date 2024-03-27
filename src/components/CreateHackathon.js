@@ -243,6 +243,7 @@ const CreateHackathon = () => {
                                 containerProps={{
                                     className: "min-w-0",
                                 }}
+                                // onFocus={}
                                 step={1}
                                 value={formData.startDate}
                                 name="startDate"

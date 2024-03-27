@@ -24,10 +24,15 @@ import {
 } from "@material-tailwind/react";
 
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { ideaSubmission } from "../features/team/teamSlice";
+import {
+    fetchTeamDetails,
+    ideaSubmission,
+    selectTeams,
+} from "../features/team/teamSlice";
 import { repoSubmission } from "../features/team/teamSlice";
 import { TEAMS, USER } from "../constants";
 import { selectUserDetails, selectUserId } from "../features/user/userSlice";
+import { toast } from "react-toastify";
 
 const DOMAINS = [
     { name: "Data and AI", value: "data" },
@@ -38,39 +43,100 @@ const DOMAINS = [
 
 const IdeaDetails = () => {
     const dispatch = useDispatch();
-    const userData = useSelector(selectUserDetails)
+    const userData = useSelector(selectUserDetails);
     // useSelector((state) => state.user.login.data);
     const hackathonId = userData?.assignedHackathon || null;
-    const userId = userData?.userId || null
+    const userId = userData?.userId || null;
 
     // const teamData=useSelector(state=>state.team.teamdetails.data)
-    const data2 = TEAMS
+    const teamsData = useSelector(selectTeams);
+    // const userData = useSelector(selectUserDetails);
+    // TEAMS
     // useSelector((state) => state.team.teamdetails.data);
 
-    const [teamData, setTeamData] = useState({});
+    const [teamDetails, setTeamDetails] = useState({});
     useEffect(() => {
-        setTeamData(data2);
-    }, [data2]);
-
-    const status = teamData.length > 0 ? teamData[0].status : null;
+        if (userData && teamsData.length > 0) {
+            setTeamDetails(
+                teamsData.find(
+                    (team) => team.hackathonId === userData?.assignedHackathon
+                )
+            );
+        }
+    }, [teamsData, userData]);
+    console.log(teamDetails);
+    // const status = teamDetails.length > 0 ? teamDetails[0].status : null;
 
     const [repoData, setRepoData] = useState({});
     const [ideaData, setIdeaData] = useState({});
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const [isShortlisted, setIsShortlisted] = useState(false);
+    const [isImplemented, setIsImplemented] = useState(false);
+    const [isRejected, setIsRejected] = useState(false);
     // const [didSubmit, setDidSubmit] = useState(false)
     useEffect(() => {
-        if (status === "selected") {
-            setIsShortlisted(true); // Set isShortlisted to true when status is 'selected'
+        if (teamDetails?.status === "submitted") {
+            setIsSubmitted(true); // Set isSubmitted to true when status is 'selected'
+            setIdeaData({
+                ...ideaData,
+                ideaTitle: teamDetails.ideaTitle,
+                ideaDomain: teamDetails.ideaDomain,
+            });
         }
-    }, [status]);
+        if (teamDetails?.status === "selected") {
+            setIsShortlisted(true); // Set isSubmitted to true when status is 'selected'
+            setIdeaData({
+                ...ideaData,
+                ideaTitle: teamDetails.ideaTitle,
+                ideaDomain: teamDetails.ideaDomain,
+            });
+        }
+        if (teamDetails?.status === "implemented") {
+            setIsImplemented(true); // Set isSubmitted to true when status is 'selected'
+            setIdeaData({
+                ...ideaData,
+                ideaTitle: teamDetails.ideaTitle,
+                ideaDomain: teamDetails.ideaDomain,
+                // ideaFiles: teamDetails.ideaFiles,
+                // ideaRepo: ideaData.ideaRepo,
+            });
+            
+            setRepoData({
+                ...repoData,
+                ideaFiles: teamDetails.ideaFiles,
+                ideaRepo: teamDetails.ideaRepo,
+            });
+        }
+
+        if (teamDetails?.status === "rejected") {
+            setIsRejected(true);
+            setIdeaData({
+                ...ideaData,
+                ideaTitle: teamDetails.ideaTitle,
+                ideaDomain: teamDetails.ideaDomain,
+            });
+        }
+    }, [teamDetails]);
     const handleChange = (e) => {
         const { name, value } = e.target;
         setIdeaData((prevstate) => ({ ...prevstate, [name]: value }));
     };
 
-    const handleSubmit = () => {
-        console.log(ideaData);
-        dispatch(ideaSubmission({ hackathonId, userId, ideaData }));
+    const handleSubmit = async () => {
+        try {
+            console.log(ideaData);
+            await dispatch(
+                ideaSubmission({ hackathonId, userId, ideaData })
+            ).unwrap();
+            // setIsSubmitted(true);
+            toast.success("Idea submitted successfully!");
+            await dispatch(fetchTeamDetails(userData.userId)).unwrap();
+            // toast.success("Fetched Teams");
+            console.log(teamsData);
+            console.log(teamsData);
+        } catch (error) {
+            toast.error(`Error: ${error?.message}`);
+        }
         // setDidSubmit(true)
     };
 
@@ -79,9 +145,18 @@ const IdeaDetails = () => {
         setRepoData((prevstate) => ({ ...prevstate, [name]: value }));
     };
 
-    const handleRepoSubmit = () => {
-        console.log(repoData);
-        dispatch(repoSubmission({ hackathonId, userId, repoData }));
+    const handleRepoSubmit = async () => {
+        try {
+            console.log(repoData);
+            await dispatch(
+                repoSubmission({ hackathonId, userId, repoData })
+            ).unwrap();
+            // setIsImplemented(true);
+            toast.success("Idea submitted successfully!");
+            await dispatch(fetchTeamDetails(userData.userId)).unwrap();
+        } catch (error) {
+            toast.error(`Error: ${error?.message}`);
+        }
         // setDidSubmit(true)
     };
 
@@ -92,7 +167,12 @@ const IdeaDetails = () => {
             </CardHeader>
             <CardBody className="w-full lg:w-2/3">
                 <Input
-                    disabled={isShortlisted}
+                    disabled={
+                        isSubmitted ||
+                        isShortlisted ||
+                        isRejected ||
+                        isImplemented
+                    }
                     label="Idea Title*"
                     value={ideaData?.ideaTitle || ""}
                     name="ideaTitle"
@@ -102,7 +182,12 @@ const IdeaDetails = () => {
                     <Menu placement="bottom-start">
                         <MenuHandler>
                             <Button
-                                disabled={isShortlisted}
+                                disabled={
+                                    isSubmitted ||
+                                    isShortlisted ||
+                                    isRejected ||
+                                    isImplemented
+                                }
                                 ripple={false}
                                 variant="text"
                                 color="blue-gray"
@@ -142,33 +227,41 @@ const IdeaDetails = () => {
 
                 <div className="mt-3">
                     <Textarea
-                        disabled={isShortlisted}
+                        disabled={
+                            isSubmitted ||
+                            isShortlisted ||
+                            isRejected ||
+                            isImplemented
+                        }
                         label="Idea Description*"
                         name="ideaBody"
                         value={ideaData?.ideaBody || ""}
                         onChange={handleChange}
                     />
                 </div>
-                {!isShortlisted && (
-                    <div className="flex w-full justify-between mt-3 py-1.5">
-                        <div className="flex gap-2 justify-center md:justify-end w-full">
-                            <Button
-                                size="sm"
-                                className="rounded-md"
-                                onClick={handleSubmit}
-                            >
-                                Submit Idea
-                            </Button>
+                {!isSubmitted &&
+                    !isRejected &&
+                    !isImplemented &&
+                    !isShortlisted && (
+                        <div className="flex w-full justify-between mt-3 py-1.5">
+                            <div className="flex gap-2 justify-center md:justify-end w-full">
+                                <Button
+                                    size="sm"
+                                    className="rounded-md"
+                                    onClick={handleSubmit}
+                                >
+                                    Submit Idea
+                                </Button>
+                            </div>
                         </div>
-                    </div>
-                )}
-                {isShortlisted && (
+                    )}
+                {(isShortlisted || isImplemented) && (
                     <div>
                         <div className="mt-3">
                             <Input
                                 label="Repository Link"
                                 value={repoData?.ideaRepo || ""}
-                                // disabled={didSubmit}
+                                disabled={isImplemented}
                                 name="ideaRepo"
                                 onChange={handleRepoChange}
                                 icon={
@@ -192,7 +285,7 @@ const IdeaDetails = () => {
                         <div className="mt-3">
                             <Input
                                 label="Drive Link"
-                                // disabled={didSubmit}
+                                disabled={isImplemented}
                                 value={repoData?.ideaFiles || ""}
                                 name="ideaFiles"
                                 onChange={handleRepoChange}
@@ -214,37 +307,18 @@ const IdeaDetails = () => {
                                 }
                             />
                         </div>
-                        <div className="flex w-full justify-between mt-3 py-1.5">
-                            {/* <IconButton
-                                variant="text"
-                                color="blue-gray"
-                                size="sm"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    strokeWidth={2}
-                                    className="h-4 w-4"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"
-                                    />
-                                </svg>
-                            </IconButton> */}
+                        {!isImplemented && <div className="flex w-full justify-between mt-3 py-1.5">
                             <div className="flex gap-2 justify-center md:justify-end w-full">
                                 <Button
                                     size="sm"
                                     className="rounded-md"
+                                    disabled={isImplemented}
                                     onClick={handleRepoSubmit}
                                 >
                                     Submit Implementation
                                 </Button>
                             </div>
-                        </div>
+                        </div>}
                     </div>
                 )}
             </CardBody>

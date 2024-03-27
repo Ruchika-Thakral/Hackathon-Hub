@@ -104,11 +104,24 @@ const EvaluatorAssign = () => {
             };
 
             // console.log(data);
-            await toast.promise(dispatch(assignEvaluator(data)).unwrap(), {
+            await toast.promise(dispatch(assignEvaluator(data)).unwrap(), 
+            {
                 pending: "Assigning...",
                 success: `${selectedEvaluator.name} assigned to ${selectedHackathon.name} successfully!`,
-                error: "A problem occured while assigning. Please try again",
-            });
+                error: {
+                    render({ data }) {
+                        return `Error: ${data?.message}`;
+                    },
+                    // other options
+                    // icon: "🟢",
+                },
+            }
+            // {
+            //     pending: "Assigning...",
+            //     success: `${selectedEvaluator.name} assigned to ${selectedHackathon.name} successfully!`,
+            //     error: "A problem occured while assigning. Please try again",
+            // }
+            );
             // toast.success(`${selectedEvaluator.name} assigned to ${selectedHackathon.name} successfully!`)
             setSelectedEvaluator({
                 name: "",
@@ -125,7 +138,8 @@ const EvaluatorAssign = () => {
             });
             await dispatch(fetchEvaluators()).unwrap();
         } catch (error) {
-            toast.error(`Error: ${error?.message}`);
+            console.log(error?.message)
+            // toast.error(`Error: ${error?.message}`);
         }
     };
 

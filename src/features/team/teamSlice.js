@@ -46,9 +46,9 @@ export const teamRegistration = createAsyncThunk(
                 `http://localhost:8080/Team/${hackathonId}/${userId}`,
                 team
             );
-            const response2 = await axios.get(
-                `http://localhost:8080/User/Teams/${userId}`
-            );
+            // const response2 = await axios.get(
+            //     `http://localhost:8080/User/Teams/${userId}`
+            // );
             // console.log(response);
             return response.data;
             // return { a: response, b: response2 };
@@ -66,14 +66,14 @@ export const ideaSubmission = createAsyncThunk(
                 `http://localhost:8080/Team/idea/${hackathonId}/${userId}`,
                 ideaData
             );
-            const response2 = await axios.get(
-                `http://localhost:8080/User/Teams/${userId}`
-            );
+            // const response2 = await axios.get(
+            //     `http://localhost:8080/User/Teams/${userId}`
+            // );
             // console.log(response);
             return response.data;
             // return { a: response, b: response2 };
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             return thunkAPI.rejectWithValue(error.response.data);
         }
     }
@@ -88,14 +88,14 @@ export const repoSubmission = createAsyncThunk(
                 `http://localhost:8080/Team/ideaFiles/${hackathonId}/${userId}`,
                 repoData
             );
-            const response2 = await axios.get(
-                `http://localhost:8080/User/Teams/${userId}`
-            );
+            // const response2 = await axios.get(
+            //     `http://localhost:8080/User/Teams/${userId}`
+            // );
             // console.log(response);
             // return { a: response, b: response2 };
             return response.data;
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             return thunkAPI.rejectWithValue(error.response.data);
         }
     }
@@ -106,14 +106,14 @@ export const fetchTeamDetails = createAsyncThunk(
     async (userId, thunkAPI) => {
         try {
             // console.log(userId);
-            if (userId) {
-                const response = await axios.get(
-                    `http://localhost:8080/User/Teams/${userId}`
-                );
-                // console.log(response);
-                return response.data;
-            }
-            return [];
+            // if (userId) {
+            const response = await axios.get(
+                `http://localhost:8080/User/Teams/${userId}`
+            );
+            // console.log(response);
+            return response.data;
+            // }
+            // return [];
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
@@ -140,14 +140,14 @@ export const fetchPanelistTeamsByHackathonId = createAsyncThunk(
     async ({ hackathonId, panelistid }, thunkAPI) => {
         // Assuming hackathonId is already available in the state
         try {
-            if (hackathonId !== -1 && panelistid) {
-                const response = await axios.get(
-                    `http://localhost:8080/panelist/${hackathonId}/${panelistid}`
-                );
-                // console.log(response);
-                return response.data;
-            }
-            return [];
+            // if (hackathonId !== -1 && panelistid) {
+            const response = await axios.get(
+                `http://localhost:8080/panelist/${hackathonId}/${panelistid}`
+            );
+            // console.log(response);
+            return response.data;
+            // }
+            // return [];
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
@@ -159,16 +159,16 @@ export const rejectTeam = createAsyncThunk(
     async ({ teamId, hackathonId, panelistid }, thunkAPI) => {
         // Assuming hackathonId is already available in the state
         try {
-            if (hackathonId !== -1 && panelistid && teamId) {
-                const response = await axios.post(
-                    `http://localhost:8080/Team/rejected/${teamId}`
-                );
-                const response2 = await axios.get(
-                    `http://localhost:8080/panelist/${hackathonId}/${panelistid}`
-                );
-                return response.data;
-            }
-            return [];
+            // if (hackathonId !== -1 && panelistid && teamId) {
+            const response = await axios.post(
+                `http://localhost:8080/Team/rejected/${teamId}`
+            );
+            const response2 = await axios.get(
+                `http://localhost:8080/panelist/${hackathonId}/${panelistid}`
+            );
+            return response.data;
+            // }
+            // return [];
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
@@ -180,16 +180,16 @@ export const acceptTeam = createAsyncThunk(
     async ({ teamId, hackathonId, panelistid }, thunkAPI) => {
         // Assuming hackathonId is already available in the state
         try {
-            if (hackathonId !== -1 && panelistid && teamId) {
-                const response = await axios.put(
-                    `http://localhost:8080/Team/selected/${teamId}`
-                );
-                const response2 = await axios.get(
-                    `http://localhost:8080/panelist/${hackathonId}/${panelistid}`
-                );
-                return response.data;
-            }
-            return [];
+            // if (hackathonId !== -1 && panelistid && teamId) {
+            const response = await axios.put(
+                `http://localhost:8080/Team/selected/${teamId}`
+            );
+            const response2 = await axios.get(
+                `http://localhost:8080/panelist/${hackathonId}/${panelistid}`
+            );
+            return response.data;
+            // }
+            // return [];
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
@@ -229,7 +229,7 @@ const teamSlice = createSlice({
             })
             .addCase(teamRegistration.rejected, (state, action) => {
                 state.loading = false;
-                state.data = null;
+                // state.data = null;
                 state.error = action.payload; // Set error payload
             })
             .addCase(ideaSubmission.pending, (state) => {
@@ -243,7 +243,7 @@ const teamSlice = createSlice({
             })
             .addCase(ideaSubmission.rejected, (state, action) => {
                 state.loading = false;
-                state.data = null;
+                // state.data = null;
                 state.error = action.payload; // Set error payload
             })
             .addCase(repoSubmission.pending, (state) => {
@@ -258,7 +258,7 @@ const teamSlice = createSlice({
             })
             .addCase(repoSubmission.rejected, (state, action) => {
                 state.loading = false;
-                state.data = null;
+                // state.data = null;
                 state.error = action.payload; // Set error payload
             })
             .addCase(fetchTeamDetails.pending, (state) => {
@@ -272,7 +272,7 @@ const teamSlice = createSlice({
             })
             .addCase(fetchTeamDetails.rejected, (state, action) => {
                 state.loading = false;
-                state.data = null;
+                // state.data = null;
                 state.error = action.payload; // Set error payload
             })
             .addCase(fetchJudgeTeamsByHackathonId.pending, (state) => {
@@ -289,7 +289,7 @@ const teamSlice = createSlice({
             )
             .addCase(fetchJudgeTeamsByHackathonId.rejected, (state, action) => {
                 state.loading = false;
-                state.data = null;
+                // state.data = null;
                 state.error = action.payload;
             })
             .addCase(fetchPanelistTeamsByHackathonId.pending, (state) => {
@@ -308,7 +308,7 @@ const teamSlice = createSlice({
                 fetchPanelistTeamsByHackathonId.rejected,
                 (state, action) => {
                     state.loading = false;
-                    state.data = null;
+                    // state.data = null;
                     state.error = action.payload;
                 }
             )
@@ -325,7 +325,7 @@ const teamSlice = createSlice({
             })
             .addCase(acceptTeam.rejected, (state, action) => {
                 state.loading = false;
-                state.data = null;
+                // state.data = null;
                 state.error = action.payload;
             })
             .addCase(rejectTeam.pending, (state) => {
@@ -339,7 +339,7 @@ const teamSlice = createSlice({
             })
             .addCase(rejectTeam.rejected, (state, action) => {
                 state.loading = false;
-                state.data = null;
+                // state.data = null;
                 state.error = action.payload;
             })
             .addCase(rateTeam.pending, (state) => {
@@ -358,5 +358,12 @@ const teamSlice = createSlice({
             });
     },
 });
+
+export const selectTeams = (state) => state.team.data;
+export const selectTeamByHackathonId = (state, hackathonId) =>
+    state.team.data?.find((team) => team.hackathonId === Number(hackathonId)) ||
+    null;
+export const selectErrorTeam = (state) => state.team.error;
+export const selectLoadingTeam = (state) => state.team.loading;
 
 export default teamSlice.reducer;

@@ -16,9 +16,9 @@ import {
 
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { fetchTeamDetails } from "../features/team/teamSlice";
+import { fetchTeamDetails, selectTeams } from "../features/team/teamSlice";
 import { TEAMS, USER } from "../constants";
-import { selectUserId } from "../features/user/userSlice";
+import { selectUserDetails, selectUserId } from "../features/user/userSlice";
 
 // import {
 //     Menu,
@@ -38,26 +38,32 @@ import { selectUserId } from "../features/user/userSlice";
 
 const TeamMembers = () => {
     const dispatch = useDispatch();
-    const data = TEAMS
+    const teamsData = useSelector(selectTeams);
+    // TEAMS
     // useSelector((state) => state.team.teamdetails.data) || [];
     // const teamdetails=data.length>0?data[0].teamUserDetailsDTOs:[]
     // const login = USER
     // useSelector((state) => state.user.login.data);
-    const userId = useSelector(selectUserId);
+    const userData = useSelector(selectUserDetails);
     // login ? login?.userId : null;
-    const [teamdetails, setTeamdetails] = useState([]
+    const [teamDetails, setTeamDetails] = useState(
+        []
         // data.length > 0 ? data[0].teamUserDetailsDTOs : []
     );
     // useEffect(() => {
     //     // console.log("hi");
     //     dispatch(fetchTeamDetails(userId));
     // }, [dispatch]);
-    
+
     useEffect(() => {
-        if (data.length > 0) {
-            setTeamdetails(data[0].teamUserDetailsDTOs);
+        if (userData && teamsData.length > 0) {
+            setTeamDetails(
+                teamsData.find(
+                    (team) => team.hackathonId === userData?.assignedHackathon
+                )?.teamUserDetailsDTOs
+            );
         }
-    }, [data]);
+    }, [teamsData, userData]);
 
     return (
         <Card className="w-full mb-4">
@@ -65,13 +71,13 @@ const TeamMembers = () => {
                 <Typography variant="h4">Team Members</Typography>
             </CardHeader>
             <CardBody className="p-4 py-2">
-                {teamdetails.length === 0 ? (
+                {teamDetails.length === 0 ? (
                     <Typography variant="paragraph" color="gray">
                         No team members found.
                     </Typography>
                 ) : (
                     <List className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {teamdetails.map((member) => {
+                        {teamDetails.map((member) => {
                             return (
                                 <ListItem key={member.userId}>
                                     <ListItemPrefix>

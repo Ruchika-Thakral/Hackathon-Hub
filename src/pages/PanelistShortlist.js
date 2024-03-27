@@ -22,8 +22,14 @@ import { IconButton, ButtonGroup } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchPanelistTeamsByHackathonId } from "../features/team/teamSlice";
-import { fetchHackathons, selectHackathons } from "../features/hackathon/hackathonSlice";
+import {
+    fetchPanelistTeamsByHackathonId,
+    selectTeams,
+} from "../features/team/teamSlice";
+import {
+    fetchHackathons,
+    selectHackathons,
+} from "../features/hackathon/hackathonSlice";
 import { selectUserDetails } from "../features/user/userSlice";
 
 const themes = [
@@ -36,7 +42,15 @@ const themes = [
 const PanelistShortlist = () => {
     const dispatch = useDispatch();
 
-    const IDEAS = TEAMS;
+    const teamsData = useSelector(selectTeams);
+    const [ideas, setIdeas] = useState([]);
+    // useSelector((state) => state.team.judgeteams.data?.data) || [];
+
+    useEffect(() => {
+        setIdeas(teamsData);
+    }, [teamsData]);
+
+    // const IDEAS = TEAMS;
     // useSelector((state) => state.team.panelistteams.data?.data) || [];
 
     // const user = USER;
@@ -47,7 +61,7 @@ const PanelistShortlist = () => {
     //     dispatch(fetchHackathons());
     // }, [dispatch]);
 
-    const hackathons = useSelector(selectHackathons)
+    const hackathons = useSelector(selectHackathons);
     // HACKATHONS;
     // useSelector((state) => state.hackathon.hackathons.data) || [];
     // console.log(hackathons);
@@ -58,13 +72,22 @@ const PanelistShortlist = () => {
     const [selectedHackathonId, setSelectedHackathonId] = React.useState(null);
 
     const [selectedIdeaId, setSelectedIdeaId] = React.useState(
-        IDEAS[0]?.teamId
+        null
+        // ideas[0]?.teamId
     );
-    // console.log(IDEAS[0]);
+    // console.log(ideas[0]);
 
     useEffect(() => {
-        setSelectedHackathonId(userData.assignedHackathon);
+        if (userData) {
+            setSelectedHackathonId(userData?.assignedHackathon);
+        }
     }, [hackathons]);
+
+    useEffect(() => {
+        if (ideas.length > 0) {
+            setSelectedIdeaId(ideas[0].teamId);
+        }
+    }, [ideas]);
 
     const [activePage, setActivePage] = React.useState(1);
 
@@ -139,13 +162,13 @@ const PanelistShortlist = () => {
                                 </CardHeader>
                                 <CardBody className="h-full py-2">
                                     <List>
-                                        {IDEAS.length === 0 ? (
+                                        {ideas.length === 0 ? (
                                             <ListItem disabled={true}>
                                                 No Ideas available.
                                             </ListItem>
                                         ) : null}
-                                        {IDEAS.length > 8
-                                            ? IDEAS.slice(7).map((idea) => {
+                                        {ideas.length > 8
+                                            ? ideas.slice(7).map((idea) => {
                                                   //   console.log(idea.name);
                                                   return (
                                                       <ListItem
@@ -161,7 +184,9 @@ const PanelistShortlist = () => {
                                                           <>
                                                               {idea.status ===
                                                               "submitted" ? null : idea.status ===
-                                                                "selected" ? (
+                                                                    "selected" ||
+                                                                idea.status ===
+                                                                    "implemented" ? (
                                                                   <svg
                                                                       xmlns="http://www.w3.org/2000/svg"
                                                                       viewBox="0 0 24 24"
@@ -193,7 +218,7 @@ const PanelistShortlist = () => {
                                                       </ListItem>
                                                   );
                                               })
-                                            : IDEAS.map((idea) => {
+                                            : ideas.map((idea) => {
                                                   //   console.log(hackathon.name);
                                                   return (
                                                       <ListItem
@@ -306,7 +331,7 @@ const PanelistShortlist = () => {
                                 hackathons={hackathons}
                                 selectedHackathonId={selectedHackathonId}
                                 selectedIdeaId={selectedIdeaId}
-                                IDEAS={IDEAS}
+                                IDEAS={ideas}
                             />
                         </div>
                     </div>

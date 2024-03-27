@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import BaseLayout from "../components/BaseLayout";
 import { HACKATHONS, TEAMS } from "../constants";
 import { selectHackathonById } from "../features/hackathon/hackathonSlice";
+import { selectTeamByHackathonId } from "../features/team/teamSlice";
 
 const Results = () => {
     let { hackathonId } = useParams();
@@ -27,28 +28,31 @@ const Results = () => {
     // hackathons?.find((hack) => hack.hackathonId === Number(hackathonId)) ||
     // null;
 
-    const data2 = TEAMS[0].teamUserDetailsDTOs;
+    // const data2 = TEAMS[0].teamUserDetailsDTOs;
     // useSelector((state) => state.team.teamdetails.data) || [];
     // const teamdetails=data.length>0?data[0].teamUserDetailsDTOs:[]
-    const [teams, setTeams] = useState(data2);
+    // const [teams, setTeams] = useState(data2);
 
-    useEffect(() => {
-        if (data2.length > 0) {
-            setTeams(data2);
-        }
-    }, [data2]);
+    // useEffect(() => {
+    //     if (data2.length > 0) {
+    //         setTeams(data2);
+    //     }
+    // }, [data2]);
 
-    const [teamDetails, setTeamDetails] = useState(
-        teams.find((team) => team.hackathonId === Number(hackathonId))
+    // const [teamDetails, setTeamDetails] = useState(
+    //     teams.find((team) => team.hackathonId === Number(hackathonId))
+    // );
+    const teamDetails = useSelector((state) =>
+        selectTeamByHackathonId(state, hackathonId)
     );
 
-    useEffect(() => {
-        if (teams.length > 0) {
-            setTeamDetails(
-                teams.find((team) => team.hackathonId === Number(hackathonId))
-            );
-        }
-    }, [teams]);
+    // useEffect(() => {
+    //     if (teams.length > 0) {
+    //         setTeamDetails(
+    //             teams.find((team) => team.hackathonId === Number(hackathonId))
+    //         );
+    //     }
+    // }, [teams]);
 
     return (
         <BaseLayout>

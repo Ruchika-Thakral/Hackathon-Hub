@@ -111,8 +111,8 @@ const hackathonSlice = createSlice({
 export const selectHackathons = (state) => state.hackathon.data;
 export const selectHackathonById = (state, hackathonId) =>
     state.hackathon.data?.find(
-        (hackathon) => hackathon.hackathonId === hackathonId
-    );
+        (hackathon) => hackathon.hackathonId === Number(hackathonId)
+    ) || null;
 export const selectErrorHackathon = (state) => state.hackathon.error;
 export const selectLoadingHackathon = (state) => state.hackathon.loading;
 

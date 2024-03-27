@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import VerticalBar from "../components/VerticalBar";
-import {USER, HACKATHONS, TEAMS} from '../constants'
+import { USER, HACKATHONS, TEAMS } from "../constants";
 import HackathonDetails from "../components/HackathonDetails";
 import BaseLayout from "../components/BaseLayout";
 import SearchFilter from "../components/SearchFilter";
@@ -20,13 +20,18 @@ import { useSearchParams } from "react-router-dom";
 import { IconButton, ButtonGroup } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import ReviewDetails from "../components/ReviewDetails";
-import { fetchJudgeTeamsByHackathonId } from "../features/team/teamSlice";
+import {
+    fetchJudgeTeamsByHackathonId,
+    selectTeams,
+} from "../features/team/teamSlice";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchHackathons, selectHackathons } from "../features/hackathon/hackathonSlice";
+import {
+    fetchHackathons,
+    selectHackathons,
+} from "../features/hackathon/hackathonSlice";
 import { selectUserDetails } from "../features/user/userSlice";
-
 
 const themes = [
     { name: "Life Sciences", value: "lifesciences" },
@@ -34,23 +39,30 @@ const themes = [
     { name: "Telecom", value: "telecom" },
     { name: "Product Engineering", value: "product" },
 ];
-const JudgeReview = ({ reviewedIdeas, setReviewedIdeas }) => {
+const JudgeReview = (
+    // { reviewedIdeas, setReviewedIdeas }
+    ) => {
     const dispatch = useDispatch();
     // const teams = useSelector((state) => state.team.panelistteams);
 
-    const IDEAS = TEAMS
-        // useSelector((state) => state.team.judgeteams.data?.data) || [];
+    const teamsData = useSelector(selectTeams);
+    const [ideas, setIdeas] = useState([]);
+    // useSelector((state) => state.team.judgeteams.data?.data) || [];
 
-    const userData = useSelector(selectUserDetails)
+    useEffect(() => {
+        setIdeas(teamsData);
+    }, [teamsData]);
+
+    const userData = useSelector(selectUserDetails);
     // useSelector((state) => state.user.login?.data?.data);
 
     // useEffect(() => {
     //     dispatch(fetchHackathons());
     // }, [dispatch]);
 
-    const hackathons = useSelector(selectHackathons)
+    const hackathons = useSelector(selectHackathons);
     // HACKATHONS
-        // useSelector((state) => state.hackathon.hackathons.data) || [];
+    // useSelector((state) => state.hackathon.hackathons.data) || [];
     // console.log(hackathons);
 
     // useEffect(() => {
@@ -60,31 +72,38 @@ const JudgeReview = ({ reviewedIdeas, setReviewedIdeas }) => {
     // const [filteredHackathons, setFilteredHackathons] =
     //     React.useState(hackathons);
 
-    const [selectedHackathonId, setSelectedHackathonId] = React.useState(
-        null
-    );
+    const [selectedHackathonId, setSelectedHackathonId] = React.useState(null);
 
     const [selectedIdeaId, setSelectedIdeaId] = React.useState(
-        IDEAS[0]?.teamId
+        null
+        // ideas[0]?.teamId
     );
-    // console.log(IDEAS);
-    // const user = useSelector((state) => state.user.login?.data?.data);
-    useEffect(() => {
-        setSelectedHackathonId(userData.assignedHackathon);
-    }, [hackathons]);
 
     useEffect(() => {
-        // if (user) {
-        dispatch(
-            fetchJudgeTeamsByHackathonId({
-                // hackathonId: user.assignedHackathon,
-                // panelistid: user.userId,
-                hackathonId: userData?.assignedHackathon,
-                // panelistid: 3,
-            })
-        );
-        // }
-    }, []);
+        if (ideas.length > 0) {
+            setSelectedIdeaId(ideas[0].teamId);
+        }
+    }, [ideas]);
+    // console.log(ideas);
+    // const user = useSelector((state) => state.user.login?.data?.data);
+    useEffect(() => {
+        if (userData && !userData.available) {
+            setSelectedHackathonId(userData?.assignedHackathon);
+        }
+    }, [hackathons]);
+
+    // useEffect(() => {
+    //     if (userData && !userData.available) {
+    //     dispatch(
+    //         fetchJudgeTeamsByHackathonId({
+    //             // hackathonId: user.assignedHackathon,
+    //             // panelistid: user.userId,
+    //             hackathonId: userData?.assignedHackathon,
+    //             // panelistid: 3,
+    //         })
+    //     );
+    //     }
+    // }, []);
 
     // const [reviewedIdeas, setReviewedIdeas] = useState([]);
 
@@ -149,9 +168,13 @@ const JudgeReview = ({ reviewedIdeas, setReviewedIdeas }) => {
                                 </CardHeader>
                                 <CardBody className="h-full py-2">
                                     <List>
-                                        {IDEAS.length === 0? <ListItem disabled={true}>No Ideas available.</ListItem>: null}
-                                        {IDEAS.length > 8
-                                            ? IDEAS.slice(7).map((idea) => {
+                                        {ideas.length === 0 ? (
+                                            <ListItem disabled={true}>
+                                                No Ideas available.
+                                            </ListItem>
+                                        ) : null}
+                                        {ideas.length > 8
+                                            ? ideas.slice(7).map((idea) => {
                                                   //   console.log(idea.name);
                                                   return (
                                                       <ListItem
@@ -164,7 +187,7 @@ const JudgeReview = ({ reviewedIdeas, setReviewedIdeas }) => {
                                                           className="flex justify-between"
                                                       >
                                                           {idea.ideaTitle}
-                                                          <>
+                                                          {/* <>
                                                               {reviewedIdeas.includes(
                                                                   idea.teamId
                                                               ) ? (
@@ -181,11 +204,11 @@ const JudgeReview = ({ reviewedIdeas, setReviewedIdeas }) => {
                                                                       />
                                                                   </svg>
                                                               ) : null}
-                                                          </>
+                                                          </> */}
                                                       </ListItem>
                                                   );
                                               })
-                                            : IDEAS.map((idea) => {
+                                            : ideas.map((idea) => {
                                                   //   console.log(hackathon.name);
                                                   return (
                                                       <ListItem
@@ -202,7 +225,7 @@ const JudgeReview = ({ reviewedIdeas, setReviewedIdeas }) => {
                                                           className="border border-gray-200 flex justify-between"
                                                       >
                                                           {idea.ideaTitle}
-                                                          <>
+                                                          {/* <>
                                                               {reviewedIdeas.includes(
                                                                   idea.teamId
                                                               ) ? (
@@ -219,7 +242,7 @@ const JudgeReview = ({ reviewedIdeas, setReviewedIdeas }) => {
                                                                       />
                                                                   </svg>
                                                               ) : null}
-                                                          </>
+                                                          </> */}
                                                       </ListItem>
                                                   );
                                               })}
@@ -284,9 +307,9 @@ const JudgeReview = ({ reviewedIdeas, setReviewedIdeas }) => {
                                 hackathons={hackathons}
                                 selectedHackathonId={selectedHackathonId}
                                 selectedIdeaId={selectedIdeaId}
-                                IDEAS={IDEAS}
-                                reviewedIdeas={reviewedIdeas}
-                                setReviewedIdeas={setReviewedIdeas}
+                                IDEAS={ideas}
+                                // reviewedIdeas={reviewedIdeas}
+                                // setReviewedIdeas={setReviewedIdeas}
                             />
                         </div>
                     </div>

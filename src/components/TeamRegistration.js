@@ -9,8 +9,12 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { teamRegistration } from "../features/team/teamSlice";
-import { selectUserId, successTeamRegistration } from "../features/user/userSlice";
+import {
+    selectUserId,
+    successTeamRegistration,
+} from "../features/user/userSlice";
 import { USER } from "../constants";
+import { toast } from "react-toastify";
 
 const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
     // const login = USER
@@ -18,61 +22,74 @@ const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
     const userId = useSelector(selectUserId);
     // login ? login.userId : null;
     const hackathonId = selectedHackathonId;
-    const data = null 
+    // const data = null;
     // useSelector((state) => state.team.registration.data);
-    const status = data ? data.status : null;
+    // const status = data ? data.status : null;
     // const error = useSelector((state) => state.team.registration.error);
 
-    
     const error = useSelector((state) => state.team.error);
     const loading = useSelector((state) => state.team.loading);
-    const [newerror, setNewError] = useState(false);
+
+    const [showError, setShowError] = useState(false);
+
     useEffect(() => {
-        setNewError(true);
-    }, [error]);
+        setShowError(false);
+    }, [open]);
+
     const dispatch = useDispatch();
-    const [formdata, setFormData] = useState({
+    const [formData, setFormData] = useState({
         name: "",
         email1: "",
         email2: "",
         email3: "",
     });
-    const emailsInput = [formdata.email1, formdata.email2, formdata.email3];
+    const emailsInput = [formData.email1, formData.email2, formData.email3];
     const emails = emailsInput.filter((email) => email.trim() !== "");
     // console.log(emails);
-    const name = formdata.name;
+    const name = formData.name;
     const team = { emails, name };
     // console.log(team);
     const [errors, setErrors] = useState({});
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formdata, [name]: value });
+        setFormData({ ...formData, [name]: value });
     };
-    useEffect(() => {
-        if (status === 201) {
-            handler();
-        }
-    }, [status]);
+    // useEffect(() => {
+    //     if (status === 201) {
+    //         handler();
+    //     }
+    // }, [status]);
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
         const newErrors = {};
-        if (!formdata.name) {
+        if (!formData.name) {
             newErrors.teamname = "Team Name is Required";
         }
-        if (formdata.email1 && !validateEmail(formdata.email1)) {
+        if (formData.email1 && !validateEmail(formData.email1)) {
             newErrors.email1 = "Email is invalid";
         }
-        if (formdata.email2 && !validateEmail(formdata.email2)) {
+        if (formData.email2 && !validateEmail(formData.email2)) {
             newErrors.email2 = "Email is invalid";
         }
-        if (formdata.email3 && !validateEmail(formdata.email3)) {
+        if (formData.email3 && !validateEmail(formData.email3)) {
             newErrors.email3 = "Email is invalid";
         }
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            dispatch(teamRegistration({ hackathonId, userId, team }));
+            try {
+                await dispatch(
+                    teamRegistration({ hackathonId, userId, team })
+                ).unwrap();
+                // toast.success(`Team: ${formData.name} registered successfully!`)
+                handler();
+                // navigate
+                setShowError(false);
+            } catch (error) {
+                // toast.success
+                setShowError(true);
+            }
             // dispatch(successTeamRegistration(hackathonId));
         }
         setErrors(newErrors);
@@ -92,7 +109,7 @@ const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
             email2: "",
             email3: "",
         });
-        setNewError(false);
+        setShowError(false);
     };
     return (
         <div>
@@ -121,7 +138,7 @@ const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
                             label="Team Name*"
                             size="md"
                             name="name"
-                            value={formdata.teamname}
+                            value={formData.teamname}
                             onChange={handleChange}
                         />
                         {errors.teamname && (
@@ -135,7 +152,7 @@ const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
                             label="Member 1 Email"
                             size="md"
                             name="email1"
-                            value={formdata.email1}
+                            value={formData.email1}
                             onChange={handleChange}
                         />
                         {errors.email1 && (
@@ -149,7 +166,7 @@ const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
                             label="Member 2 Email"
                             size="md"
                             name="email2"
-                            value={formdata.email2}
+                            value={formData.email2}
                             onChange={handleChange}
                         />
                         {errors.email2 && (
@@ -163,7 +180,7 @@ const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
                             label="Member 3 Email"
                             size="md"
                             name="email3"
-                            value={formdata.email3}
+                            value={formData.email3}
                             onChange={handleChange}
                         />
                         {errors.email3 && (
@@ -171,7 +188,7 @@ const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
                                 {errors.email3 || ""}
                             </Typography>
                         )}
-                        {newerror && (
+                        {showError && error && (
                             <Typography className="text-red-500 text-xs w-fit">
                                 {error?.message || ""}
                             </Typography>
