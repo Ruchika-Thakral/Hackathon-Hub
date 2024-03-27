@@ -18,6 +18,7 @@ import JudgeReview from "./pages/JudgeReview";
 import { fetchTeamDetails } from "./features/team/teamSlice";
 import { HACKATHONS, USER } from "./constants";
 import { Slide, ToastContainer, toast } from "react-toastify";
+import { fetchEvaluators } from "./features/evaluator/evaluatorSlice";
 function App() {
     const dispatch = useDispatch();
 
@@ -28,6 +29,7 @@ function App() {
 
     useEffect(() => {
         dispatch(fetchHackathons());
+        dispatch(fetchEvaluators())
     }, [dispatch]);
 
     useEffect(() => {

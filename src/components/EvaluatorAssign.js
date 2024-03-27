@@ -16,6 +16,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import {
     assignEvaluator,
     fetchEvaluators,
+    selectEvaluators,
 } from "../features/evaluator/evaluatorSlice";
 import {
     fetchHackathons,
@@ -29,7 +30,8 @@ const EvaluatorAssign = () => {
     const hackathons = useSelector(selectHackathons);
     // HACKATHONS;
     // useSelector((state) => state.hackathon.hackathons?.data) || [];
-    const evaluators = EVALUATORS;
+    const evaluators = useSelector(selectEvaluators);
+    // EVALUATORS;
     // useSelector((state) => state.evaluator.evaluators?.data) || [];
 
     const [JUDGES, setJUDGES] = useState(
@@ -102,8 +104,12 @@ const EvaluatorAssign = () => {
             };
 
             // console.log(data);
-            await dispatch(assignEvaluator(data)).unwrap();
-            toast.success(`${selectedRole.name} assigned to ${selectedHackathon.name} successfully!`)
+            await toast.promise(dispatch(assignEvaluator(data)).unwrap(), {
+                pending: "Assigning...",
+                success: `${selectedEvaluator.name} assigned to ${selectedHackathon.name} successfully!`,
+                error: "A problem occured while assigning. Please try again",
+            });
+            // toast.success(`${selectedEvaluator.name} assigned to ${selectedHackathon.name} successfully!`)
             setSelectedEvaluator({
                 name: "",
                 email: "",
@@ -117,8 +123,9 @@ const EvaluatorAssign = () => {
                 hackathonId: 0,
                 name: "",
             });
+            await dispatch(fetchEvaluators()).unwrap();
         } catch (error) {
-            toast.error(`Error: ${error?.message}`)
+            toast.error(`Error: ${error?.message}`);
         }
     };
 
@@ -369,7 +376,16 @@ const EvaluatorAssign = () => {
                             }}
                         />
                     </div>
-                    <Button className="mt-6" fullWidth onClick={handleSubmit}>
+                    <Button
+                        className="mt-6"
+                        fullWidth
+                        onClick={handleSubmit}
+                        disabled={
+                            selectedEvaluator.name === "" ||
+                            selectedHackathon.name === "" ||
+                            selectedRole.name === ""
+                        }
+                    >
                         Assign{" " + selectedRole.name}
                     </Button>
                 </form>

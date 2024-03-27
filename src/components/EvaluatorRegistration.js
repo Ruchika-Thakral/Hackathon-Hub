@@ -12,13 +12,16 @@ import {
 
 import { useDispatch } from "react-redux";
 
-
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 import React, { useEffect, useState } from "react";
 
-import { registerEvaluator, fetchEvaluators } from "../features/evaluator/evaluatorSlice";
+import {
+    registerEvaluator,
+    fetchEvaluators,
+} from "../features/evaluator/evaluatorSlice";
 import { fetchHackathons } from "../features/hackathon/hackathonSlice";
+import { toast } from "react-toastify";
 
 const EvaluatorRegistration = () => {
     const roles = [
@@ -31,23 +34,58 @@ const EvaluatorRegistration = () => {
     const dispatch = useDispatch();
     // const [selectedTheme, setSelectedTheme] = useState({ name: "" });
 
-
-    const [evaluatorData, setEvaluatorData] = useState({role: roles[selectedRoleIndex].value});
+    const [registerData, setRegisterData] = useState({
+        role: roles[selectedRoleIndex].value,
+    });
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setEvaluatorData((prevstate) => ({ ...prevstate, [name]: value }));
+        setRegisterData((prevstate) => ({ ...prevstate, [name]: value }));
     };
 
     // useEffect(()=>{
     //     dispatch(fetchEvaluators())
     //     dispatch(fetchHackathons())
     // },[dispatch])
-
-    const handleSubmit = () => {
-        console.log(evaluatorData);
-        
-        setEvaluatorData({role: roles[selectedRoleIndex].value})
-        dispatch(registerEvaluator(evaluatorData));
+    const validateEmail = (email) => {
+        // Regex pattern for email validation
+        const pattern =
+            /^[_a-z0-9-]+(\.[_a-z0-9-]+)*(\+[a-z0-9-]+)?@[a-z0-9-]+(\.[a-z0-9-]+)*$/i;
+        return pattern.test(email);
+    };
+    const [validationErrors, setValidationErrors] = useState({});
+    const handleSubmit = async () => {
+        const newErrors = {};
+        if (!registerData.name) {
+            newErrors.name = "Name is Required!";
+        }
+        if (!registerData.email) {
+            newErrors.email = "Email is Required!";
+        }
+        if (registerData.email && !validateEmail(registerData.email)) {
+            newErrors.email = "Email is Invalid!";
+        }
+        if (Object.keys(newErrors).length > 0) {
+            setValidationErrors(newErrors);
+        } else {
+            try {
+                // await dispatch(registerEvaluator(registerData)).unwrap();
+                await toast.promise(
+                    dispatch(registerEvaluator(registerData)).unwrap(),
+                    {
+                        pending: "Registering...",
+                        success: `${registerData.name} registered successfully!`,
+                        error: "A problem occured while registering. Please try again",
+                    }
+                );
+                setRegisterData({ role: roles[selectedRoleIndex].value });
+                await dispatch(fetchEvaluators()).unwrap();
+            } catch (error) {
+                console.log(error);
+                toast.error(`Error: ${error?.message}`);
+            }
+        }
+        setValidationErrors(newErrors);
+        // console.log(registerData);
     };
 
     return (
@@ -94,8 +132,8 @@ const EvaluatorRegistration = () => {
                                                 className="flex items-center gap-2"
                                                 onClick={() => {
                                                     setSelectedRoleIndex(index);
-                                                    setEvaluatorData({
-                                                        ...evaluatorData,
+                                                    setRegisterData({
+                                                        ...registerData,
                                                         role: item.value,
                                                     });
                                                 }}
@@ -118,10 +156,15 @@ const EvaluatorRegistration = () => {
                                         // className: "min-w-0",
                                     }
                                 }
-                                value={evaluatorData?.name || ""}
+                                value={registerData?.name || ""}
                                 name="name"
                                 onChange={handleChange}
                             />
+                            {validationErrors.name && (
+                                <Typography className="text-red-500 text-xs w-fit">
+                                    {validationErrors.name}
+                                </Typography>
+                            )}
                         </div>
                         <Typography
                             variant="h6"
@@ -140,12 +183,26 @@ const EvaluatorRegistration = () => {
                             containerProps={{
                                 className: "min-w-0",
                             }}
-                            value={evaluatorData?.email || ""}
+                            value={registerData?.email || ""}
                             name="email"
                             onChange={handleChange}
                         />
+                        {validationErrors.email && (
+                            <Typography className="text-red-500 text-xs w-fit">
+                                {validationErrors.email}
+                            </Typography>
+                        )}
                     </div>
-                    <Button className="mt-6" fullWidth onClick={handleSubmit}>
+                    <Button
+                        className="mt-6"
+                        fullWidth
+                        onClick={handleSubmit}
+                        disabled={
+                            !registerData?.name ||
+                            !registerData?.email ||
+                            selectedRole.name === ""
+                        }
+                    >
                         Create{" " + selectedRole.name}
                     </Button>
                 </form>

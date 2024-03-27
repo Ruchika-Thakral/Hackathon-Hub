@@ -77,7 +77,7 @@ const evaluatorSlice = createSlice({
             })
             .addCase(fetchEvaluators.rejected, (state, action) => {
                 state.loading = false;
-                state.data = null;
+                // state.data = [];
                 state.error = action.payload; // Set error payload
             })
             .addCase(registerEvaluator.pending, (state) => {
@@ -91,7 +91,7 @@ const evaluatorSlice = createSlice({
             })
             .addCase(registerEvaluator.rejected, (state, action) => {
                 state.loading = false;
-                state.data = null;
+                // state.data = null;
                 state.error = action.payload; // Set error payload
             })
             .addCase(assignEvaluator.pending, (state) => {
@@ -105,12 +105,19 @@ const evaluatorSlice = createSlice({
             })
             .addCase(assignEvaluator.rejected, (state, action) => {
                 state.loading = false;
-                state.data = null;
+                // state.data = null;
                 state.error = action.payload; // Set error payload
             });
     },
 });
 
-export const { login, logout, register } = evaluatorSlice.actions;
+
+export const selectEvaluators = (state) => state.evaluator.data;
+
+export const selectErrorEvaluator = (state) => state.evaluator.error;
+export const selectLoadingEvaluator = (state) => state.evaluator.loading;
+
+
+// export const { login, logout, register } = evaluatorSlice.actions;
 
 export default evaluatorSlice.reducer;
