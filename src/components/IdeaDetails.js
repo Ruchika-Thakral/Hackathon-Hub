@@ -100,7 +100,7 @@ const IdeaDetails = () => {
                 // ideaFiles: teamDetails.ideaFiles,
                 // ideaRepo: ideaData.ideaRepo,
             });
-            
+
             setRepoData({
                 ...repoData,
                 ideaFiles: teamDetails.ideaFiles,
@@ -117,26 +117,52 @@ const IdeaDetails = () => {
             });
         }
     }, [teamDetails]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setIdeaData((prevstate) => ({ ...prevstate, [name]: value }));
     };
 
+    const [validationIdeaErrors, setValidationIdeaErrors] = useState({});
+
     const handleSubmit = async () => {
-        try {
-            console.log(ideaData);
-            await dispatch(
-                ideaSubmission({ hackathonId, userId, ideaData })
-            ).unwrap();
-            // setIsSubmitted(true);
-            toast.success("Idea submitted successfully!");
-            await dispatch(fetchTeamDetails(userData.userId)).unwrap();
-            // toast.success("Fetched Teams");
-            console.log(teamsData);
-            console.log(teamsData);
-        } catch (error) {
-            toast.error(`Error: ${error?.message}`);
+        const newErrors = {};
+        if (!ideaData.ideaTitle) {
+            newErrors.ideaTitle = "Idea Title is Required!";
         }
+        if (ideaData.ideaTitle && ideaData.ideaTitle.length > 255) {
+            newErrors.ideaTitle =
+                "Idea Title Should Not Contain More Than 255 Characters";
+        }
+        if (!ideaData.ideaDomain) {
+            newErrors.ideaDomain = "Theme Is Required";
+        }
+        if (!ideaData.ideaBody) {
+            newErrors.ideaBody = "Idea Description Is Required";
+        }
+        if (ideaData.ideaBody && ideaData.ideaBody.length > 3000) {
+            newErrors.ideaBody =
+                "Idea Title Should Not Contain More Than 3000 Characters";
+        }
+        if (Object.keys(newErrors).length > 0) {
+            setValidationIdeaErrors(newErrors);
+        } else {
+            try {
+                console.log(ideaData);
+                await dispatch(
+                    ideaSubmission({ hackathonId, userId, ideaData })
+                ).unwrap();
+                // setIsSubmitted(true);
+                toast.success("Idea submitted successfully!");
+                await dispatch(fetchTeamDetails(userData.userId)).unwrap();
+                // toast.success("Fetched Teams");
+                console.log(teamsData);
+                console.log(teamsData);
+            } catch (error) {
+                toast.error(`Error: ${error?.message}`);
+            }
+        }
+        setValidationIdeaErrors(newErrors);
         // setDidSubmit(true)
     };
 
@@ -145,18 +171,40 @@ const IdeaDetails = () => {
         setRepoData((prevstate) => ({ ...prevstate, [name]: value }));
     };
 
+    const [validationRepoErrors, setValidationRepoErrors] = useState({});
+
     const handleRepoSubmit = async () => {
-        try {
-            console.log(repoData);
-            await dispatch(
-                repoSubmission({ hackathonId, userId, repoData })
-            ).unwrap();
-            // setIsImplemented(true);
-            toast.success("Idea submitted successfully!");
-            await dispatch(fetchTeamDetails(userData.userId)).unwrap();
-        } catch (error) {
-            toast.error(`Error: ${error?.message}`);
+        const newErrors = {};
+        if (!repoData.ideaRepo) {
+            newErrors.ideaRepo = "Repository Link is Required!";
         }
+        if (repoData.ideaRepo && repoData.ideaRepo.length > 255) {
+            newErrors.ideaRepo =
+                "Repository Link Should Not Contain More Than 255 Characters";
+        }
+        if (!repoData.ideaFiles) {
+            newErrors.ideaFiles = "Drive Link Is Required";
+        }
+        if (repoData.ideaFiles && repoData.ideaFiles.length > 255) {
+            newErrors.ideaBody =
+                "Drive Link Should Not Contain More Than 255 Characters";
+        }
+        if (Object.keys(newErrors).length > 0) {
+            setValidationRepoErrors(newErrors);
+        } else {
+            try {
+                console.log(repoData);
+                await dispatch(
+                    repoSubmission({ hackathonId, userId, repoData })
+                ).unwrap();
+                // setIsImplemented(true);
+                toast.success("Idea submitted successfully!");
+                await dispatch(fetchTeamDetails(userData.userId)).unwrap();
+            } catch (error) {
+                toast.error(`Error: ${error?.message}`);
+            }
+        }
+        setValidationRepoErrors(newErrors);
         // setDidSubmit(true)
     };
 
@@ -178,6 +226,11 @@ const IdeaDetails = () => {
                     name="ideaTitle"
                     onChange={handleChange}
                 />
+                {validationIdeaErrors.ideaTitle && (
+                    <Typography className="text-red-500 text-xs w-fit">
+                        {validationIdeaErrors.ideaTitle}
+                    </Typography>
+                )}
                 <div className="relative mt-3 flex w-full">
                     <Menu placement="bottom-start">
                         <MenuHandler>
@@ -223,6 +276,11 @@ const IdeaDetails = () => {
                             })}
                         </MenuList>
                     </Menu>
+                    {validationIdeaErrors.ideaDomain && (
+                        <Typography className="text-red-500 text-xs w-fit">
+                            {validationIdeaErrors.ideaDomain}
+                        </Typography>
+                    )}
                 </div>
 
                 <div className="mt-3">
@@ -238,6 +296,11 @@ const IdeaDetails = () => {
                         value={ideaData?.ideaBody || ""}
                         onChange={handleChange}
                     />
+                    {validationIdeaErrors.ideaBody && (
+                        <Typography className="text-red-500 text-xs w-fit">
+                            {validationIdeaErrors.ideaBody}
+                        </Typography>
+                    )}
                 </div>
                 {!isSubmitted &&
                     !isRejected &&
@@ -282,6 +345,12 @@ const IdeaDetails = () => {
                                 }
                             />
                         </div>
+
+                        {validationRepoErrors.ideaRepo && (
+                            <Typography className="text-red-500 text-xs w-fit">
+                                {validationRepoErrors.ideaRepo}
+                            </Typography>
+                        )}
                         <div className="mt-3">
                             <Input
                                 label="Drive Link"
@@ -307,18 +376,26 @@ const IdeaDetails = () => {
                                 }
                             />
                         </div>
-                        {!isImplemented && <div className="flex w-full justify-between mt-3 py-1.5">
-                            <div className="flex gap-2 justify-center md:justify-end w-full">
-                                <Button
-                                    size="sm"
-                                    className="rounded-md"
-                                    disabled={isImplemented}
-                                    onClick={handleRepoSubmit}
-                                >
-                                    Submit Implementation
-                                </Button>
+
+                        {validationRepoErrors.ideaFiles && (
+                            <Typography className="text-red-500 text-xs w-fit">
+                                {validationRepoErrors.ideaFiles}
+                            </Typography>
+                        )}
+                        {!isImplemented && (
+                            <div className="flex w-full justify-between mt-3 py-1.5">
+                                <div className="flex gap-2 justify-center md:justify-end w-full">
+                                    <Button
+                                        size="sm"
+                                        className="rounded-md"
+                                        disabled={isImplemented}
+                                        onClick={handleRepoSubmit}
+                                    >
+                                        Submit Implementation
+                                    </Button>
+                                </div>
                             </div>
-                        </div>}
+                        )}
                     </div>
                 )}
             </CardBody>

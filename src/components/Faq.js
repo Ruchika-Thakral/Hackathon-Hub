@@ -95,7 +95,7 @@ const Faq = () => {
                     </div>
                 </div>
 
-                <div className="-mx-4 flex flex-wrap">
+                <div className="mx-2 md:-mx-4 flex flex-wrap">
                     <div className="w-full px-4 lg:w-1/2">
                         <AccordionItem
                             header="How can I participate?"

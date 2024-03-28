@@ -5,7 +5,10 @@ import styles from "./HorizontalScrollBar.module.css";
 import { useContext } from "react";
 import { CreateContext } from "../App";
 import { useDispatch } from "react-redux";
-import { fetchHackathons, selectHackathons } from "../features/hackathon/hackathonSlice";
+import {
+    fetchHackathons,
+    selectHackathons,
+} from "../features/hackathon/hackathonSlice";
 import { useSelector } from "react-redux";
 
 import { HACKATHONS } from "../constants";
@@ -17,10 +20,10 @@ const HorizontalScrollBar = () => {
     //     setDetails(item);
     // };
     const dispatch = useDispatch();
-    const hackathons = useSelector(selectHackathons)
+    const hackathons = useSelector(selectHackathons);
     // HACKATHONS
     // useSelector((state) => state.hackathon.hackathons.data);
-    console.log(hackathons);
+    // console.log(hackathons);
     // const arr = hackathons ? hackathons.data : [];
     // const [details, setDetails] = useState(arr[0]);
 
@@ -36,32 +39,19 @@ const HorizontalScrollBar = () => {
             >
                 Popular Hackathons
             </Typography>
-            {/* <Carousel className="rounded-xl place-self-center justify-self-center">
-                {hackathons?.map((hachathon) => (
-                    <div className="relative h-40">
-                        <Card className=" h-full w-full" shadow={true} color="black">
-                            <CardBody className="flex justify-center items-center">
-                                {hachathon.name}
-                            </CardBody>
-                        </Card>
-                    </div>
-                ))}
 
-            </Carousel> */}
-            <div
-                className={`${styles.main} flex gap-x-4 items-center w-9/12 overflow-x-auto  borderrounded-3xl p-4 mx-auto`}
-            >
-                {hackathons ? (
+            <Carousel className="w-full md:w-2/3 mt-8 h-fit mx-auto rounded-xl">
+                {hackathons.length > 0 ? (
                     hackathons?.map((item) => (
                         <Link
                             to={`hackathons/?hackathonId=${item.hackathonId}`}
                             key={item.hackathonId}
                             // onClick={() => clickHandler(item)}
                         >
-                            <Card className="h-24 md:h-48 w-56 md:w-72 shadow-md to-incedo-primary-100/50 px-4 py-2 flex align-middle justify-center">
+                            <Card className="h-40 md:h-48 px-4 py-2 flex align-middle justify-center bg-deep-purple-100/60 rounded-none">
                                 <Typography
                                     variant="h4"
-                                    className="mb-2 font-semiboldflex justify-center text-center text-incedo-secondary-600"
+                                    className="mb-2 font-semibold text-xl md:text-2xl flex justify-center text-center text-incedo-secondary-600"
                                 >
                                     {item.name}
                                 </Typography>
@@ -91,6 +81,72 @@ const HorizontalScrollBar = () => {
                         </Link>
                     ))
                 ) : (
+                    <Card className="h-40 md:h-48 px-4 py-2 flex align-middle justify-center bg-deep-purple-100/60 rounded-none">
+                        <Typography
+                            variant="h4"
+                            className="mb-2 font-semibold text-xl md:text-2xl flex justify-center text-center text-incedo-secondary-600"
+                        >
+                            No Hackathons
+                        </Typography>
+                    </Card>
+                    // <div className="shrink-0 w-96 h-48 border shadow-md p-8 items-center justify-center rounded-3xl  bg-incedo-secondary-100/50">
+                    //     <>
+                    //         <Typography
+                    //             className="w-full mx-auto justify-self-center  text-incedo-secondary-600 "
+                    //             variant="h2"
+                    //             color="black"
+                    //             // className=""
+                    //         >
+                    //             No Hackathons
+                    //         </Typography>
+                    //         <Typography
+                    //             variant="h6"
+                    //             color=" text-incedo-secondary-600"
+                    //         ></Typography>
+                    //     </>
+                    // </div>
+                )}
+            </Carousel>
+
+            {/* <Carousel className="rounded-xl place-self-center justify-self-center">
+                {hackathons?.map((hachathon) => (
+                    <div className="relative h-40">
+                        <Card className=" h-full w-full" shadow={true} color="black">
+                            <CardBody className="flex justify-center items-center">
+                                {hachathon.name}
+                            </CardBody>
+                        </Card>
+                    </div>
+                ))}
+
+            </Carousel> */}
+            {/* <div
+                className={`${styles.main} flex gap-x-4 items-center w-9/12 overflow-x-auto  borderrounded-3xl p-4 mx-auto`}
+            >
+                {hackathons ? (
+                    hackathons?.map((item) => (
+                        <Link
+                            to={`hackathons/?hackathonId=${item.hackathonId}`}
+                            key={item.hackathonId}
+                        >
+                            <Card className="h-24 md:h-48 w-56 md:w-72 shadow-md to-incedo-primary-100/50 px-4 py-2 flex align-middle justify-center">
+                                <Typography
+                                    variant="h4"
+                                    className="mb-2 font-semiboldflex justify-center text-center text-incedo-secondary-600"
+                                >
+                                    {item.name}
+                                </Typography>
+
+                                <Typography
+                                    variant="h6"
+                                    className=" hidden md:flex text-incedo-secondary-600 justify-center text-center"
+                                >
+                                    Start Date:{item.startDate}
+                                </Typography>
+                            </Card>
+                        </Link>
+                    ))
+                ) : (
                     <div className="shrink-0 w-96 h-48 border shadow-md p-8 items-center justify-center rounded-3xl  bg-incedo-secondary-100/50">
                         <>
                             <Typography
@@ -108,7 +164,7 @@ const HorizontalScrollBar = () => {
                         </>
                     </div>
                 )}
-            </div>
+            </div> */}
         </div>
     );
 };

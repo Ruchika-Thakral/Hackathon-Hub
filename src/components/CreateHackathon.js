@@ -49,49 +49,282 @@ const CreateHackathon = () => {
         const { name, value } = e.target;
         setFormData((prevstate) => ({ ...prevstate, [name]: value }));
     };
-    const [errors, setErrors] = useState({});
+
+//     const [errors, setErrors] = useState({});
+//     const handleSubmit = () => {
+//         const currentDate = new Date()
+//         const startDate = new Date(formData.startDate);
+//         const ideaSubmissionDeadLine=new Date(formData.ideaSubmissionDeadLine)
+//         const shortListDeadLine=new Date(formData.shortListDeadLine)
+//         const implementationDeadLine=new Date(formData.implementationDeadLine)
+//         const reviewStartTime=new Date(formData.reviewStartTime)
+//         const reviewEndTime=new Date(formData.reviewEndTime)
+//         const newErrors = {};
+//         if(!formData.name)
+//         {
+//             newErrors.name="Hackathon Name is Required!"
+//         }
+//         if(formData.name && formData.name.length>255)
+//         {
+//             newErrors.name="Hackathon Name Should Not Contain More Than 255 Characters"
+//         }
+//         if(!formData.theme)
+//         {
+//             newErrors.theme="Theme Is Required"
+//         }
+//         if(!formData.startDate)
+//         {
+//             newErrors.startDate="Start Date is Required!"
+//         }
+//         if(formData.startDate && startDate<=currentDate)
+//         {
+//             newErrors.startDate="Start Date Must Be In Future"
+//         }
+//         if(!formData.ideaSubmissionDeadLine)
+//         {
+//             newErrors.ideaSubmissionDeadLine="Idea Submission Dead Line is Required!"
+//         }
+//         if(formData.ideaSubmissionDeadLine && ideaSubmissionDeadLine<=startDate)
+//         {
+//             newErrors.ideaSubmissionDeadLine="Idea Submission Dead Line Should Be After The Start Date"
+//         }
+//         if(formData.ideaSubmissionDeadLine && ideaSubmissionDeadLine<=currentDate)
+//         {
+//             newErrors.ideaSubmissionDeadLine="Idea Submission Dead Line Must Be In Future"
+//         }
+//         if(!formData.shortListDeadLine)
+//         {
+//             newErrors.shortListDeadLine="short List Dead Line is Required!"
+//         }
+//         if(formData.shortListDeadLine && shortListDeadLine<=ideaSubmissionDeadLine)
+//         {
+//             newErrors.shortListDeadLine="Short List Dead Line Should Be After The Idea Submission Dead Line"
+//         }
+//         if(formData.shortListDeadLine && shortListDeadLine<=currentDate)
+//         {
+//             newErrors.shortListDeadLine="Short List Dead Line Must Be In Future"
+//         }
+//         if(!formData.implementationDeadLine)
+//         {
+//             newErrors.implementationDeadLine="Implementation Dead Line is Required!"
+//         }
+//         if(formData.implementationDeadLine && implementationDeadLine<=shortListDeadLine)
+//         {
+//             newErrors.implementationDeadLine="Implementation Dead Line Should be After The ShortList Dead Line"
+//         }
+//         if(formData.implementationDeadLine && implementationDeadLine<currentDate)
+//         {
+//             newErrors.implementationDeadLine="Implementation Dead Line Must Be In Future"
+//         }
+//         if(!formData.reviewStartTime)
+//         {
+//             newErrors.reviewStartTime="Review Start Time is Required!"
+//         }
+//         if(formData.reviewStartTime && reviewStartTime<=implementationDeadLine)
+//         {
+//             newErrors.reviewStartTime="Review Start Time Should Be After Implementation Dead Line"
+//         }
+//         if(formData.reviewStartTime && reviewStartTime<=currentDate)
+//         {
+//             newErrors.reviewStartTime="Review Start Time Must Be In Future"
+//         }
+//         if(!formData.reviewEndTime)
+//         {
+//             newErrors.reviewEndTime="Review End Time is Required!"
+//         }
+//         if(formData.reviewEndTime && reviewEndTime <=reviewStartTime)
+//         {
+//             newErrors.reviewEndTime="Review End Time Should Be After Review Start Time"
+//         }
+//         if(formData.reviewEndTime && reviewEndTime <=currentDate)
+//         {
+//             newErrors.reviewEndTime="Review End Time Must Be In Future"
+//         }
+//         if(!formData.description)
+//         {
+//             newErrors.description="Description is Required!"
+//         }
+//         if(formData.description && formData.description.length>3000)
+//         {
+//             newErrors.description="Description Should Not Contain More Than 3000 characters"
+//         }
+//         if(!formData.guidelines)
+//         {
+//             newErrors.guidelines="GuideLines Are Required!"
+//         }
+//         if(formData.guidelines && formData.guidelines.length>3000)
+//         {
+//             newErrors.guidelines="Guidelines Should Not Contain More Than 3000 characters"
+//         }
+//         if(!formData.prizes)
+//         {
+//             newErrors.prizes="Prizes Are Required!"
+//         }
+//         if(formData.prizes && formData.prizes.length>3000)
+//         {
+//             newErrors.prizes="Prizes Should Not Contain More Than 3000 characters"
+//         }
+//         if(!formData.judgingCriteria)
+//         {
+//             newErrors.judgingCriteria="Judging Criteria Is Required"
+//         }
+//         if(formData.judgingCriteria && formData.judgingCriteria.length>3000)
+//         {
+//             newErrors.judgingCriteria="Judging Criteria Should Not Contain More Than 3000 characters"
+//         }
+//         if(Object.keys(newErrors).length > 0)
+//         {
+//             setErrors(newErrors);
+//         }
+//         else{
+//         dispatch(hackathonCreation(formData));
+//         setFormData({
+//             name:"",
+//             theme:"",
+//             startDate:"",
+//             ideaSubmissionDeadLine:"",
+//             shortListDeadLine:"",
+//             implementationDeadLine:"",
+//             reviewStartTime:"",
+//             reviewEndTime:"",
+//             description:"",
+//             guidelines:"",
+//             prizes:"",
+//             judgingCriteria:"",})
+//             toast.success("Hackathon Is Created!", {
+//                 position: "top-center",
+//                 transition:Slide})
+//     }
+   
+//     setErrors(newErrors);
+// }
+
+
+
+    const [validationErrors, setValidationErrros] = useState({});
     const handleSubmit = async () => {
+        const currentDate = new Date()
+        const startDate = new Date(formData.startDate);
+        const ideaSubmissionDeadLine=new Date(formData.ideaSubmissionDeadLine)
+        const shortListDeadLine=new Date(formData.shortListDeadLine)
+        const implementationDeadLine=new Date(formData.implementationDeadLine)
+        const reviewStartTime=new Date(formData.reviewStartTime)
+        const reviewEndTime=new Date(formData.reviewEndTime)
         const newErrors = {};
-        if (!formData.name) {
-            newErrors.name = "Hackathon Name is Required!";
+        if(!formData.name)
+        {
+            newErrors.name="Hackathon Name is Required!"
         }
-        if (!formData.theme) {
-            newErrors.theme = "Theme Is Required";
+        if(formData.name && formData.name.length>255)
+        {
+            newErrors.name="Hackathon Name Should Not Contain More Than 255 Characters"
         }
-        if (!formData.startDate) {
-            newErrors.startDate = "Start Date is Required!";
+        if(!formData.theme)
+        {
+            newErrors.theme="Theme Is Required"
         }
-        if (!formData.ideaSubmissionDeadLine) {
-            newErrors.ideaSubmissionDeadLine =
-                "Idea Submission Dead Line is Required!";
+        if(!formData.startDate)
+        {
+            newErrors.startDate="Start Date is Required!"
         }
-        if (!formData.shortListDeadLine) {
-            newErrors.shortListDeadLine = "short List Dead Line is Required!";
+        if(formData.startDate && startDate<=currentDate)
+        {
+            newErrors.startDate="Start Date Must Be In Future"
         }
-        if (!formData.implementationDeadLine) {
-            newErrors.implementationDeadLine =
-                "Implementation Dead Line is Required!";
+        if(!formData.ideaSubmissionDeadLine)
+        {
+            newErrors.ideaSubmissionDeadLine="Idea Submission Dead Line is Required!"
         }
-        if (!formData.reviewStartTime) {
-            newErrors.reviewStartTime = "Review Start Time is Required!";
+        if(formData.ideaSubmissionDeadLine && ideaSubmissionDeadLine<=startDate)
+        {
+            newErrors.ideaSubmissionDeadLine="Idea Submission Dead Line Should Be After The Start Date"
         }
-        if (!formData.reviewEndTime) {
-            newErrors.reviewEndTime = "Review End Time is Required!";
+        if(formData.ideaSubmissionDeadLine && ideaSubmissionDeadLine<=currentDate)
+        {
+            newErrors.ideaSubmissionDeadLine="Idea Submission Dead Line Must Be In Future"
         }
-        if (!formData.description) {
-            newErrors.description = "Description is Required!";
+        if(!formData.shortListDeadLine)
+        {
+            newErrors.shortListDeadLine="short List Dead Line is Required!"
         }
-        if (!formData.guidelines) {
-            newErrors.guidelines = "GuideLines Are Required!";
+        if(formData.shortListDeadLine && shortListDeadLine<=ideaSubmissionDeadLine)
+        {
+            newErrors.shortListDeadLine="Short List Dead Line Should Be After The Idea Submission Dead Line"
         }
-        if (!formData.prizes) {
-            newErrors.prizes = "Prizes Are Required!";
+        if(formData.shortListDeadLine && shortListDeadLine<=currentDate)
+        {
+            newErrors.shortListDeadLine="Short List Dead Line Must Be In Future"
         }
-        if (!formData.judgingCriteria) {
-            newErrors.judgingCriteria = "Judging Criteria Is Required";
+        if(!formData.implementationDeadLine)
+        {
+            newErrors.implementationDeadLine="Implementation Dead Line is Required!"
+        }
+        if(formData.implementationDeadLine && implementationDeadLine<=shortListDeadLine)
+        {
+            newErrors.implementationDeadLine="Implementation Dead Line Should be After The ShortList Dead Line"
+        }
+        if(formData.implementationDeadLine && implementationDeadLine<currentDate)
+        {
+            newErrors.implementationDeadLine="Implementation Dead Line Must Be In Future"
+        }
+        if(!formData.reviewStartTime)
+        {
+            newErrors.reviewStartTime="Review Start Time is Required!"
+        }
+        if(formData.reviewStartTime && reviewStartTime<=implementationDeadLine)
+        {
+            newErrors.reviewStartTime="Review Start Time Should Be After Implementation Dead Line"
+        }
+        if(formData.reviewStartTime && reviewStartTime<=currentDate)
+        {
+            newErrors.reviewStartTime="Review Start Time Must Be In Future"
+        }
+        if(!formData.reviewEndTime)
+        {
+            newErrors.reviewEndTime="Review End Time is Required!"
+        }
+        if(formData.reviewEndTime && reviewEndTime <=reviewStartTime)
+        {
+            newErrors.reviewEndTime="Review End Time Should Be After Review Start Time"
+        }
+        if(formData.reviewEndTime && reviewEndTime <=currentDate)
+        {
+            newErrors.reviewEndTime="Review End Time Must Be In Future"
+        }
+        if(!formData.description)
+        {
+            newErrors.description="Description is Required!"
+        }
+        if(formData.description && formData.description.length>3000)
+        {
+            newErrors.description="Description Should Not Contain More Than 3000 characters"
+        }
+        if(!formData.guidelines)
+        {
+            newErrors.guidelines="GuideLines Are Required!"
+        }
+        if(formData.guidelines && formData.guidelines.length>3000)
+        {
+            newErrors.guidelines="Guidelines Should Not Contain More Than 3000 characters"
+        }
+        if(!formData.prizes)
+        {
+            newErrors.prizes="Prizes Are Required!"
+        }
+        if(formData.prizes && formData.prizes.length>3000)
+        {
+            newErrors.prizes="Prizes Should Not Contain More Than 3000 characters"
+        }
+        if(!formData.judgingCriteria)
+        {
+            newErrors.judgingCriteria="Judging Criteria Is Required"
+        }
+        if(formData.judgingCriteria && formData.judgingCriteria.length>3000)
+        {
+            newErrors.judgingCriteria="Judging Criteria Should Not Contain More Than 3000 characters"
         }
         if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
+            setValidationErrros(newErrors);
         } else {
             try {
                 await dispatch(hackathonCreation(formData)).unwrap();
@@ -120,7 +353,7 @@ const CreateHackathon = () => {
             }
         }
 
-        setErrors(newErrors);
+        setValidationErrros(newErrors);
     };
 
     return (
@@ -167,9 +400,9 @@ const CreateHackathon = () => {
                                 name="name"
                                 onChange={handleChange}
                             />
-                            {errors.name && (
+                            {validationErrors.name && (
                                 <Typography className="text-red-500 text-xs w-fit">
-                                    {errors.name}
+                                    {validationErrors.name}
                                 </Typography>
                             )}
                         </div>
@@ -219,9 +452,9 @@ const CreateHackathon = () => {
                                     </MenuList>
                                 </Menu>
                             </div>
-                            {errors.theme && (
+                            {validationErrors.theme && (
                                 <Typography className="text-red-500 text-xs w-fit">
-                                    {errors.theme}
+                                    {validationErrors.theme}
                                 </Typography>
                             )}
                         </div>
@@ -249,9 +482,9 @@ const CreateHackathon = () => {
                                 name="startDate"
                                 onChange={handleChange}
                             />
-                            {errors.startDate && (
+                            {validationErrors.startDate && (
                                 <Typography className="text-red-500 text-xs w-fit">
-                                    {errors.startDate}
+                                    {validationErrors.startDate}
                                 </Typography>
                             )}
                         </div>
@@ -279,9 +512,9 @@ const CreateHackathon = () => {
                                 name="ideaSubmissionDeadLine"
                                 onChange={handleChange}
                             />
-                            {errors.ideaSubmissionDeadLine && (
+                            {validationErrors.ideaSubmissionDeadLine && (
                                 <Typography className="text-red-500 text-xs w-fit">
-                                    {errors.ideaSubmissionDeadLine}
+                                    {validationErrors.ideaSubmissionDeadLine}
                                 </Typography>
                             )}
                         </div>
@@ -308,9 +541,9 @@ const CreateHackathon = () => {
                                 value={formData.shortListDeadLine}
                                 onChange={handleChange}
                             />
-                            {errors.shortListDeadLine && (
+                            {validationErrors.shortListDeadLine && (
                                 <Typography className="text-red-500 text-xs w-fit">
-                                    {errors.shortListDeadLine}
+                                    {validationErrors.shortListDeadLine}
                                 </Typography>
                             )}
                         </div>
@@ -337,9 +570,9 @@ const CreateHackathon = () => {
                                 name="implementationDeadLine"
                                 onChange={handleChange}
                             />
-                            {errors.implementationDeadLine && (
+                            {validationErrors.implementationDeadLine && (
                                 <Typography className="text-red-500 text-xs w-fit">
-                                    {errors.implementationDeadLine}
+                                    {validationErrors.implementationDeadLine}
                                 </Typography>
                             )}
                         </div>
@@ -366,9 +599,9 @@ const CreateHackathon = () => {
                                 name="reviewStartTime"
                                 onChange={handleChange}
                             />
-                            {errors.reviewStartTime && (
+                            {validationErrors.reviewStartTime && (
                                 <Typography className="text-red-500 text-xs w-fit">
-                                    {errors.reviewStartTime}
+                                    {validationErrors.reviewStartTime}
                                 </Typography>
                             )}
                         </div>
@@ -395,9 +628,9 @@ const CreateHackathon = () => {
                                 name="reviewEndTime"
                                 onChange={handleChange}
                             />
-                            {errors.reviewEndTime && (
+                            {validationErrors.reviewEndTime && (
                                 <Typography className="text-red-500 text-xs w-fit">
-                                    {errors.reviewEndTime}
+                                    {validationErrors.reviewEndTime}
                                 </Typography>
                             )}
                         </div>
@@ -422,9 +655,9 @@ const CreateHackathon = () => {
                                 value={formData?.description}
                                 onChange={handleChange}
                             />
-                            {errors.description && (
+                            {validationErrors.description && (
                                 <Typography className="text-red-500 text-xs w-fit">
-                                    {errors.description}
+                                    {validationErrors.description}
                                 </Typography>
                             )}
                         </div>
@@ -450,9 +683,9 @@ const CreateHackathon = () => {
                                 value={formData?.guidelines}
                                 onChange={handleChange}
                             />
-                            {errors.guidelines && (
+                            {validationErrors.guidelines && (
                                 <Typography className="text-red-500 text-xs w-fit">
-                                    {errors.guidelines}
+                                    {validationErrors.guidelines}
                                 </Typography>
                             )}
                         </div>
@@ -478,9 +711,9 @@ const CreateHackathon = () => {
                                 value={formData?.prizes}
                                 onChange={handleChange}
                             />
-                            {errors.prizes && (
+                            {validationErrors.prizes && (
                                 <Typography className="text-red-500 text-xs w-fit">
-                                    {errors.prizes}
+                                    {validationErrors.prizes}
                                 </Typography>
                             )}
                         </div>
@@ -506,9 +739,9 @@ const CreateHackathon = () => {
                                 value={formData?.judgingCriteria}
                                 onChange={handleChange}
                             />
-                            {errors.judgingCriteria && (
+                            {validationErrors.judgingCriteria && (
                                 <Typography className="text-red-500 text-xs w-fit">
-                                    {errors.judgingCriteria}
+                                    {validationErrors.judgingCriteria}
                                 </Typography>
                             )}
                         </div>
