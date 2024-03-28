@@ -128,7 +128,7 @@ const ReviewDetails = ({
                     </Card>
                 ) : null}
 
-                {IDEAS.length !== 0 ? (
+                {IDEAS.length !== 0 && selectedIdeaId ? (
                     <Card
                         shadow={false}
                         className="md:min-h-[52.2vh] md:max-h-[52.2vh] overflow-auto"

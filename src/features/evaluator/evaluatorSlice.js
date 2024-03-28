@@ -63,7 +63,12 @@ export const assignEvaluator = createAsyncThunk(
 const evaluatorSlice = createSlice({
     name: "evaluator",
     initialState,
-    reducers: {},
+    reducers: {
+        clearEvaluators(state) {
+            state.data = [];
+            // Cookies.remove("userData");
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchEvaluators.pending, (state) => {
@@ -118,6 +123,6 @@ export const selectErrorEvaluator = (state) => state.evaluator.error;
 export const selectLoadingEvaluator = (state) => state.evaluator.loading;
 
 
-// export const { login, logout, register } = evaluatorSlice.actions;
+export const { clearEvaluators } = evaluatorSlice.actions;
 
 export default evaluatorSlice.reducer;

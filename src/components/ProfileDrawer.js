@@ -9,6 +9,8 @@ import {
 import { useDispatch } from "react-redux";
 import { logout } from "../features/user/userSlice";
 import { useNavigate } from "react-router";
+import { clearEvaluators } from "../features/evaluator/evaluatorSlice";
+import { clearTeams } from "../features/team/teamSlice";
 
 
 const ProfileDrawer = ({ opens, onClose, user }) => {
@@ -30,6 +32,8 @@ const ProfileDrawer = ({ opens, onClose, user }) => {
     const dispatch=useDispatch()
     const logoutHandler=()=>{
         dispatch(logout())
+        dispatch(clearEvaluators())
+        dispatch(clearTeams())
         onClose()
         navigate('/')
 

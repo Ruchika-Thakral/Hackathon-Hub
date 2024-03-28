@@ -215,7 +215,12 @@ export const rateTeam = createAsyncThunk(
 const teamSlice = createSlice({
     name: "team",
     initialState,
-    reducers: {},
+    reducers: {
+        clearTeams(state) {
+            state.data = [];
+            // Cookies.remove("userData");
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(teamRegistration.pending, (state) => {
@@ -365,5 +370,8 @@ export const selectTeamByHackathonId = (state, hackathonId) =>
     null;
 export const selectErrorTeam = (state) => state.team.error;
 export const selectLoadingTeam = (state) => state.team.loading;
+
+
+export const { clearTeams } = teamSlice.actions;
 
 export default teamSlice.reducer;
