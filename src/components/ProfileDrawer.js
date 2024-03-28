@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Drawer,
     Typography,
@@ -6,12 +6,16 @@ import {
     Button,
     Input,
 } from "@material-tailwind/react";
-import { useDispatch } from "react-redux";
-import { logout } from "../features/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, selectUserDetails } from "../features/user/userSlice";
+import { useNavigate } from "react-router";
+import { clearEvaluators } from "../features/evaluator/evaluatorSlice";
+import { clearTeams } from "../features/team/teamSlice";
+import Cookies from "js-cookie";
 
-
-const DrawerDefault = ({ opens, onClose, user }) => {
+const ProfileDrawer = ({ opens, onClose }) => {
     const [editMode, setEditMode] = useState(false);
+    const navigate = useNavigate();
 
     const handleEdit = () => {
         setEditMode(true);
@@ -20,18 +24,31 @@ const DrawerDefault = ({ opens, onClose, user }) => {
         setEditMode(false);
     };
 
+    const userData = useSelector(selectUserDetails);
+
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        console.log(userData)
+        setUser(userData);
+    }, [userData]);
+
     // const [selectedHackathon, setSelectedHackathon] = useState("");
 
     // const handleSelectChange = (e) => {
     //   setSelectedHackathon(e.taget.value);
     // };
-    const dispatch=useDispatch()
-    const logoutHandler=()=>{
-        dispatch(logout())
-        onClose()
-    }
+    const dispatch = useDispatch();
+    const logoutHandler = () => {
+        dispatch(logout());
+        Cookies.remove("userData");
+        dispatch(clearEvaluators());
+        dispatch(clearTeams());
+        onClose();
+        navigate("/");
+    };
 
-    console.log(user)
+    // console.log(user)
     return (
         <Drawer
             placement="right"
@@ -39,7 +56,7 @@ const DrawerDefault = ({ opens, onClose, user }) => {
             onClose={onClose}
             className="p-4"
         >
-            <div className="mb-6  bg-orange-600">
+            <div className="mb-6">
                 <IconButton variant="text" color="blue-gray" onClick={onClose}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -67,11 +84,7 @@ const DrawerDefault = ({ opens, onClose, user }) => {
             {editMode ? (
                 <form>
                     <div className="mb-4">
-                        <Input
-                            label="Name"
-                            name="name"
-                            value={user.name}
-                        />
+                        <Input label="Name" name="name" value={user.name} />
                     </div>
                     <div className="mt-6">
                         <Button size="sm" onClick={handleSave}>
@@ -82,28 +95,24 @@ const DrawerDefault = ({ opens, onClose, user }) => {
             ) : (
                 <div>
                     <div className="mb-4">
-                        <Typography>
-                            Name: {user?.name}
-                        </Typography>
+                        <Typography>Name: {user?.name}</Typography>
                         {/* <Typography variant="body1">{user.firstName}</Typography> */}
                     </div>
-        
+
                     <div className="mb-4">
-                        <Typography>
-                            Email: {user?.email}
-                        </Typography>
+                        <Typography>Email: {user?.email}</Typography>
                         {/* <Typography variant="body1">{user.email}</Typography> */}
                     </div>
                     <Button onClick={logoutHandler}>Log Out</Button>
-                    <div className="mt-6">
+                    {/* <div className="mt-6">
                         <Button size="sm" onClick={handleEdit}>
                             Edit
                         </Button>
-                    </div>
+                    </div> */}
                 </div>
             )}
         </Drawer>
     );
 };
 
-export default DrawerDefault;
+export default ProfileDrawer;

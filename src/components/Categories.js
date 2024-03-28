@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 const Categories = () => {
     const themes = [
         { name: "Life Sciences", value: "lifesciences" },
-        { name: "Banking and Wealth", value: "banking" },
+        { name: "Banking and Wealth Management", value: "banking" },
         { name: "Telecom", value: "telecom" },
         { name: "Product Engineering", value: "product" },
     ];

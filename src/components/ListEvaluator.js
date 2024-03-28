@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
@@ -18,6 +18,16 @@ import {
     IconButton,
     Tooltip,
 } from "@material-tailwind/react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    fetchEvaluators,
+    selectEvaluators,
+} from "../features/evaluator/evaluatorSlice";
+import {
+    fetchHackathons,
+    selectHackathons,
+} from "../features/hackathon/hackathonSlice";
+import { EVALUATORS, HACKATHONS } from "../constants";
 
 const TABS = [
     {
@@ -34,184 +44,43 @@ const TABS = [
     },
 ];
 
-const TABLE_HEAD = ["Member", "Role", "Status", "Actions"];
+const TABLE_HEAD = ["Member", "Role", "Status"];
+// , "Actions"
 
-const TABLE_ROWS = [
-    {
-        userId: 15672,
-        name: "John Doe",
-        email: "john.doe@example.com",
-        role: "panelist",
-        isAvailable: false,
-        assignedHackathon: "InnovateTech",
-    },
-    {
-        userId: 23784,
-        name: "Alice Smith",
-        email: "alice.smith@example.com",
-        role: "judge",
-        isAvailable: false,
-        assignedHackathon: "TechGenius",
-    },
-    {
-        userId: 39812,
-        name: "Emily Johnson",
-        email: "emily.johnson@example.com",
-        role: "panelist",
-        isAvailable: true,
-        assignedHackathon: null,
-    },
-    {
-        userId: 56473,
-        name: "Michael Brown",
-        email: "michael.brown@example.com",
-        role: "panelist",
-        isAvailable: false,
-        assignedHackathon: "CodeCrafters",
-    },
-    {
-        userId: 72691,
-        name: "Sophia Martinez",
-        email: "sophia.martinez@example.com",
-        role: "judge",
-        isAvailable: true,
-        assignedHackathon: null,
-    },
-    {
-        userId: 83246,
-        name: "David Wilson",
-        email: "david.wilson@example.com",
-        role: "panelist",
-        isAvailable: false,
-        assignedHackathon: "InnovateHub",
-    },
-    {
-        userId: 98712,
-        name: "Emma Thomas",
-        email: "emma.thomas@example.com",
-        role: "panelist",
-        isAvailable: true,
-        assignedHackathon: null,
-    },
-    {
-        userId: 10654,
-        name: "James Anderson",
-        email: "james.anderson@example.com",
-        role: "judge",
-        isAvailable: false,
-        assignedHackathon: "TechConnect",
-    },
-    {
-        userId: 11938,
-        name: "Olivia Lee",
-        email: "olivia.lee@example.com",
-        role: "panelist",
-        isAvailable: false,
-        assignedHackathon: "InnovateLab",
-    },
-    {
-        userId: 12543,
-        name: "William Garcia",
-        email: "william.garcia@example.com",
-        role: "panelist",
-        isAvailable: false,
-        assignedHackathon: "CodeHack",
-    },
-    {
-        userId: 15282,
-        name: "John Doe",
-        email: "john.doe2@example.com",
-        role: "judge",
-        isAvailable: false,
-        assignedHackathon: "TechFusion",
-    },
-    {
-        userId: 23785,
-        name: "Alice Smith",
-        email: "alice.smith2@example.com",
-        role: "panelist",
-        isAvailable: false,
-        assignedHackathon: "InnovateX",
-    },
-    {
-        userId: 39813,
-        name: "Emily Johnson",
-        email: "emily.johnson2@example.com",
-        role: "judge",
-        isAvailable: true,
-        assignedHackathon: null,
-    },
-    {
-        userId: 56474,
-        name: "Michael Brown",
-        email: "michael.brown2@example.com",
-        role: "panelist",
-        isAvailable: false,
-        assignedHackathon: "TechSpark",
-    },
-    {
-        userId: 72692,
-        name: "Sophia Martinez",
-        email: "sophia.martinez2@example.com",
-        role: "judge",
-        isAvailable: true,
-        assignedHackathon: null,
-    },
-    {
-        userId: 83247,
-        name: "David Wilson",
-        email: "david.wilson2@example.com",
-        role: "panelist",
-        isAvailable: false,
-        assignedHackathon: "InnoTech",
-    },
-    {
-        userId: 98713,
-        name: "Emma Thomas",
-        email: "emma.thomas2@example.com",
-        role: "panelist",
-        isAvailable: true,
-        assignedHackathon: null,
-    },
-    {
-        userId: 10655,
-        name: "James Anderson",
-        email: "james.anderson2@example.com",
-        role: "judge",
-        isAvailable: false,
-        assignedHackathon: "TechSummit",
-    },
-    {
-        userId: 11939,
-        name: "Olivia Lee",
-        email: "olivia.lee2@example.com",
-        role: "panelist",
-        isAvailable: false,
-        assignedHackathon: "Innovate360",
-    },
-    {
-        userId: 12544,
-        name: "William Garcia",
-        email: "william.garcia2@example.com",
-        role: "panelist",
-        isAvailable: false,
-        assignedHackathon: "CodeStorm",
-    },
-];
 //   https://avatar.iran.liara.run/public
 // https://ui-avatars.com/api/?background=random&name=Vidit+Bhanja
 
 const ListEvaluator = ({ handleAddMembers, handleAssignMembers }) => {
-    const [tableData, setTableData] = useState(TABLE_ROWS);
+    const dispatch = useDispatch();
+    // useEffect(() => {
+    //     dispatch(fetchEvaluators());
+    //     dispatch(fetchHackathons())
+    // }, [dispatch]);
+
+    // const data =
+    // HACKATHONS
+    // useSelector((state) => state.hackathon.hackathons.data);
+    let hackathons = useSelector(selectHackathons);
+    // data ? data : [];
+    // const data2 = EVALUATORS
+    // useSelector((state) => state.evaluator.evaluators.data);
+    const evaluatorData = useSelector(selectEvaluators);
+    // data2 ? data2 : [];;
+
+    // console.log(evaluatorData)
+    const [evaluators, setEvaluators] = useState(evaluatorData);
+    useEffect(() => {
+        setEvaluators(evaluatorData);
+    }, [evaluatorData]);
     const handleFilterClick = (keyword = "all") => {
-        console.log("hi" + keyword);
+        // console.log("hi" + keyword);
         if (keyword === "all") {
-            setTableData(TABLE_ROWS);
+            setEvaluators(evaluatorData);
             return;
         }
 
-        setTableData(
-            TABLE_ROWS.filter((evaluator) => evaluator.role === keyword)
+        setEvaluators(
+            evaluatorData.filter((evaluator) => evaluator.role === keyword)
         );
     };
 
@@ -305,8 +174,9 @@ const ListEvaluator = ({ handleAddMembers, handleAssignMembers }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {tableData.map((evaluator, index) => {
-                                const isLast = index === TABLE_ROWS.length - 1;
+                            {evaluators.map((evaluator, index) => {
+                                const isLast =
+                                    index === evaluatorData.length - 1;
                                 const classes = isLast
                                     ? "p-4"
                                     : "p-4 border-b border-blue-gray-50";
@@ -317,7 +187,7 @@ const ListEvaluator = ({ handleAddMembers, handleAssignMembers }) => {
                                             <div className="flex items-center gap-3">
                                                 <Avatar
                                                     src="https://avatar.iran.liara.run/public"
-                                                    alt={evaluator.name}
+                                                    alt={evaluator?.name}
                                                     size="sm"
                                                 />
                                                 <div className="flex flex-col">
@@ -326,14 +196,14 @@ const ListEvaluator = ({ handleAddMembers, handleAssignMembers }) => {
                                                         color="blue-gray"
                                                         className="font-bold"
                                                     >
-                                                        {evaluator.name}
+                                                        {evaluator?.name}
                                                     </Typography>
                                                     <Typography
                                                         variant="small"
                                                         color="blue-gray"
                                                         className="font-normal opacity-70"
                                                     >
-                                                        {evaluator.email}
+                                                        {evaluator?.email}
                                                     </Typography>
                                                 </div>
                                             </div>
@@ -353,14 +223,18 @@ const ListEvaluator = ({ handleAddMembers, handleAssignMembers }) => {
                                                         ? "Judge"
                                                         : null}
                                                 </Typography>
-                                                {!evaluator.isAvailable && (
+                                                {!evaluator.available && (
                                                     <Typography
                                                         variant="small"
                                                         color="blue-gray"
                                                         className="font-normal opacity-70"
                                                     >
                                                         {
-                                                            evaluator.assignedHackathon
+                                                            hackathons.find(
+                                                                (hackathon) =>
+                                                                    hackathon?.hackathonId ===
+                                                                    evaluator?.assignedHackathon
+                                                            )?.name
                                                         }
                                                     </Typography>
                                                 )}
@@ -372,19 +246,19 @@ const ListEvaluator = ({ handleAddMembers, handleAssignMembers }) => {
                                                     variant="ghost"
                                                     size="sm"
                                                     value={
-                                                        evaluator.isAvailable
+                                                        evaluator.available
                                                             ? "Available"
                                                             : "Assigned"
                                                     }
                                                     color={
-                                                        evaluator.isAvailable
+                                                        evaluator.available
                                                             ? "green"
                                                             : "blue-gray"
                                                     }
                                                 />
                                             </div>
                                         </td>
-                                        <td className="p-4 hidden lg:table-cell">
+                                        {/* <td className="p-4 hidden lg:table-cell">
                                             <Button
                                                 className="flex items-center gap-3"
                                                 size="sm"
@@ -396,7 +270,7 @@ const ListEvaluator = ({ handleAddMembers, handleAssignMembers }) => {
                                                 <PencilIcon className="h-4 w-4" />
                                                 Assign
                                             </Button>
-                                        </td>
+                                        </td> */}
                                     </tr>
                                 );
                             })}

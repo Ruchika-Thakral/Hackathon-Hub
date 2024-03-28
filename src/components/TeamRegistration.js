@@ -6,67 +6,117 @@ import {
     Input,
     Typography,
 } from "@material-tailwind/react";
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { teamRegistration } from "../features/team/teamSlice";
-import { CreateContext } from "../App";
+import {
+    selectUserId,
+    successTeamRegistration,
+} from "../features/user/userSlice";
+import { USER } from "../constants";
+import { toast } from "react-toastify";
 
-const TeamRegistration = ({ open, setOpen }) => {
-    const { details } = useContext(CreateContext);
-    const login = useSelector((state) => state.user.login.data);
-    const userId = login ? login.data.userId : null;
-    const hackathonId = details.hackathonId;
-    const navigate = useNavigate();
+const TeamRegistration = ({ open, setOpen, selectedHackathonId }) => {
+    // const login = USER
+    // useSelector((state) => state.user.login.data);
+    const userId = useSelector(selectUserId);
+    // login ? login.userId : null;
+    const hackathonId = selectedHackathonId;
+    // const data = null;
+    // useSelector((state) => state.team.registration.data);
+    // const status = data ? data.status : null;
+    // const error = useSelector((state) => state.team.registration.error);
+
+    const error = useSelector((state) => state.team.error);
+    const loading = useSelector((state) => state.team.loading);
+
+    const [showError, setShowError] = useState(false);
+
+    useEffect(() => {
+        setShowError(false);
+    }, [open]);
+
     const dispatch = useDispatch();
-    const [formdata, setFormData] = useState({
+    const [formData, setFormData] = useState({
         name: "",
         email1: "",
         email2: "",
         email3: "",
     });
-    const emails = [formdata.email1];
-    const name = formdata.name;
+    const emailsInput = [formData.email1, formData.email2, formData.email3];
+    const emails = emailsInput.filter((email) => email.trim() !== "");
+    // console.log(emails);
+    const name = formData.name;
     const team = { emails, name };
+    // console.log(team);
     const [errors, setErrors] = useState({});
-
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formdata, [name]: value });
+        setFormData({ ...formData, [name]: value });
     };
-    const submitHandler = (e) => {
+    // useEffect(() => {
+    //     if (status === 201) {
+    //         handler();
+    //     }
+    // }, [status]);
+
+    const submitHandler = async (e) => {
         e.preventDefault();
         const newErrors = {};
-        if (!formdata.name) {
+        if (!formData.name) {
             newErrors.teamname = "Team Name is Required";
         }
-        if (formdata.email1 && !validateEmail(formdata.email1)) {
+        if (formData.email1 && !validateEmail(formData.email1)) {
             newErrors.email1 = "Email is invalid";
         }
-        if (formdata.email2 && !validateEmail(formdata.email2)) {
+        if (formData.email2 && !validateEmail(formData.email2)) {
             newErrors.email2 = "Email is invalid";
         }
-        if (formdata.email3 && !validateEmail(formdata.email3)) {
+        if (formData.email3 && !validateEmail(formData.email3)) {
             newErrors.email3 = "Email is invalid";
         }
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            dispatch(teamRegistration({ hackathonId, userId, team }));
+            try {
+                await dispatch(
+                    teamRegistration({ hackathonId, userId, team })
+                ).unwrap();
+                // toast.success(`Team: ${formData.name} registered successfully!`)
+                handler();
+                // navigate
+                setShowError(false);
+            } catch (error) {
+                // toast.success
+                setShowError(true);
+            }
+            // dispatch(successTeamRegistration(hackathonId));
         }
         setErrors(newErrors);
     };
     const validateEmail = (email) => {
         // Regex pattern for email validation
-        const pattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/;
+        const pattern =
+            /^[_a-z0-9-]+(\.[_a-z0-9-]+)*(\+[a-z0-9-]+)?@[a-z0-9-]+(\.[a-z0-9-]+)*$/i;
         return pattern.test(email);
+    };
+    const handler = () => {
+        setOpen((cur) => !cur);
+        setErrors({});
+        setFormData({
+            name: "",
+            email1: "",
+            email2: "",
+            email3: "",
+        });
+        setShowError(false);
     };
     return (
         <div>
             <Dialog
                 size="xs"
                 open={open}
-                handler={() => setOpen((cur) => !cur)}
+                handler={handler}
                 className="bg-transparent shadow-none"
             >
                 <Card className="mx-auto w-full px-16 py-4">
@@ -86,56 +136,61 @@ const TeamRegistration = ({ open, setOpen }) => {
                         <Input
                             type="text"
                             label="Team Name*"
-                            size="sm"
+                            size="md"
                             name="name"
-                            value={formdata.teamname}
+                            value={formData.teamname}
                             onChange={handleChange}
                         />
                         {errors.teamname && (
                             <Typography className="text-red-500 text-xs w-fit">
-                                {"*"+errors.teamname}
+                                {"*" + errors.teamname}
                             </Typography>
                         )}
 
                         <Input
                             type="email"
                             label="Member 1 Email"
-                            size="sm"
+                            size="md"
                             name="email1"
-                            value={formdata.email1}
+                            value={formData.email1}
                             onChange={handleChange}
                         />
                         {errors.email1 && (
                             <Typography className="text-red-500 text-xs w-fit">
-                                {errors.email1}
-                           </Typography>
+                                {errors.email1 || ""}
+                            </Typography>
                         )}
 
                         <Input
                             type="email"
                             label="Member 2 Email"
-                            size="sm"
+                            size="md"
                             name="email2"
-                            value={formdata.email2}
+                            value={formData.email2}
                             onChange={handleChange}
                         />
                         {errors.email2 && (
                             <Typography className="text-red-500 text-xs w-fit">
-                                {errors.email2}
-                           </Typography>
+                                {errors.email2 || ""}
+                            </Typography>
                         )}
 
                         <Input
                             type="email"
                             label="Member 3 Email"
-                            size="sm"
+                            size="md"
                             name="email3"
-                            value={formdata.email3}
+                            value={formData.email3}
                             onChange={handleChange}
                         />
                         {errors.email3 && (
                             <Typography className="text-red-500 text-xs w-fit">
-                                {errors.email3}
+                                {errors.email3 || ""}
+                            </Typography>
+                        )}
+                        {showError && error && (
+                            <Typography className="text-red-500 text-xs w-fit">
+                                {error?.message || ""}
                             </Typography>
                         )}
                         <div className="w-fit mx-auto">

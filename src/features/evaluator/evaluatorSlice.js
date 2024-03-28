@@ -3,11 +3,11 @@ import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
-    evaluators: {
+    // evaluators: {
         data: [],
         loading: false,
         error: null,
-    },
+    // },
 };
 
 export const fetchEvaluators = createAsyncThunk(
@@ -32,10 +32,10 @@ export const registerEvaluator = createAsyncThunk(
                 "http://localhost:8080/Admin/Evaluator",
                 evaluatorData
             );
-            const response2 = await axios.get(
-                "http://localhost:8080/Admin/Evaluator"
-            );
-            return response2.data;
+            // const response2 = await axios.get(
+            //     "http://localhost:8080/Admin/Evaluator"
+            // );
+            return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
@@ -50,7 +50,10 @@ export const assignEvaluator = createAsyncThunk(
                 "http://localhost:8080/Admin/assign",
                 evaluatorData
             );
-            return response;
+            // const response2 = await axios.get(
+            //     "http://localhost:8080/Admin/Evaluator"
+            // );
+            return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
@@ -60,40 +63,66 @@ export const assignEvaluator = createAsyncThunk(
 const evaluatorSlice = createSlice({
     name: "evaluator",
     initialState,
-    reducers: {},
+    reducers: {
+        clearEvaluators(state) {
+            state.data = [];
+            // Cookies.remove("userData");
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchEvaluators.pending, (state) => {
-                state.evaluators.loading = true;
-                state.evaluators.error = null;
+                state.loading = true;
+                state.error = null;
             })
             .addCase(fetchEvaluators.fulfilled, (state, action) => {
-                state.evaluators.loading = false;
-                state.evaluators.data = action.payload; // Extract data from the response
-                state.evaluators.error = null;
+                state.loading = false;
+                state.data = action.payload; // Extract data from the response
+                state.error = null;
             })
             .addCase(fetchEvaluators.rejected, (state, action) => {
-                state.evaluators.loading = false;
-                state.evaluators.data = null;
-                state.evaluators.error = action.payload; // Set error payload
+                state.loading = false;
+                // state.data = [];
+                state.error = action.payload; // Set error payload
             })
             .addCase(registerEvaluator.pending, (state) => {
-                state.evaluators.loading = true;
-                state.evaluators.error = null;
+                state.loading = true;
+                state.error = null;
             })
             .addCase(registerEvaluator.fulfilled, (state, action) => {
-                state.evaluators.loading = false;
-                state.evaluators.data = action.payload; // Refetch and set evalautor list   
-                state.evaluators.error = null;
+                state.loading = false;
+                // state.data = action.payload; // Refetch and set evalautor list   
+                state.error = null;
             })
             .addCase(registerEvaluator.rejected, (state, action) => {
-                state.evaluators.loading = false;
-                state.evaluators.data = null;
-                state.evaluators.error = action.payload; // Set error payload
+                state.loading = false;
+                // state.data = null;
+                state.error = action.payload; // Set error payload
+            })
+            .addCase(assignEvaluator.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(assignEvaluator.fulfilled, (state, action) => {
+                state.loading = false;
+                // state.data = action.payload; // Refetch and set evalautor list   
+                state.error = null;
+            })
+            .addCase(assignEvaluator.rejected, (state, action) => {
+                state.loading = false;
+                // state.data = null;
+                state.error = action.payload; // Set error payload
             });
     },
 });
 
-export const { login, logout, register } = evaluatorSlice.actions;
+
+export const selectEvaluators = (state) => state.evaluator.data;
+
+export const selectErrorEvaluator = (state) => state.evaluator.error;
+export const selectLoadingEvaluator = (state) => state.evaluator.loading;
+
+
+export const { clearEvaluators } = evaluatorSlice.actions;
 
 export default evaluatorSlice.reducer;

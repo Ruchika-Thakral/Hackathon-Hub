@@ -1,22 +1,109 @@
-.bg-gradient-to-b{
+@import url("https://fonts.googleapis.com/css2?family=Hanken+Grotesk&display=swap");
+
+.results {
+    font-family: Hanken Grotesk, sans-serif;
+    font-feature-settings: normal;
+    font-variation-settings: normal;
+}
+
+.bg-cobaltBlue {
+    --tw-bg-opacity: 1;
+    background-color: hsl(234 85% 45% / var(--tw-bg-opacity));
+}
+
+.bg-darkGrayBlue {
+    --tw-bg-opacity: 1;
+    background-color: hsl(224 30% 27% / var(--tw-bg-opacity));
+}
+
+.bg-greenTeal {
+    --tw-bg-opacity: 1;
+    background-color: hsl(166 100% 37% / var(--tw-bg-opacity));
+}
+
+.bg-lightRed {
+    --tw-bg-opacity: 1;
+    background-color: hsl(0 100% 67% / var(--tw-bg-opacity));
+}
+
+.bg-orangeyYellow {
+    --tw-bg-opacity: 1;
+    background-color: hsl(39 100% 56% / var(--tw-bg-opacity));
+}
+
+.bg-white {
+    --tw-bg-opacity: 1;
+    background-color: hsl(0 0% 100% / var(--tw-bg-opacity));
+}
+
+.bg-opacity-20 {
+    --tw-bg-opacity: 0.2;
+}
+
+.bg-gradient-to-b {
     background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
-  }
-  
-  .from-lightSlateBlue{
+}
+
+.from-lightSlateBlue {
     --tw-gradient-from: hsl(252, 100%, 67%) var(--tw-gradient-from-position);
     --tw-gradient-to: hsl(252 100% 67% / 0) var(--tw-gradient-to-position);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-  }
-  
-  .from-violetBlue{
+}
+
+.from-violetBlue {
     --tw-gradient-from: hsla(256, 72%, 46%, 1) var(--tw-gradient-from-position);
     --tw-gradient-to: hsla(256, 72%, 46%, 0) var(--tw-gradient-to-position);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-  }
-  .to-lightRoyalBlue{
+}
+
+.to-lightRoyalBlue {
     --tw-gradient-to: hsl(241, 81%, 54%) var(--tw-gradient-to-position);
-  }
-  
-  .to-persianBlue{
+}
+
+.to-persianBlue {
     --tw-gradient-to: hsla(241, 72%, 46%, 0) var(--tw-gradient-to-position);
-  }  
+}
+
+text-cobaltBlue {
+    --tw-text-opacity: 1;
+    color: hsl(234 85% 45% / var(--tw-text-opacity));
+}
+
+.text-darkGrayBlue {
+    --tw-text-opacity: 1;
+    color: hsl(224 30% 27% / var(--tw-text-opacity));
+}
+
+.text-gray-500 {
+    --tw-text-opacity: 1;
+    color: rgb(107 114 128 / var(--tw-text-opacity));
+}
+
+.text-greenTeal {
+    --tw-text-opacity: 1;
+    color: hsl(166 100% 37% / var(--tw-text-opacity));
+}
+
+.text-lightLavender {
+    --tw-text-opacity: 1;
+    color: hsl(241 100% 89% / var(--tw-text-opacity));
+}
+
+.text-lightRed {
+    --tw-text-opacity: 1;
+    color: hsl(0 100% 67% / var(--tw-text-opacity));
+}
+
+.text-orangeyYellow {
+    --tw-text-opacity: 1;
+    color: hsl(39 100% 56% / var(--tw-text-opacity));
+}
+
+.text-white {
+    --tw-text-opacity: 1;
+    color: hsl(0 0% 100% / var(--tw-text-opacity));
+}
+
+.hover\:bg-gradient-to-b:hover {
+    background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
+}
