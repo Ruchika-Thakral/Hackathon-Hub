@@ -82,37 +82,15 @@ const userSlice = createSlice({
     reducers: {
         logout(state) {
             state.data = null;
-            Cookies.remove("userData");
+            // Cookies.remove("userData");
         },
-        reattemptLogin(state) {
-            const userCookie = Cookies.get("userData");
-            if (userCookie) {
-                state.login.data = { data: JSON.parse(userCookie) };
+        reattemptLogin(state, action) {
+            // const userCookie = Cookies.get("userData");
+            // if (userCookie) {
+                state.data = action.payload ;
                 console.log("reloggedin");
-                console.log({ data: JSON.parse(userCookie) });
-            }
-        },
-        successTeamRegistration(state, hackathonId) {
-            const userCookie = JSON.parse(Cookies.get("userData"));
-            state.data = {
-                data: {
-                    ...userCookie,
-                    available: 0,
-                    assignedHackathon: hackathonId,
-                },
-            };
-            Cookies.set(
-                "userData",
-                JSON.stringify({
-                    ...userCookie,
-                    available: 0,
-                    assignedHackathon: hackathonId,
-                }),
-                {
-                    expires: 7,
-                }
-            );
-            state.login.data = { data: JSON.parse(userCookie) };
+                // console.log({ data: JSON.parse(userCookie) });
+            // }
         },
     },
     extraReducers: (builder) => {

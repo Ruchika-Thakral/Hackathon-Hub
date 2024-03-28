@@ -30,6 +30,7 @@ import {
 import { HACKATHONS, USER } from "./constants";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import { fetchEvaluators } from "./features/evaluator/evaluatorSlice";
+import Cookies from "js-cookie";
 function App() {
     const dispatch = useDispatch();
 
@@ -40,6 +41,11 @@ function App() {
     const userData = useSelector(selectUserDetails);
     useEffect(() => {
         dispatch(fetchHackathons());
+
+        //just a work around until we have a proper userdetails fetch api
+
+        //
+
         if (userData?.role === "admin") {
             dispatch(fetchEvaluators());
         }
@@ -64,7 +70,11 @@ function App() {
     }, [userData]);
 
     useEffect(() => {
-        dispatch(reattemptLogin());
+        const userCookie = Cookies.get("userData");
+        console.log(userCookie)
+        if (userCookie) {
+            dispatch(reattemptLogin(JSON.parse(userCookie)));
+        }
     }, []);
 
     const userId = useSelector(selectUserId);
@@ -116,8 +126,8 @@ function App() {
                         path="judge/review"
                         element={
                             <JudgeReview
-                                // reviewedIdeas={reviewedIdeas}
-                                // setReviewedIdeas={setReviewedIdeas}
+                            // reviewedIdeas={reviewedIdeas}
+                            // setReviewedIdeas={setReviewedIdeas}
                             />
                         }
                     />

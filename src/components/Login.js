@@ -11,9 +11,10 @@ import {
     Card,
 } from "@material-tailwind/react";
 import { useDispatch, useSelector } from "react-redux";
-import { userLogin } from "../features/user/userSlice";
+import { selectUserDetails, userLogin } from "../features/user/userSlice";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router";
+import Cookies from "js-cookie";
 // import { showNotification } from "./Notification";
 
 const Login = ({
@@ -69,10 +70,17 @@ const Login = ({
         }
     };
 
+    // const userData = useSelector(selectUserDetails);
+
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
-            await dispatch(userLogin(formData1)).unwrap();
+            const userData = await dispatch(userLogin(formData1)).unwrap();
+            if (userData) {
+                Cookies.set("userData", JSON.stringify(userData), {
+                    expires: 7,
+                });
+            }
 
             // showNotification({type: "success", message: "Login successful!"})
             setShowError(false);
